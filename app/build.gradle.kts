@@ -59,4 +59,12 @@ dependencies {
     implementation ("commons-io:commons-io:2.15.1")
     implementation ("org.jsoup:jsoup:1.14.3")
 
+    implementation(files("C:\\Users\\giric\\Music\\3 курс 1 семестр\\Проектирование ИС\\jsoup-1.17.1.jar"))
+    implementation(files("commons-io-2.15.1.jar"))
+    implementation("com.google.firebase:firebase-crashlytics-gradle:2.9.9")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation("commons-io:commons-io:2.15.1")
+
 }
