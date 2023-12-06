@@ -18,7 +18,7 @@
         android:layout_marginBottom="16dp"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
-        android:gravity="center"
+        android:gravity="left"
         android:padding="16dp"
         android:background="#80000000" /> <!-- Полупрозрачный фон для текста Linear-->
 </RelativeLayout>

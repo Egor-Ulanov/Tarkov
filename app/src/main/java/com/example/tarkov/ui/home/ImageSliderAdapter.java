@@ -44,7 +44,7 @@ public class ImageSliderAdapter extends PagerAdapter {
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP); // Установите ScaleType (03.12.2023/16:30)
 
         // Установите текст для textOverlay (здесь вы можете использовать данные, связанные с изображением/03.12.2023/16:42)
-        textOverlay.setText("Текст наложенный на изображение");
+        textOverlay.setText("Текст наложенный на изображение для большей реалистичности тест тест");
 
         container.addView(itemView);
 
