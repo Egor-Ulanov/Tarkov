@@ -13,10 +13,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.tarkov.databinding.FragmentHomeBinding;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import com.example.tarkov.R;
 
 import android.widget.LinearLayout;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
@@ -25,6 +31,8 @@ public class HomeFragment extends Fragment {
     private ViewPager viewPager;
     private ImageSliderAdapter sliderAdapter;
     private LinearLayout sliderIndicator;
+    private RecyclerView recyclerView;
+    private NewsAdapter newsAdapter;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -45,6 +53,16 @@ public class HomeFragment extends Fragment {
         sliderIndicator = root.findViewById(R.id.sliderIndicator);
         setupSlideIndicator();
 
+        // Инициализация RecyclerView
+        recyclerView = root.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        newsAdapter = new NewsAdapter();
+        recyclerView.setAdapter(newsAdapter);
+
+        // Передайте данные в адаптер (ваш список новостей)
+        List<String> newsList = new ArrayList<>(); // Замените этот список на ваш
+        newsAdapter.setNewsList(newsList);
+
         // Обработчик смены слайда
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -55,15 +73,11 @@ public class HomeFragment extends Fragment {
             public void onPageSelected(int position) {
                 // Обновление индикатора слайдов при смене слайда
                 sliderAdapter.updateSlideIndicator(sliderIndicator, position);
-
-
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
             }
-
-            
         });
 
         return root;
