@@ -1,7 +1,10 @@
 package com.example.tarkov;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.example.tarkov.ui.Parser.ParserFix;
+import com.example.tarkov.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +14,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.tarkov.databinding.ActivityMainBinding;
+
+import java.util.List;
+
+import com.example.tarkov.ui.home.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+
+
     }
+
 
 }

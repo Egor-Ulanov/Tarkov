@@ -56,6 +56,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation ("com.squareup.picasso:picasso:2.71828")
-
+    implementation ("commons-io:commons-io:2.15.1")
+    implementation ("org.jsoup:jsoup:1.14.3")
 
 }

@@ -1,6 +1,6 @@
 package com.example.tarkov.ui.Parser;
 
-import com.google.firebase.crashlytics.buildtools.utils.FileUtils;
+
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,36 +17,71 @@ import java.util.TimerTask;
 public class ParserFix {
     private static final String HTML_FILE_PATH = "src/Parser/HotFix/news.html";
     private static final int UPDATE_INTERVAL_MINUTES = 10;
+    private static final String BASE_URL = "https://www.escapefromtarkov.com/news?lang=ru";
 
-//    public static void main(String[] args) {
-//        System.out.println("Парсинг новостей EFT...");
-//
-//        // Загрузка HTML-кода в файл
-//        downloadHtmlToFile("https://www.escapefromtarkov.com/news?lang=ru", HTML_FILE_PATH);
-//
-//        // Парсинг новостей из файла
-//        List<NewsItem> newsItems = parseEftNewsFromFile(HTML_FILE_PATH);
-//
-//        if (newsItems != null && !newsItems.isEmpty()) {
-//            System.out.println("Новости EFT успешно спарсены.");
-//            // Выводим первые 3 новости
-//            for (int i = 0; i < Math.min(3, newsItems.size()); i++) {
-//                System.out.println(newsItems.get(i));
-//                System.out.println("---------------------");
-//            }
-//        } else {
-//            System.out.println("Новости не были спарсены или произошла ошибка.");
-//        }
-//
-//        // Запускаем таймер для обновления HTML-кода
-//        Timer timer = new Timer();
-//        timer.scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-//                downloadHtmlToFile("https://www.escapefromtarkov.com/news?lang=ru", HTML_FILE_PATH);
-//            }
-//        }, 0, UPDATE_INTERVAL_MINUTES * 60 * 1000); // Периодически обновляем каждые 10 минут
-//    }
+    public static void main(String[] args) {
+        System.out.println("Парсинг новостей EFT...");
+
+        // Загрузка HTML-кода в файл
+        downloadHtmlToFile("https://www.escapefromtarkov.com/news?lang=ru", HTML_FILE_PATH);
+
+        // Парсинг новостей из файла
+        List<NewsItem> newsItems = parseEftNewsFromFile(HTML_FILE_PATH);
+
+        if (newsItems != null && !newsItems.isEmpty()) {
+            System.out.println("Новости EFT успешно спарсены.");
+            // Выводим первые 3 новости
+            for (int i = 0; i < Math.min(3, newsItems.size()); i++) {
+                System.out.println(newsItems.get(i));
+                System.out.println("---------------------");
+            }
+        } else {
+            System.out.println("Новости не были спарсены или произошла ошибка.");
+        }
+
+        // Запускаем таймер для обновления HTML-кода
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                downloadHtmlToFile("https://www.escapefromtarkov.com/news?lang=ru", HTML_FILE_PATH);
+            }
+        }, 0, UPDATE_INTERVAL_MINUTES * 60 * 1000); // Периодически обновляем каждые 10 минут
+    }
+
+    public static List<NewsItem> parseEftNews() {
+        try {
+            Document document = Jsoup.connect(BASE_URL)
+                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3")
+                    .get();
+
+            Elements newsElements = document.select("#news-list .container");
+            List<NewsItem> newsItems = new ArrayList<>();
+
+            int numberOfNews = Math.min(5, newsElements.size());
+            for (int i = 0; i < numberOfNews; i++) {
+                Element newsElement = newsElements.get(i);
+
+                String title = newsElement.select(".headtext a").text();
+                String date = newsElement.select(".headtext span").text();
+                String partialContent = newsElement.select(".description").text();
+                String imageUrl = newsElement.select(".image img").attr("src");
+
+                // Добавляем ссылку на полную новость
+                String fullNewsLink = "https://www.escapefromtarkov.com" + newsElement.select(".headtext a").attr("href");
+
+                NewsItem newsItem = new NewsItem(title, date, partialContent, imageUrl, fullNewsLink);
+                newsItems.add(newsItem);
+            }
+
+            return newsItems;
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Произошла ошибка при парсинге HTML-кода.");
+        }
+
+        return null; // Возвращаем null в случае ошибки
+    }
 
     // Метод для загрузки HTML-кода в файл
     public static void downloadHtmlToFile(String url, String filePath) {

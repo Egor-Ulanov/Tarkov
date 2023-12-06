@@ -1,5 +1,6 @@
 package com.example.tarkov.ui.home;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import com.example.tarkov.R;
+import com.example.tarkov.ui.Parser.ParserFix;
 
 import android.widget.LinearLayout;
 
@@ -32,7 +34,10 @@ public class HomeFragment extends Fragment {
     private ImageSliderAdapter sliderAdapter;
     private LinearLayout sliderIndicator;
     private RecyclerView recyclerView;
-    private NewsAdapter newsAdapter;
+    private static NewsAdapter newsAdapter;
+
+    private AsyncTask<Void, Void, List<ParserFix.NewsItem>> parserTask;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -60,7 +65,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(newsAdapter);
 
         // Передайте данные в адаптер (ваш список новостей)
-        List<String> newsList = new ArrayList<>(); // Замените этот список на ваш
+        List<ParserFix.NewsItem> newsList = new ArrayList<>(); // Замените этот список на ваш
         newsAdapter.setNewsList(newsList);
 
         // Обработчик смены слайда
@@ -81,6 +86,42 @@ public class HomeFragment extends Fragment {
         });
 
         return root;
+    }
+
+    // Логика парсера на фоне
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Запускаем фоновую задачу для парсинга
+        parserTask = new ParserTask();
+        parserTask.execute();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Отменяем фоновую задачу при остановке фрагмента
+        if (parserTask != null && !parserTask.isCancelled()) {
+            parserTask.cancel(true);
+        }
+    }
+
+    public static class ParserTask extends AsyncTask<Void, Void, List<ParserFix.NewsItem>> {
+
+        @Override
+        protected List<ParserFix.NewsItem> doInBackground(Void... voids) {
+            // Выполняйте парсинг в фоновом режиме
+            return ParserFix.parseEftNews();
+        }
+
+        @Override
+        protected void onPostExecute(List<ParserFix.NewsItem> newsItems) {
+            super.onPostExecute(newsItems);
+            if (newsItems != null) {
+                // Обновите RecyclerView вашего адаптера
+                newsAdapter.setNewsList(newsItems);
+            }
+        }
     }
 
     private void setupSlideIndicator() {

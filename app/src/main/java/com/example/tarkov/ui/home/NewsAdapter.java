@@ -1,5 +1,6 @@
 package com.example.tarkov.ui.home;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,21 +8,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.example.tarkov.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.example.tarkov.ui.Parser.ParserFix;
+
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
-    private List<String> newsList = new ArrayList<>();
+    private static List<ParserFix.NewsItem> newsList = new ArrayList<>();
 
-    public void setNewsList(List<String> newsList) {
+
+    public void setNewsList(List<ParserFix.NewsItem> newsList) {
         this.newsList = newsList;
         notifyDataSetChanged();
     }
@@ -42,15 +49,19 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                 .placeholder(R.drawable.image1)
                 .into(holder.newsImage);*/
 
-        NewsItem currentNews = newsList.get(position);
+        ParserFix.NewsItem currentNews = newsList.get(position);
+        holder.bind(currentNews);
+//        holder.bind(currentNews.getTitle(), currentNews.getPartialContent(), currentNews.getDate());
 
-        holder.bind(currentNews.getTitle(), currentNews.getContent(), currentNews.getDate());
-
-        // Загрузите изображение с использованием Glide или Picasso
-        Glide.with(holder.itemView.getContext())
+        Picasso.get()
                 .load(currentNews.getImageUrl())
                 .placeholder(R.drawable.image1)
                 .into(holder.newsImage);
+        // Загрузите изображение с использованием Glide или Picasso
+//        Glide.with(holder.itemView.getContext())
+//                .load(currentNews.getImageUrl())
+//                .placeholder(R.drawable.image1)
+//                .into(holder.newsImage);
     }
 
     @Override
@@ -62,7 +73,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     static class NewsViewHolder extends RecyclerView.ViewHolder {
 
-        private final NetworkImageView newsImage;
+        private final ImageView newsImage;
         private final TextView newsTitle;
         private final TextView newsContent;
         private final TextView newsDate;
@@ -75,16 +86,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             newsDate = itemView.findViewById(R.id.newsDate);
         }
 
-        public void bind(String title, String content, String date) {
-            //Замените следующие строки на загрузку изображения из вашего URL-адреса
-            Glide.with(itemView.getContext())
-                    .load(newsImage)
-                    .placeholder(R.drawable.image1)
-                    .into(newsImage);
 
-            newsTitle.setText(title);
-            newsContent.setText(content);
-            newsDate.setText(date);
-        }
+public void bind(ParserFix.NewsItem currentNews) {
+    Picasso.get()
+            .load(currentNews.getImageUrl())
+            .placeholder(R.drawable.image1)
+            .into(newsImage);
+
+    newsTitle.setText(currentNews.getTitle());
+    newsContent.setText(currentNews.getPartialContent());
+    newsDate.setText(currentNews.getDate());
+}
+
+
     }
 }
