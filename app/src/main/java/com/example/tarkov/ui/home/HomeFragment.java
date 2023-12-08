@@ -59,6 +59,7 @@ public class HomeFragment extends Fragment {
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
+
         // Initialize ViewPager
         viewPager = root.findViewById(R.id.viewPager);
         sliderAdapter = new ImageSliderAdapter(requireContext());
