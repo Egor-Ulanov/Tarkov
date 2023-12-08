@@ -1,5 +1,6 @@
 package com.example.tarkov.ui.home;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                 .load(imageUrl)
                 .placeholder(R.drawable.image1)
                 .into(holder.newsImage);*/
+
+        holder.itemView.setOnClickListener(v -> {
+            // Открывает новую активность при нажатии на элемент списка
+            Intent intent = new Intent(v.getContext(), NewsDetailActivity.class);
+            // Здесь вы можете передавать дополнительные данные в новую активность
+            v.getContext().startActivity(intent);
+        });
 
         ParserFix.NewsItem currentNews = newsList.get(position);
         holder.bind(currentNews);

@@ -4,13 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.home.HomeFragment"
+    android:layout_marginBottom="60dp">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:contentDescription="Описание вашего ViewPager"/>
+        android:layout_height="220dp"
+        android:layout_marginBottom="4dp"
+        android:contentDescription="Описание вашего ViewPager"
+         />
 
     <LinearLayout
         android:id="@+id/sliderIndicator"
@@ -19,10 +22,10 @@
         android:layout_below="@id/viewPager"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
+
         android:orientation="horizontal" />
 
-    <TextView
+   <!-- <TextView
         android:id="@+id/text_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,11 +35,11 @@
         android:textAlignment="center"
         android:textSize="20sp"
         android:gravity="center"
-        android:text="Your Text Here"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />-->
 
     <!-- Добавьте RecyclerView для списка новостей -->
     <androidx.recyclerview.widget.RecyclerView
@@ -44,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/viewPager"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="24dp"
+        android:background="@color/newsListBackground"/>
 </RelativeLayout>
 
