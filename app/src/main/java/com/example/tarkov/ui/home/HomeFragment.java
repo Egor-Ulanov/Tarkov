@@ -1,26 +1,28 @@
 package com.example.tarkov.ui.home;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.example.tarkov.databinding.FragmentHomeBinding;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-import com.example.tarkov.R;
-import com.example.tarkov.ui.Parser.ParserFix;
 
-import android.widget.LinearLayout;
+import com.example.tarkov.R;
+import com.example.tarkov.databinding.FragmentHomeBinding;
+import com.example.tarkov.ui.Parser.ParserFix;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +31,15 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
-    //2 строки внизу добавил Volegov
     private ViewPager viewPager;
     private ImageSliderAdapter sliderAdapter;
     private LinearLayout sliderIndicator;
     private RecyclerView recyclerView;
     private static NewsAdapter newsAdapter;
 
-    private AsyncTask<Void, Void, List<ParserFix.NewsItem>> parserTask;
+    private ParserTask parserTask;
+
+    private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -46,29 +49,37 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        /*final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);*/
+        // Запрос разрешения на запись во внешнее хранилище
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+            }
+        }
 
-        // Initialize ViewPager, добавил volegov
+        final TextView textView = binding.textHome;
+        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+
+        // Initialize ViewPager
         viewPager = root.findViewById(R.id.viewPager);
         sliderAdapter = new ImageSliderAdapter(requireContext());
         viewPager.setAdapter(sliderAdapter);
 
-        // Инициализация индикатора слайдов
+        // Initialize slide indicator
         sliderIndicator = root.findViewById(R.id.sliderIndicator);
         setupSlideIndicator();
 
-        // Инициализация RecyclerView
+        // Initialize RecyclerView
         recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         newsAdapter = new NewsAdapter();
         recyclerView.setAdapter(newsAdapter);
 
-        // Передайте данные в адаптер (ваш список новостей)
-        List<ParserFix.NewsItem> newsList = new ArrayList<>(); // Замените этот список на ваш
+        // Pass data to the adapter (your list of news)
+        List<ParserFix.NewsItem> newsList = new ArrayList<>();
         newsAdapter.setNewsList(newsList);
 
-        // Обработчик смены слайда
+        // Slide change listener
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -76,7 +87,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                // Обновление индикатора слайдов при смене слайда
+                // Update slide indicator on slide change
                 sliderAdapter.updateSlideIndicator(sliderIndicator, position);
             }
 
@@ -88,37 +99,39 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    // Логика парсера на фоне
     @Override
     public void onStart() {
         super.onStart();
-        // Запускаем фоновую задачу для парсинга
+        // Start background task for parsing
         parserTask = new ParserTask();
-        parserTask.execute();
+        parserTask.execute(getContext()); // Передаем контекст
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        // Отменяем фоновую задачу при остановке фрагмента
+        // Cancel background task when fragment is stopped
         if (parserTask != null && !parserTask.isCancelled()) {
             parserTask.cancel(true);
         }
     }
 
-    public static class ParserTask extends AsyncTask<Void, Void, List<ParserFix.NewsItem>> {
+    public static class ParserTask extends AsyncTask<Context, Void, List<ParserFix.NewsItem>> {
 
         @Override
-        protected List<ParserFix.NewsItem> doInBackground(Void... voids) {
-            // Выполняйте парсинг в фоновом режиме
-            return ParserFix.parseEftNews();
+        protected List<ParserFix.NewsItem> doInBackground(Context... contexts) {
+            if (contexts != null && contexts.length > 0) {
+                // Perform parsing in the background
+                return ParserFix.parseEftNews(contexts[0]); // Используем переданный контекст
+            }
+            return null;
         }
 
         @Override
         protected void onPostExecute(List<ParserFix.NewsItem> newsItems) {
             super.onPostExecute(newsItems);
             if (newsItems != null) {
-                // Обновите RecyclerView вашего адаптера
+                // Update your adapter's RecyclerView
                 newsAdapter.setNewsList(newsItems);
             }
         }
@@ -144,5 +157,18 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Разрешение на запись во внешнее хранилище получено, выполните необходимые действия здесь
+                // Например, запустите вашу задачу для загрузки и парсинга данных
+                parserTask = new ParserTask();
+                parserTask.execute(getContext()); // Передаем контекст
+            } else {
+                // Разрешение не было предоставлено, обработайте этот случай (например, показ сообщения об ошибке)
+            }
+        }
+    }
 }
