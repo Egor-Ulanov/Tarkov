@@ -1,10 +1,8 @@
 package com.example.tarkov.ui.home;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,42 +10,35 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
 import com.example.tarkov.R;
 import com.example.tarkov.databinding.FragmentHomeBinding;
+import com.example.tarkov.ui.Parser.ParserCookie.NewsViewModel;
 import com.example.tarkov.ui.Parser.ParserFix;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-
     private ViewPager viewPager;
     private ImageSliderAdapter sliderAdapter;
     private LinearLayout sliderIndicator;
     private RecyclerView recyclerView;
     private static NewsAdapter newsAdapter;
-
-    private ParserTask parserTask;
-    private static ProgressBar progressBar;
-
+    private ProgressBar progressBar;
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
+    private NewsViewModel newsViewModel;
+    private ParserTask parserTask;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -68,6 +59,19 @@ public class HomeFragment extends Fragment {
 
         List<ParserFix.NewsItem> newsList = new ArrayList<>();
         newsAdapter.setNewsList(newsList);
+
+        // Инициализация ViewModel
+        newsViewModel = new ViewModelProvider(requireActivity()).get(NewsViewModel.class);
+
+        // Наблюдатель за изменением данных в ViewModel
+        newsViewModel.getNewsListLiveData().observe(getViewLifecycleOwner(), new Observer<List<ParserFix.NewsItem>>() {
+            @Override
+            public void onChanged(List<ParserFix.NewsItem> newsItems) {
+                if (newsItems != null) {
+                    newsAdapter.setNewsList(newsItems);
+                }
+            }
+        });
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -90,19 +94,28 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        parserTask = new ParserTask();
-        parserTask.execute(getContext());
+
+        // Если данные уже загружены, обновите RecyclerView
+        List<ParserFix.NewsItem> cachedNews = newsViewModel.getNewsListLiveData().getValue();
+        if (cachedNews != null && !cachedNews.isEmpty()) {
+            newsAdapter.setNewsList(cachedNews);
+        } else {
+            // Иначе, если данные еще не загружены, выполните парсинг
+            parserTask = new ParserTask();
+            parserTask.execute(getContext());
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        // Остановите выполнение парсинга при остановке фрагмента
         if (parserTask != null && !parserTask.isCancelled()) {
             parserTask.cancel(true);
         }
     }
 
-    public static class ParserTask extends AsyncTask<Context, Void, List<ParserFix.NewsItem>> {
+    public class ParserTask extends AsyncTask<Context, Void, List<ParserFix.NewsItem>> {
 
         @Override
         protected void onPreExecute() {
@@ -123,7 +136,8 @@ public class HomeFragment extends Fragment {
         protected void onPostExecute(List<ParserFix.NewsItem> newsItems) {
             super.onPostExecute(newsItems);
             if (newsItems != null) {
-                newsAdapter.setNewsList(newsItems);
+                // Сохранение данных в ViewModel
+                newsViewModel.setNewsList(newsItems);
             }
             // Скрываем ProgressBar после завершения парсинга
             progressBar.setVisibility(View.GONE);
@@ -155,7 +169,8 @@ public class HomeFragment extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                parserTask = new ParserTask();
+                // Если разрешение на запись предоставлено, выполните парсинг
+                ParserTask parserTask = new ParserTask();
                 parserTask.execute(getContext());
             } else {
                 // Обработка случая, когда разрешение не предоставлено
