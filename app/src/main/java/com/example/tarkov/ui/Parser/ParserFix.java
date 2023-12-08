@@ -22,7 +22,7 @@ public class ParserFix {
         downloadHtmlToFile(context, "https://www.escapefromtarkov.com/news?lang=ru");
 
         // Парсинг новостей из файла
-        List<NewsItem> newsItems = parseEftNewsFromFile(context);
+        List<NewsItem> newsItems = parseEftNewsFromFile(context,5);
 
         return newsItems;
     }
@@ -56,7 +56,7 @@ public class ParserFix {
         }
     }
 
-    public static List<NewsItem> parseEftNewsFromFile(Context context) {
+    public static List<NewsItem> parseEftNewsFromFile(Context context, int numberOfNews) {
         List<NewsItem> newsItems = new ArrayList<>();
         try {
             File input = new File(getExternalFilePath(context));
@@ -69,7 +69,13 @@ public class ParserFix {
                 return null;
             }
 
+            // Ограничиваем количество новостей
+            int count = 0;
             for (Element newsElement : newsElements) {
+                if (count >= numberOfNews) {
+                    break;
+                }
+
                 String title = newsElement.select(".headtext a").text();
                 String date = newsElement.select(".headtext span").text();
                 String partialContent = newsElement.select(".description").text();
@@ -80,6 +86,8 @@ public class ParserFix {
 
                 NewsItem newsItem = new NewsItem(title, date, partialContent, imageUrl, fullNewsLink);
                 newsItems.add(newsItem);
+
+                count++;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,6 +95,7 @@ public class ParserFix {
         }
         return newsItems;
     }
+
 
     public static class NewsItem {
         private String title;

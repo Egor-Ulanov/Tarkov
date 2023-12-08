@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ public class HomeFragment extends Fragment {
     private static NewsAdapter newsAdapter;
 
     private ParserTask parserTask;
+    private static ProgressBar progressBar;
 
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
 
@@ -49,37 +51,24 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Запрос разрешения на запись во внешнее хранилище
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
-            }
-        }
+        progressBar = root.findViewById(R.id.progressBar); // Инициализация ProgressBar
 
-        /*final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);*/
-
-
-        // Initialize ViewPager
+        // Инициализация остальных элементов фрагмента
         viewPager = root.findViewById(R.id.viewPager);
         sliderAdapter = new ImageSliderAdapter(requireContext());
         viewPager.setAdapter(sliderAdapter);
 
-        // Initialize slide indicator
         sliderIndicator = root.findViewById(R.id.sliderIndicator);
         setupSlideIndicator();
 
-        // Initialize RecyclerView
         recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         newsAdapter = new NewsAdapter();
         recyclerView.setAdapter(newsAdapter);
 
-        // Pass data to the adapter (your list of news)
         List<ParserFix.NewsItem> newsList = new ArrayList<>();
         newsAdapter.setNewsList(newsList);
 
-        // Slide change listener
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -87,7 +76,6 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                // Update slide indicator on slide change
                 sliderAdapter.updateSlideIndicator(sliderIndicator, position);
             }
 
@@ -102,15 +90,13 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        // Start background task for parsing
         parserTask = new ParserTask();
-        parserTask.execute(getContext()); // Передаем контекст
+        parserTask.execute(getContext());
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        // Cancel background task when fragment is stopped
         if (parserTask != null && !parserTask.isCancelled()) {
             parserTask.cancel(true);
         }
@@ -119,10 +105,16 @@ public class HomeFragment extends Fragment {
     public static class ParserTask extends AsyncTask<Context, Void, List<ParserFix.NewsItem>> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Показываем ProgressBar перед началом парсинга
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         protected List<ParserFix.NewsItem> doInBackground(Context... contexts) {
             if (contexts != null && contexts.length > 0) {
-                // Perform parsing in the background
-                return ParserFix.parseEftNews(contexts[0]); // Используем переданный контекст
+                return ParserFix.parseEftNews(contexts[0]);
             }
             return null;
         }
@@ -131,9 +123,10 @@ public class HomeFragment extends Fragment {
         protected void onPostExecute(List<ParserFix.NewsItem> newsItems) {
             super.onPostExecute(newsItems);
             if (newsItems != null) {
-                // Update your adapter's RecyclerView
                 newsAdapter.setNewsList(newsItems);
             }
+            // Скрываем ProgressBar после завершения парсинга
+            progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -162,12 +155,10 @@ public class HomeFragment extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Разрешение на запись во внешнее хранилище получено, выполните необходимые действия здесь
-                // Например, запустите вашу задачу для загрузки и парсинга данных
                 parserTask = new ParserTask();
-                parserTask.execute(getContext()); // Передаем контекст
+                parserTask.execute(getContext());
             } else {
-                // Разрешение не было предоставлено, обработайте этот случай (например, показ сообщения об ошибке)
+                // Обработка случая, когда разрешение не предоставлено
             }
         }
     }
