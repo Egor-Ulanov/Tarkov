@@ -7,11 +7,13 @@ import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tarkov.R;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
@@ -31,6 +33,8 @@ public class NewsDetailActivity extends AppCompatActivity {
     private TextView sourceLink;
     private ImageButton closeButton;
 
+    private ProgressBar progressBarDetail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +47,9 @@ public class NewsDetailActivity extends AppCompatActivity {
         detailContent = findViewById(R.id.detailContent);
         sourceLink = findViewById(R.id.sourceLink);
         closeButton = findViewById(R.id.closeButton);
+
+        // Добавлена инициализация ProgressBar
+        progressBarDetail = findViewById(R.id.progressBarDetail);
 
         // Получение ссылки на полную новость из предыдущей активности
         String fullNewsLink = getIntent().getStringExtra("fullNewsLink");
@@ -63,6 +70,19 @@ public class NewsDetailActivity extends AppCompatActivity {
     private class LoadNewsTask extends AsyncTask<String, Void, Document> {
 
         @Override
+        protected void onPreExecute() {
+            // Покажем ProgressBar перед началом загрузки
+            progressBarDetail.setVisibility(View.VISIBLE);
+
+            // Скроем все элементы интерфейса
+            detailTitle.setVisibility(View.GONE);
+            detailDate.setVisibility(View.GONE);
+            detailImage.setVisibility(View.GONE);
+            detailContent.setVisibility(View.GONE);
+            sourceLink.setVisibility(View.GONE);
+            closeButton.setVisibility(View.GONE);
+        }
+        @Override
         protected Document doInBackground(String... params) {
             String fullNewsLink = params[0];
             try {
@@ -75,6 +95,17 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Document doc) {
+
+            // Скроем ProgressBar после завершения загрузки
+            progressBarDetail.setVisibility(View.GONE);
+
+            // Отобразим все элементы интерфейса
+            detailTitle.setVisibility(View.VISIBLE);
+            detailDate.setVisibility(View.VISIBLE);
+            detailImage.setVisibility(View.VISIBLE);
+            detailContent.setVisibility(View.VISIBLE);
+            sourceLink.setVisibility(View.VISIBLE);
+            closeButton.setVisibility(View.VISIBLE);
             // Обновление UI в основном потоке на основе полученных данных
             if (doc != null) {
                 // Извлечение данных из HTML-документа
@@ -97,6 +128,23 @@ public class NewsDetailActivity extends AppCompatActivity {
                 } else {
                     sourceLink.setText("Источник не указан");
                 }
+
+                // Загрузка изображения с использованием Picasso с обратным вызовом
+                String finalImageUrl = imageUrl;
+                Picasso.get().load(imageUrl).into(detailImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        // Вызывается при успешной загрузке изображения
+                        // Теперь вы можете скрыть прогресс-бар, так как весь контент загружен
+                        progressBarDetail.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        // Вызывается в случае ошибки загрузки изображения
+                        // Здесь также вы можете скрыть прогресс-бар или обработать ошибку
+                    }
+                });
             } else {
                 // В случае ошибки вы можете, например, отобразить пользователю сообщение об ошибке
                 // или просто выйти из активности
