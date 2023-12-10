@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -141,6 +142,14 @@ public class HomeFragment extends Fragment {
             }
             // Скрываем ProgressBar после завершения парсинга
             progressBar.setVisibility(View.GONE);
+
+//            // Обновление макета NestedScrollView
+//            View parentView = getView(); // Получаем корневой вид фрагмента
+//            if (parentView != null) {
+//                NestedScrollView nestedScrollView = parentView.findViewById(R.id.nested_scroll_view); // Замените на ваш ID
+//                if (nestedScrollView != null) {
+//                    nestedScrollView.requestLayout();
+//                }
         }
     }
 
