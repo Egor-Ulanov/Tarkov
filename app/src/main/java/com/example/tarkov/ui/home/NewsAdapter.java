@@ -41,35 +41,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     @Override
+
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
-        // Подставьте реальные данные для каждой новости
-        /*holder.bind("Заголовок новости", "Содержимое новости", "01.01.2023");
-        String imageUrl = "https://www.escapefromtarkov.com/uploads/content/news/thumb_71d9c96b35e48336e85138ee5395d1a3.png?ru";
-        Glide.with(holder.itemView.getContext())
-                .load(imageUrl)
-                .placeholder(R.drawable.image1)
-                .into(holder.newsImage);*/
-
-        holder.itemView.setOnClickListener(v -> {
-            // Открывает новую активность при нажатии на элемент списка
-            Intent intent = new Intent(v.getContext(), NewsDetailActivity.class);
-            // Здесь вы можете передавать дополнительные данные в новую активность
-            v.getContext().startActivity(intent);
-        });
-
+        // Привязать данные элемента новости к держателю представления
         ParserFix.NewsItem currentNews = newsList.get(position);
         holder.bind(currentNews);
-//        holder.bind(currentNews.getTitle(), currentNews.getPartialContent(), currentNews.getDate());
 
-        Picasso.get()
-                .load(currentNews.getImageUrl())
-                .placeholder(R.drawable.image1)
-                .into(holder.newsImage);
-        // Загрузите изображение с использованием Glide или Picasso
-//        Glide.with(holder.itemView.getContext())
-//                .load(currentNews.getImageUrl())
-//                .placeholder(R.drawable.image1)
-//                .into(holder.newsImage);
+        holder.itemView.setOnClickListener(v -> {
+            // Переход к Activity подробной информации о новостях, когда элемент новости щелкивается
+            Intent intent = new Intent(v.getContext(), NewsDetailActivity.class);
+            intent.putExtra("fullNewsLink", currentNews.getFullNewsLink()); // Передать полную ссылку на активность
+            v.getContext().startActivity(intent);
+        });
     }
 
     @Override
