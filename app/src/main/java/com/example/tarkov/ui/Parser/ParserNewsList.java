@@ -13,7 +13,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParserFix {
+public class ParserNewsList {
     private static final String DIRECTORY_NAME = "MyAppDirectoryName";
     private static final String FILE_NAME = "news.html";
 
@@ -22,7 +22,7 @@ public class ParserFix {
         downloadHtmlToFile(context, "https://www.escapefromtarkov.com/news?lang=ru");
 
         // Парсинг новостей из файла
-        List<NewsItem> newsItems = parseEftNewsFromFile(context);
+        List<NewsItem> newsItems = parseEftNewsFromFile(context,5);
 
         return newsItems;
     }
@@ -56,7 +56,7 @@ public class ParserFix {
         }
     }
 
-    public static List<NewsItem> parseEftNewsFromFile(Context context) {
+    public static List<NewsItem> parseEftNewsFromFile(Context context, int numberOfNews) {
         List<NewsItem> newsItems = new ArrayList<>();
         try {
             File input = new File(getExternalFilePath(context));
@@ -69,17 +69,26 @@ public class ParserFix {
                 return null;
             }
 
+            // Ограничиваем количество новостей
+            int count = 0;
             for (Element newsElement : newsElements) {
+                if (count >= numberOfNews) {
+                    break;
+                }
+
                 String title = newsElement.select(".headtext a").text();
                 String date = newsElement.select(".headtext span").text();
                 String partialContent = newsElement.select(".description").text();
                 String imageUrl = newsElement.select(".image img").attr("src");
 
                 // Добавляем ссылку на полную новость
-                String fullNewsLink = "https://www.escapefromtarkov.com" + newsElement.select(".headtext a").attr("href");
+                String relativeLink = newsElement.select(".headtext a").attr("href");
+                String fullNewsLink = "https://www.escapefromtarkov.com" + relativeLink + "?lang=ru";
 
                 NewsItem newsItem = new NewsItem(title, date, partialContent, imageUrl, fullNewsLink);
                 newsItems.add(newsItem);
+
+                count++;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,6 +96,7 @@ public class ParserFix {
         }
         return newsItems;
     }
+
 
     public static class NewsItem {
         private String title;
