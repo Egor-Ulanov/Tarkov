@@ -2,7 +2,7 @@ package com.example.tarkov.ui.Parser.ParserCookie;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import com.example.tarkov.ui.Parser.ParserFix.NewsItem;
+import com.example.tarkov.ui.Parser.ParserNewsList.NewsItem;
 import java.util.List;
 
 public class NewsViewModel extends ViewModel {

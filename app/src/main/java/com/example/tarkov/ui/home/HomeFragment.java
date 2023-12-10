@@ -20,7 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.tarkov.R;
 import com.example.tarkov.databinding.FragmentHomeBinding;
 import com.example.tarkov.ui.Parser.ParserCookie.NewsViewModel;
-import com.example.tarkov.ui.Parser.ParserFix;
+import com.example.tarkov.ui.Parser.ParserNewsList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,16 +57,16 @@ public class HomeFragment extends Fragment {
         newsAdapter = new NewsAdapter();
         recyclerView.setAdapter(newsAdapter);
 
-        List<ParserFix.NewsItem> newsList = new ArrayList<>();
+        List<ParserNewsList.NewsItem> newsList = new ArrayList<>();
         newsAdapter.setNewsList(newsList);
 
         // Инициализация ViewModel
         newsViewModel = new ViewModelProvider(requireActivity()).get(NewsViewModel.class);
 
         // Наблюдатель за изменением данных в ViewModel
-        newsViewModel.getNewsListLiveData().observe(getViewLifecycleOwner(), new Observer<List<ParserFix.NewsItem>>() {
+        newsViewModel.getNewsListLiveData().observe(getViewLifecycleOwner(), new Observer<List<ParserNewsList.NewsItem>>() {
             @Override
-            public void onChanged(List<ParserFix.NewsItem> newsItems) {
+            public void onChanged(List<ParserNewsList.NewsItem> newsItems) {
                 if (newsItems != null) {
                     newsAdapter.setNewsList(newsItems);
                 }
@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
         super.onStart();
 
         // Если данные уже загружены, обновите RecyclerView
-        List<ParserFix.NewsItem> cachedNews = newsViewModel.getNewsListLiveData().getValue();
+        List<ParserNewsList.NewsItem> cachedNews = newsViewModel.getNewsListLiveData().getValue();
         if (cachedNews != null && !cachedNews.isEmpty()) {
             newsAdapter.setNewsList(cachedNews);
         } else {
@@ -115,7 +115,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public class ParserTask extends AsyncTask<Context, Void, List<ParserFix.NewsItem>> {
+    public class ParserTask extends AsyncTask<Context, Void, List<ParserNewsList.NewsItem>> {
 
         @Override
         protected void onPreExecute() {
@@ -125,15 +125,15 @@ public class HomeFragment extends Fragment {
         }
 
         @Override
-        protected List<ParserFix.NewsItem> doInBackground(Context... contexts) {
+        protected List<ParserNewsList.NewsItem> doInBackground(Context... contexts) {
             if (contexts != null && contexts.length > 0) {
-                return ParserFix.parseEftNews(contexts[0]);
+                return ParserNewsList.parseEftNews(contexts[0]);
             }
             return null;
         }
 
         @Override
-        protected void onPostExecute(List<ParserFix.NewsItem> newsItems) {
+        protected void onPostExecute(List<ParserNewsList.NewsItem> newsItems) {
             super.onPostExecute(newsItems);
             if (newsItems != null) {
                 // Сохранение данных в ViewModel

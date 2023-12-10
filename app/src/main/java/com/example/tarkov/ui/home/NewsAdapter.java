@@ -1,7 +1,6 @@
 package com.example.tarkov.ui.home;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,27 +8,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.toolbox.NetworkImageView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.example.tarkov.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.example.tarkov.ui.Parser.ParserFix;
+import com.example.tarkov.ui.Parser.ParserNewsList;
 
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
-    private static List<ParserFix.NewsItem> newsList = new ArrayList<>();
+    private static List<ParserNewsList.NewsItem> newsList = new ArrayList<>();
 
 
-    public void setNewsList(List<ParserFix.NewsItem> newsList) {
+    public void setNewsList(List<ParserNewsList.NewsItem> newsList) {
         this.newsList = newsList;
         notifyDataSetChanged();
     }
@@ -44,7 +38,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         // Привязать данные элемента новости к держателю представления
-        ParserFix.NewsItem currentNews = newsList.get(position);
+        ParserNewsList.NewsItem currentNews = newsList.get(position);
         holder.bind(currentNews);
 
         holder.itemView.setOnClickListener(v -> {
@@ -78,7 +72,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         }
 
 
-public void bind(ParserFix.NewsItem currentNews) {
+public void bind(ParserNewsList.NewsItem currentNews) {
     Picasso.get()
             .load(currentNews.getImageUrl())
             .placeholder(R.drawable.image1)

@@ -13,7 +13,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParserFix {
+public class ParserNewsList {
     private static final String DIRECTORY_NAME = "MyAppDirectoryName";
     private static final String FILE_NAME = "news.html";
 
@@ -82,7 +82,8 @@ public class ParserFix {
                 String imageUrl = newsElement.select(".image img").attr("src");
 
                 // Добавляем ссылку на полную новость
-                String fullNewsLink = "https://www.escapefromtarkov.com" + newsElement.select(".headtext a").attr("href");
+                String relativeLink = newsElement.select(".headtext a").attr("href");
+                String fullNewsLink = "https://www.escapefromtarkov.com" + relativeLink + "?lang=ru";
 
                 NewsItem newsItem = new NewsItem(title, date, partialContent, imageUrl, fullNewsLink);
                 newsItems.add(newsItem);

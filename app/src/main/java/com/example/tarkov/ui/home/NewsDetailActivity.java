@@ -89,10 +89,11 @@ public class NewsDetailActivity extends AppCompatActivity {
                 detailContent.setText(HtmlCompat.fromHtml(contentHtml, HtmlCompat.FROM_HTML_MODE_COMPACT));
                 detailContent.setMovementMethod(LinkMovementMethod.getInstance());
 
-                Element sourceElement = doc.select("a[itemprop='mainEntityOfPage']").first();
+                Element sourceElement = doc.select("meta[property='og:url']").first();
                 if (sourceElement != null) {
-                    String sourceLinkText = sourceElement.attr("href");
-                    sourceLink.setText("Источник: " + sourceLinkText);
+                    String sourceLinkText = sourceElement.attr("content");
+                    sourceLink.setText(Html.fromHtml("Источник: <a href=\"" + sourceLinkText + "\">" + title + "</a>"));
+                    sourceLink.setMovementMethod(LinkMovementMethod.getInstance());
                 } else {
                     sourceLink.setText("Источник не указан");
                 }

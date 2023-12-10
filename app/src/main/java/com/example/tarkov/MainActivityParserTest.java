@@ -1,20 +1,8 @@
 package com.example.tarkov;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.tarkov.databinding.ActivityMainBinding;
-import com.example.tarkov.ui.Parser.ParserForNews;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.List;
 
 public class MainActivityParserTest extends AppCompatActivity {
 
