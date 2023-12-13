@@ -10,10 +10,12 @@ public class DashboardViewModel extends ViewModel {
 
     public DashboardViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Здесь будет интерактивная карта Содержимое (сам текст) в папке com.example.tarkov.ui.dashboard");
+        mText.setValue("");
+
     }
 
     public LiveData<String> getText() {
         return mText;
     }
+
 }
