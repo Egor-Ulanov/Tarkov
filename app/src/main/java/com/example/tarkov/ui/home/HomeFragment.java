@@ -45,7 +45,14 @@ public class HomeFragment extends Fragment {
 
         progressBar = root.findViewById(R.id.progressBar); // Инициализация ProgressBar
 
+        /*final TextView textView = binding.textHome;
+        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);*/
+
+
+        // Initialize ViewPager
+
         // Инициализация остальных элементов фрагмента
+
         viewPager = root.findViewById(R.id.viewPager);
         sliderAdapter = new ImageSliderAdapter(requireContext());
         viewPager.setAdapter(sliderAdapter);
