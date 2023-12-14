@@ -60,5 +60,8 @@ dependencies {
     implementation ("commons-io:commons-io:2.15.1")
     implementation ("org.jsoup:jsoup:1.14.3")
 
+
     implementation ("com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
+    implementation ("androidx.core:core-ktx:1.6.0")
+
 }

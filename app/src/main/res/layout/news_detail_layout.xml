@@ -1,66 +1,79 @@
 <!-- news_detail_layout.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/detailTitle"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Название новости"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/detailDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Дата публикации"
-        android:textColor="@android:color/darker_gray"
-        android:layout_below="@id/detailTitle"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp" />
+        <!-- Добавлен ProgressBar -->
+        <ProgressBar
+            android:id="@+id/progressBarDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible" />
+        <TextView
+            android:id="@+id/detailTitle"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Название новости"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <ImageView
-        android:id="@+id/detailImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/detailDate"
-        android:scaleType="centerCrop"
-        android:layout_marginTop="8dp" />
+        <TextView
+            android:id="@+id/detailDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Дата публикации"
+            android:textColor="@android:color/darker_gray"
+            android:layout_below="@id/detailTitle"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp" />
 
-    <TextView
-        android:id="@+id/detailContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Содержание новости"
-        android:layout_below="@id/detailImage"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        <ImageView
+            android:id="@+id/detailImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/detailDate"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="8dp" />
 
-    <TextView
-        android:id="@+id/sourceLink"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Источник"
-        android:textColor="@color/colorAccent"
-        android:layout_below="@id/detailContent"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        <TextView
+            android:id="@+id/detailContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Содержание новости"
+            android:layout_below="@id/detailImage"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
-    <ImageButton
-        android:id="@+id/closeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
-        android:contentDescription="Закрыть новость"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp" /><!--android:background="?android:attr/selectableItemBackground"-->
-</RelativeLayout>
+        <TextView
+            android:id="@+id/sourceLink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Источник"
+            android:textColor="@color/colorAccent"
+            android:layout_below="@id/detailContent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <ImageButton
+            android:id="@+id/closeButton"
+            android:layout_width="44dp"
+            android:layout_height="34dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="15dp"
+            android:contentDescription="Закрыть новость"
+            android:src="@android:drawable/ic_menu_close_clear_cancel" /><!--android:background="?android:attr/selectableItemBackground"-->
+    </RelativeLayout>
+</ScrollView>

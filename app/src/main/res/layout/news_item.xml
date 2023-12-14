@@ -21,24 +21,24 @@
     <TextView
         android:id="@+id/newsTitle"
         android:layout_width="0dp"
-        android:layout_height="30dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="20dp"
         android:text="Название новости"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/newsImage"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/newsImage" />
 
     <TextView
         android:id="@+id/newsContent"
         android:layout_width="0dp"
-        android:layout_height="39dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:text="Содержимое новости"
-        app:layout_constraintTop_toBottomOf="@+id/newsTitle"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/newsTitle" />
 
     <TextView
         android:id="@+id/newsDate"
