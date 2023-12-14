@@ -56,8 +56,8 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        /*final TextView textView = binding.textHome;
+        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);*/
 
 
         // Initialize ViewPager
