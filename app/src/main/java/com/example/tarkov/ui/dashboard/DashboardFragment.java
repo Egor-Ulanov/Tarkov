@@ -37,7 +37,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.example.tarkov.ui.Parser.ParserFix;
+import com.example.tarkov.ui.Parser.ParserNewsList;
 
 public class DashboardFragment extends Fragment {
 
