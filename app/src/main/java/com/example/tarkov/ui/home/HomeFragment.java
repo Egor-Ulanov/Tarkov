@@ -24,6 +24,7 @@ import com.example.tarkov.R;
 import com.example.tarkov.databinding.FragmentHomeBinding;
 import com.example.tarkov.ui.Parser.ParserCookie.NewsViewModel;
 import com.example.tarkov.ui.Parser.ParserNewsList;
+import com.example.tarkov.ui.home.YouTubeApiPackage.CachedYouTubeVideos;
 import com.example.tarkov.ui.home.YouTubeApiPackage.YouTubeApiClient;
 import com.google.api.services.youtube.model.SearchResult;
 
@@ -59,14 +60,16 @@ public class HomeFragment extends Fragment {
         viewPager.setAdapter(sliderAdapter);
 
         sliderIndicator = root.findViewById(R.id.sliderIndicator);
-        setupSlideIndicator();
+        setupSlideIndicator(sliderIndicator)
+
+        ;
 
         recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         newsAdapter = new NewsAdapter();
         recyclerView.setAdapter(newsAdapter);
 
-        loadYouTubeData();
+//        loadYouTubeData();
 
         // Инициализация ViewModel
         newsViewModel = new ViewModelProvider(requireActivity()).get(NewsViewModel.class);
@@ -84,15 +87,18 @@ public class HomeFragment extends Fragment {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // Ignore scrolling events
             }
 
             @Override
             public void onPageSelected(int position) {
-                updateSlideIndicator(sliderIndicator, position);
+                // Update the slide indicator
+                updateSlideIndicator(sliderIndicator, viewPager);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
+                // Ignore scrolling state change events
             }
         });
 
@@ -100,19 +106,30 @@ public class HomeFragment extends Fragment {
         YouTubeApiClient.fetchLatestVideos(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
             @Override
             public void onVideosFetched(List<SearchResult> videos) {
-                if (videos != null && !videos.isEmpty()) {
-                    latestVideos.addAll(videos);
-                    sliderAdapter.notifyDataSetChanged();
+                // Фильтровать только первые 5 видео
+                List<SearchResult> filteredVideos = new ArrayList<>();
+                for (int i = 0; i < 5; i++) {
+                    if (i < videos.size()) {
+                        filteredVideos.add(videos.get(i));
+                    }
                 }
+
+                latestVideos.clear();
+                latestVideos.addAll(filteredVideos);
+                sliderAdapter.notifyDataSetChanged();
             }
         });
 
         return root;
     }
 
-    private void setupSlideIndicator() {
-        if (sliderAdapter != null) {
-            int count = sliderAdapter.getCount();
+
+
+    private void setupSlideIndicator(LinearLayout sliderIndicator) {
+        sliderIndicator.removeAllViews(); // Удалить все дочерние элементы
+
+        if (latestVideos != null) {
+            int count = latestVideos.size();
             if (count > 0) {
                 for (int i = 0; i < count; i++) {
                     ImageView indicator = new ImageView(requireContext());
@@ -127,14 +144,29 @@ public class HomeFragment extends Fragment {
                 }
             }
         } else {
-            Log.e("HomeFragment", "sliderAdapter is null in setupSlideIndicator");
+            Log.e("HomeFragment", "latestVideos is null in setupSlideIndicator");
         }
     }
 
+
+
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+
+    {
         super.onViewCreated(view, savedInstanceState);
-        setupSlideIndicator();
+
+        // Инициализация ProgressBar
+        progressBar = view.findViewById(R.id.progressBar);
+
+        // Инициализация ViewPager
+        viewPager = view.findViewById(R.id.viewPager);
+        sliderAdapter = new ImageSliderAdapter(requireContext(), latestVideos);
+        viewPager.setAdapter(sliderAdapter);
+
+        // Инициализация индикатора слайдера
+        LinearLayout sliderIndicator = view.findViewById(R.id.sliderIndicator);
+        setupSlideIndicator(sliderIndicator);
     }
 
     @Override
@@ -164,10 +196,10 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void updateSlideIndicator(LinearLayout sliderIndicator, int position) {
+    private void updateSlideIndicator(LinearLayout sliderIndicator, ViewPager viewPager) {
         for (int i = 0; i < sliderIndicator.getChildCount(); i++) {
             ImageView indicator = (ImageView) sliderIndicator.getChildAt(i);
-            indicator.setImageResource(i == position ? R.drawable.truedot1 : R.drawable.truedot2);
+            indicator.setImageResource(i == viewPager.getCurrentItem() ? R.drawable.truedot1 : R.drawable.truedot2);
         }
     }
 
@@ -207,17 +239,42 @@ public class HomeFragment extends Fragment {
         Log.d("HomeFragment", "onDestroy");
     }
 
+    // Загрузка последних 5 видео с канала Battlestategames
     private void loadYouTubeData() {
-        YouTubeApiClient.fetchLatestVideos(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
-            @Override
-            public void onVideosFetched(List<SearchResult> videos) {
-                if (videos != null && !videos.isEmpty()) {
+        if (CachedYouTubeVideos.isExpired()) {
+            // Кэш устарел, делаем запрос к API
+            YouTubeApiClient.fetchLatestVideosAsync(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
+                @Override
+                public void onVideosFetched(List<SearchResult> videos) {
+                    // Фильтровать только первые 5 видео
+                    List<SearchResult> filteredVideos = new ArrayList<>();
+                    for (int i = 0; i < 5; i++) {
+                        if (i < videos.size()) {
+                            filteredVideos.add(videos.get(i));
+                        }
+                    }
+
                     latestVideos.clear();
-                    latestVideos.addAll(videos);
+                    latestVideos.addAll(filteredVideos);
                     sliderAdapter.notifyDataSetChanged();
+
+                    // Обновите индикатор после успешной подгрузки видеороликов
+                    setupSlideIndicator(sliderIndicator);
                 }
-            }
-        });
+            });
+        } else {
+            // Используем кэшированные видео
+            latestVideos = CachedYouTubeVideos.fetchVideos(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
+                @Override
+                public void onVideosFetched(List<SearchResult> videos) {
+                    if (videos != null && !videos.isEmpty()) {
+                        latestVideos.clear();
+                        latestVideos.addAll(videos);
+                        sliderAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
+        }
     }
 
     @Override

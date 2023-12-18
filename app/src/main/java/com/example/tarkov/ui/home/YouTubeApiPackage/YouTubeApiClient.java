@@ -39,6 +39,10 @@ public class YouTubeApiClient {
         return null;
     }
 
+    public static void fetchLatestVideosAsync(Context context, OnVideosFetchedListener listener) {
+        new FetchVideosTask(context, listener).execute();
+    }
+
     private static class FetchVideosTask extends AsyncTask<Void, Void, List<SearchResult>> {
 
         private final Context context;
