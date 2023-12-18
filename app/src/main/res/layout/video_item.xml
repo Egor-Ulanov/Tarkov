@@ -3,31 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Превью видеоролика -->
-    <ImageView
-        android:id="@+id/videoThumbnail"
+    <!-- WebView для встраивания видеоплеера YouTube -->
+    <WebView
+        android:id="@+id/youtubeWebView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop" />
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
 
-    <!-- Заголовок видеоролика -->
-    <TextView
-        android:id="@+id/videoTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/videoThumbnail"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        android:padding="16dp"
-        android:background="#FFFFFF" />
-
-    <!-- Кнопка для воспроизведения видео -->
-    <ImageView
-        android:id="@+id/playButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/ic_play_button" />
 </RelativeLayout>

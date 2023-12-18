@@ -1,17 +1,16 @@
 package com.example.tarkov.ui.home;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.bumptech.glide.Glide;
 import com.example.tarkov.R;
 import com.google.api.services.youtube.model.SearchResult;
 
@@ -43,29 +42,25 @@ public class ImageSliderAdapter extends PagerAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.video_item, container, false);
 
-        ImageView imageView = itemView.findViewById(R.id.videoThumbnail);
-        TextView videoTitle = itemView.findViewById(R.id.videoTitle);
-        ImageView playButton = itemView.findViewById(R.id.playButton);
+        WebView youtubeWebView = itemView.findViewById(R.id.youtubeWebView);
 
-        // Получить URL превью видеоролика
+        // Получите videoId
         String videoId = videos.get(position).getId().getVideoId();
-        String thumbnailUrl = "https://img.youtube.com/vi/" + videoId + "/0.jpg";
 
-        // Загрузить превью видеоролика
-        Glide.with(context)
-                .load(thumbnailUrl)
-                .into(imageView);
+        // Создайте iframe-код для встраивания видеоплеера YouTube
+        String iframeCode = "<html><body><iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/"
+                + videoId + "\" frameborder=\"0\" allowfullscreen></iframe></body></html>";
 
-        // Установить заголовок видеоролика (примените нужную логику для получения заголовка)
-        String title = "Заголовок видео";
-        videoTitle.setText(title);
+        // Настройте WebView для отображения iframe-кода
+        WebSettings webSettings = youtubeWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        youtubeWebView.loadData(iframeCode, "text/html", "utf-8");
 
-        // Добавьте обработчик щелчка кнопки воспроизведения (примените нужную логику)
-        playButton.setOnClickListener(new View.OnClickListener() {
+        youtubeWebView.setWebViewClient(new WebViewClient() {
             @Override
-            public void onClick(View v) {
-                // Обработка нажатия на кнопку воспроизведения
-                Log.d("ImageSliderAdapter", "Кнопка воспроизведения нажата для позиции: " + position);
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                // Обработка нажатия на видеоплеер (открывается в приложении YouTube)
+                return false;
             }
         });
 

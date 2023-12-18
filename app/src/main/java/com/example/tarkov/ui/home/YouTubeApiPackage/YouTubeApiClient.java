@@ -25,8 +25,18 @@ public class YouTubeApiClient {
         void onVideosFetched(List<SearchResult> videos);
     }
 
-    public static void fetchLatestVideos(Context context, OnVideosFetchedListener listener) {
-        new FetchVideosTask(context, listener).execute();
+    public static List<SearchResult> fetchLatestVideos(Context context, OnVideosFetchedListener listener) {
+        // Проверяем, есть ли кэшированные данные
+        if (CachedYouTubeVideos.getCachedVideos() != null) {
+            List<SearchResult> cachedVideos = CachedYouTubeVideos.getCachedVideos();
+            if (listener != null) {
+                listener.onVideosFetched(cachedVideos);
+            }
+        } else {
+            // Если нет кэшированных данных, выполняем запрос к API
+            new FetchVideosTask(context, listener).execute();
+        }
+        return null;
     }
 
     private static class FetchVideosTask extends AsyncTask<Void, Void, List<SearchResult>> {
@@ -72,6 +82,10 @@ public class YouTubeApiClient {
         @Override
         protected void onPostExecute(List<SearchResult> searchResults) {
             super.onPostExecute(searchResults);
+            if (searchResults != null) {
+                // Сохраняем данные в кэше
+                CachedYouTubeVideos.setCachedVideos(searchResults);
+            }
             if (listener != null) {
                 listener.onVideosFetched(searchResults);
             }
