@@ -1,5 +1,6 @@
 package com.example.tarkov.ui.home.DataBaseHelper;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -44,9 +45,15 @@ public class VideosDatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_VIDEO_ID, videoId);
         values.put(COLUMN_TITLE, title);
         values.put(COLUMN_TIMESTAMP, timestamp);
-        db.insert(TABLE_NAME, null, values);
+
+        // Обновление или вставка новой записи
+        int updated = db.update(TABLE_NAME, values, COLUMN_VIDEO_ID + " = ?", new String[]{videoId});
+        if (updated == 0) {
+            db.insert(TABLE_NAME, null, values);
+        }
         db.close();
     }
+
 
     // Получение информации о видеороликах из базы данных
     public Cursor getVideos() {
@@ -64,6 +71,7 @@ public class VideosDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Получение времени последнего запроса к API
+    @SuppressLint("Range")
     public long getLastFetchTime() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_LAST_FETCH_TIME}, null, null, null, null, null);
@@ -74,4 +82,8 @@ public class VideosDatabaseHelper extends SQLiteOpenHelper {
         }
         return lastFetchTime;
     }
+
+
+
+
 }

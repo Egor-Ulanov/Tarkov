@@ -1,5 +1,7 @@
 package com.example.tarkov.ui.home.YouTubeApiPackage;
 
+import static com.example.tarkov.ui.home.YouTubeApiPackage.CachedYouTubeVideos.EXPIRATION_TIME_IN_MILLISECONDS;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
@@ -42,11 +44,9 @@ public class YouTubeApiClient {
         long lastFetchTime = databaseHelper.getLastFetchTime();
         long currentTime = System.currentTimeMillis();
 
-        if (currentTime - lastFetchTime > 24 * 60 * 60 * 1000) {
-            // Время последнего запроса истекло, делаем новый запрос
+        if (currentTime - lastFetchTime > EXPIRATION_TIME_IN_MILLISECONDS) {
             new FetchVideosTask(context, listener).execute();
         } else {
-            // Используем данные из кеша
             List<SearchResult> cachedVideos = getCachedVideosFromDatabase(context);
             if (listener != null) {
                 listener.onVideosFetched(cachedVideos);
@@ -55,6 +55,9 @@ public class YouTubeApiClient {
 
         return null;
     }
+
+
+
 
     public static void fetchLatestVideosAsync(Context context, OnVideosFetchedListener listener) {
         new FetchVideosTask(context, listener).execute();
@@ -118,7 +121,9 @@ public class YouTubeApiClient {
                 String title = video.getSnippet().getTitle();
                 long timestamp = System.currentTimeMillis();
 
-                databaseHelper.addVideo(videoId, title, timestamp);
+                databaseHelper.addVideo(videoId,
+                        title,
+                        timestamp);
             }
         }
     }

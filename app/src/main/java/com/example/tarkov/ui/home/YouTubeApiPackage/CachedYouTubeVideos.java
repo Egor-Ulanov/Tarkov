@@ -9,7 +9,7 @@
 
 
     public class CachedYouTubeVideos {
-        private static final long EXPIRATION_TIME_IN_MILLISECONDS = 86400000; // 24 часа
+        public static final long EXPIRATION_TIME_IN_MILLISECONDS = 86400000; // 24 часа
 
         private static List<SearchResult> cachedVideos;
         private static long lastFetchedTimestamp = 0;

@@ -60,16 +60,13 @@ public class HomeFragment extends Fragment {
         viewPager.setAdapter(sliderAdapter);
 
         sliderIndicator = root.findViewById(R.id.sliderIndicator);
-        setupSlideIndicator(sliderIndicator)
-
-        ;
+        setupSlideIndicator(sliderIndicator);
 
         recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         newsAdapter = new NewsAdapter();
         recyclerView.setAdapter(newsAdapter);
 
-//        loadYouTubeData();
 
         // Инициализация ViewModel
         newsViewModel = new ViewModelProvider(requireActivity()).get(NewsViewModel.class);
@@ -101,6 +98,15 @@ public class HomeFragment extends Fragment {
                 // Ignore scrolling state change events
             }
         });
+
+        // Проверка и загрузка данных из YouTube API
+        if (CachedYouTubeVideos.isExpired() || CachedYouTubeVideos.getCachedVideos() == null) {
+            loadYouTubeData();
+        } else {
+            // Используем кэшированные данные
+            processFetchedVideos(CachedYouTubeVideos.getCachedVideos());
+        }
+
 
         // Загрузка последних 5 видео с канала Battlestategames
         YouTubeApiClient.fetchLatestVideos(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
@@ -182,9 +188,6 @@ public class HomeFragment extends Fragment {
             parserTask = new ParserTask();
             parserTask.execute(getContext());
         }
-
-        // Обновите данные из YouTube API
-        loadYouTubeData();
     }
 
     @Override
@@ -239,41 +242,24 @@ public class HomeFragment extends Fragment {
         Log.d("HomeFragment", "onDestroy");
     }
 
-    // Загрузка последних 5 видео с канала Battlestategames
     private void loadYouTubeData() {
-        if (CachedYouTubeVideos.isExpired()) {
-            // Кэш устарел, делаем запрос к API
-            YouTubeApiClient.fetchLatestVideosAsync(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
-                @Override
-                public void onVideosFetched(List<SearchResult> videos) {
-                    // Фильтровать только первые 5 видео
-                    List<SearchResult> filteredVideos = new ArrayList<>();
-                    for (int i = 0; i < 5; i++) {
-                        if (i < videos.size()) {
-                            filteredVideos.add(videos.get(i));
-                        }
-                    }
+        YouTubeApiClient.fetchLatestVideosAsync(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
+            @Override
+            public void onVideosFetched(List<SearchResult> videos) {
+                // Обновляем кэш и UI
+                CachedYouTubeVideos.setCachedVideos(videos);
+                processFetchedVideos(videos);
+            }
+        });
+    }
 
-                    latestVideos.clear();
-                    latestVideos.addAll(filteredVideos);
-                    sliderAdapter.notifyDataSetChanged();
 
-                    // Обновите индикатор после успешной подгрузки видеороликов
-                    setupSlideIndicator(sliderIndicator);
-                }
-            });
-        } else {
-            // Используем кэшированные видео
-            latestVideos = CachedYouTubeVideos.fetchVideos(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
-                @Override
-                public void onVideosFetched(List<SearchResult> videos) {
-                    if (videos != null && !videos.isEmpty()) {
-                        latestVideos.clear();
-                        latestVideos.addAll(videos);
-                        sliderAdapter.notifyDataSetChanged();
-                    }
-                }
-            });
+    private void processFetchedVideos(List<SearchResult> videos) {
+        if (videos != null && !videos.isEmpty()) {
+            latestVideos.clear();
+            latestVideos.addAll(videos);
+            sliderAdapter.notifyDataSetChanged();
+            setupSlideIndicator(sliderIndicator);
         }
     }
 
