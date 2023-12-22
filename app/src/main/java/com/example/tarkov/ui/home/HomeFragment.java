@@ -1,6 +1,8 @@
 package com.example.tarkov.ui.home;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,6 +48,8 @@ public class HomeFragment extends Fragment {
 
     private List<SearchResult> latestVideos = new ArrayList<>();
 
+    private boolean isFetchingVideos = false; // Флаг для отслеживания состояния загрузки
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -56,11 +60,29 @@ public class HomeFragment extends Fragment {
         progressBar = root.findViewById(R.id.progressBar); // Инициализация ProgressBar
 
         viewPager = root.findViewById(R.id.viewPager);
-        sliderAdapter = new ImageSliderAdapter(requireContext(), latestVideos);
+
+        // Инициализация ViewPagerAdapter
+        sliderAdapter = new ImageSliderAdapter(this, latestVideos);
+        sliderAdapter.setShowErrorLayout(!isNetworkConnected());
+
+
+        // Проверка состояния сети и установка состояния ошибки для адаптера
+        if (!isNetworkConnected()) {
+            sliderAdapter.setShowErrorLayout(true);
+            Log.d("HomeFragment", "Нет интернета при загрузке");
+        } else {
+            Log.d("HomeFragment", "Загрузка данных, интернет есть");
+            loadYouTubeData(); // Загрузка данных, если есть интернет
+//            sliderIndicator = root.findViewById(R.id.sliderIndicator);
+//            setupSlideIndicator(sliderIndicator); 3333
+        }
+
         viewPager.setAdapter(sliderAdapter);
 
-        sliderIndicator = root.findViewById(R.id.sliderIndicator);
-        setupSlideIndicator(sliderIndicator);
+
+
+//        sliderIndicator = root.findViewById(R.id.sliderIndicator);
+//        setupSlideIndicator(sliderIndicator);
 
         recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -100,31 +122,46 @@ public class HomeFragment extends Fragment {
         });
 
         // Проверка и загрузка данных из YouTube API
-        if (CachedYouTubeVideos.isExpired() || CachedYouTubeVideos.getCachedVideos() == null) {
-            loadYouTubeData();
+        if (CachedYouTubeVideos.isExpired(requireContext()) || CachedYouTubeVideos.getCachedVideos(requireContext()) == null) {
+            // Проверка состояния сети и установка состояния ошибки для адаптера
+            if (!isNetworkConnected()) {
+                Log.d("HomeFragment", "Нет интернета при загрузке и нет кэша");
+
+            } else {
+                Log.d("HomeFragment", "Загрузка данных, интернет есть и есть кэш");
+                loadYouTubeData();
+            }
         } else {
             // Используем кэшированные данные
-            processFetchedVideos(CachedYouTubeVideos.getCachedVideos());
+            processFetchedVideos(CachedYouTubeVideos.getCachedVideos(requireContext()));
         }
 
 
         // Загрузка последних 5 видео с канала Battlestategames
-        YouTubeApiClient.fetchLatestVideos(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
-            @Override
-            public void onVideosFetched(List<SearchResult> videos) {
-                // Фильтровать только первые 5 видео
-                List<SearchResult> filteredVideos = new ArrayList<>();
-                for (int i = 0; i < 5; i++) {
-                    if (i < videos.size()) {
-                        filteredVideos.add(videos.get(i));
+        if (!isNetworkConnected()) {
+            Log.d("HomeFragment", "Нет интернета, показываем ошибку");
+            // Если нет интернета, показать сообщение об ошибке
+            sliderAdapter.setShowErrorLayout(true);
+        } else if (!isFetchingVideos) { // Добавьте проверку флага
+            isFetchingVideos = true; // Устанавливаем флаг в true перед вызовом fetchVideos
+            CachedYouTubeVideos.fetchVideos(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
+                @Override
+                public void onVideosFetched(List<SearchResult> videos) {
+                    isFetchingVideos = false; // Устанавливаем флаг в false после завершения загрузки
+                    if (videos != null && !videos.isEmpty()) {
+                        Log.d("HomeFragment", "Данные YouTube получены");
+                        CachedYouTubeVideos.setCachedVideos(videos);
+                        processFetchedVideos(videos);
+                        setupSlideIndicator(sliderIndicator); // Инициализация индикаторов, когда есть данные
+                    } else {
+                        Log.d("HomeFragment", "Видео не найдены или ошибка");
+                        sliderAdapter.setShowErrorLayout(true);
                     }
                 }
+            });
+        }
 
-                latestVideos.clear();
-                latestVideos.addAll(filteredVideos);
-                sliderAdapter.notifyDataSetChanged();
-            }
-        });
+
 
         return root;
     }
@@ -132,34 +169,39 @@ public class HomeFragment extends Fragment {
 
 
     private void setupSlideIndicator(LinearLayout sliderIndicator) {
-        sliderIndicator.removeAllViews(); // Удалить все дочерние элементы
+        Log.d("HomeFragment", "Настройка индикатора слайдера");
+        if (sliderIndicator == null) {
+            Log.e("HomeFragment", "SliderIndicator is null");
+            return;
+        }
 
-        if (latestVideos != null) {
-            int count = latestVideos.size();
-            if (count > 0) {
-                for (int i = 0; i < count; i++) {
-                    ImageView indicator = new ImageView(requireContext());
-                    indicator.setImageResource(i == 0 ? R.drawable.truedot1 : R.drawable.truedot2);
+        if (!sliderAdapter.isShowErrorLayout() && latestVideos != null && !latestVideos.isEmpty()) {
+            sliderIndicator.removeAllViews(); // Удалить все дочерние элементы
 
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    );
-                    layoutParams.setMargins(8, 8, 8, 0);
-                    sliderIndicator.addView(indicator, layoutParams);
+            if (latestVideos != null) {
+                int count = latestVideos.size();
+                if (count > 0) {
+                    for (int i = 0; i < count; i++) {
+                        ImageView indicator = new ImageView(requireContext());
+                        indicator.setImageResource(i == 0 ? R.drawable.truedot1 : R.drawable.truedot2);
+
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                        );
+                        layoutParams.setMargins(8, 8, 8, 0);
+                        sliderIndicator.addView(indicator, layoutParams);
+                    }
                 }
+            } else {
+                Log.e("HomeFragment", "latestVideos is null in setupSlideIndicator");
             }
-        } else {
-            Log.e("HomeFragment", "latestVideos is null in setupSlideIndicator");
         }
     }
 
 
-
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // Инициализация ProgressBar
@@ -167,13 +209,25 @@ public class HomeFragment extends Fragment {
 
         // Инициализация ViewPager
         viewPager = view.findViewById(R.id.viewPager);
-        sliderAdapter = new ImageSliderAdapter(requireContext(), latestVideos);
+
+        // Установка адаптера с учетом состояния сети
+        sliderAdapter = new ImageSliderAdapter(this, latestVideos);
         viewPager.setAdapter(sliderAdapter);
 
         // Инициализация индикатора слайдера
-        LinearLayout sliderIndicator = view.findViewById(R.id.sliderIndicator);
-        setupSlideIndicator(sliderIndicator);
+        sliderIndicator = view.findViewById(R.id.sliderIndicator);
+
+        if (!isNetworkConnected()) {
+            // Если нет интернета, установить флаг ошибки в адаптере
+            sliderAdapter.setShowErrorLayout(true);
+            // Нет необходимости инициализировать индикаторы, так как нет видео
+        } else {
+            // Если есть интернет, загружаем данные и инициализируем индикаторы
+            loadYouTubeData();
+            setupSlideIndicator(sliderIndicator);
+        }
     }
+
 
     @Override
     public void onStart() {
@@ -242,26 +296,67 @@ public class HomeFragment extends Fragment {
         Log.d("HomeFragment", "onDestroy");
     }
 
+//    private void loadYouTubeData() {
+//        YouTubeApiClient.fetchLatestVideosAsync(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
+//            @Override
+//            public void onVideosFetched(List<SearchResult> videos) {
+//                // Обновляем кэш и UI
+//                CachedYouTubeVideos.setCachedVideos(videos);
+//                processFetchedVideos(videos);
+//            }
+//        });
+//    }
+
     private void loadYouTubeData() {
-        YouTubeApiClient.fetchLatestVideosAsync(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
-            @Override
-            public void onVideosFetched(List<SearchResult> videos) {
-                // Обновляем кэш и UI
-                CachedYouTubeVideos.setCachedVideos(videos);
-                processFetchedVideos(videos);
-            }
-        });
+        Log.d("HomeFragment", "Начало загрузки данных YouTube");
+        if (!isNetworkConnected()) {
+            Log.d("HomeFragment", "Нет интернета, показываем ошибку");
+            // Если нет интернета, показать сообщение об ошибке
+            sliderAdapter.setShowErrorLayout(true);
+        } else if (!isFetchingVideos) { // Добавьте проверку флага
+            isFetchingVideos = true; // Устанавливаем флаг в true перед вызовом fetchVideos
+            CachedYouTubeVideos.fetchVideos(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
+                @Override
+                public void onVideosFetched(List<SearchResult> videos) {
+                    isFetchingVideos = false; // Устанавливаем флаг в false после завершения загрузки
+                    if (videos != null && !videos.isEmpty()) {
+                        Log.d("HomeFragment", "Данные YouTube получены");
+                        CachedYouTubeVideos.setCachedVideos(videos);
+                        processFetchedVideos(videos);
+                        setupSlideIndicator(sliderIndicator); // Инициализация индикаторов, когда есть данные
+                    } else {
+                        Log.d("HomeFragment", "Видео не найдены или ошибка");
+                        sliderAdapter.setShowErrorLayout(true);
+                    }
+                }
+            });
+        }
     }
+
+
+
 
 
     private void processFetchedVideos(List<SearchResult> videos) {
         if (videos != null && !videos.isEmpty()) {
             latestVideos.clear();
             latestVideos.addAll(videos);
-            sliderAdapter.notifyDataSetChanged();
-            setupSlideIndicator(sliderIndicator);
+            sliderAdapter.notifyDataSetChanged(); // Обновить адаптер
+            setupSlideIndicator(sliderIndicator); // Обновить индикатор слайдера
         }
     }
+
+    public boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (cm != null) {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        }
+
+        return false;
+    }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -279,5 +374,7 @@ public class HomeFragment extends Fragment {
         super.onDetach();
         Log.d("HomeFragment", "onDetach");
     }
+
+
 
 }

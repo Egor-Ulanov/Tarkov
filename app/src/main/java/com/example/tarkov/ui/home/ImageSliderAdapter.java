@@ -18,17 +18,27 @@ import java.util.List;
 
 public class ImageSliderAdapter extends PagerAdapter {
 
-    private Context context;
+    private HomeFragment fragment;
     private List<SearchResult> videos;
+    private boolean showErrorLayout = false; // Флаг для отображения ошибки
 
-    public ImageSliderAdapter(Context context, List<SearchResult> videos) {
-        this.context = context;
+    public ImageSliderAdapter(HomeFragment fragment, List<SearchResult> videos) {
+        this.fragment = fragment;
         this.videos = videos;
+    }
+
+    public void setShowErrorLayout(boolean showError) {
+        this.showErrorLayout = showError;
+        notifyDataSetChanged();
+    }
+
+    public boolean isShowErrorLayout() {
+        return showErrorLayout;
     }
 
     @Override
     public int getCount() {
-        return videos.size();
+        return videos != null ? videos.size() : 0;
     }
 
     @Override
@@ -39,34 +49,31 @@ public class ImageSliderAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView = inflater.inflate(R.layout.video_item, container, false);
+        LayoutInflater inflater = (LayoutInflater) fragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        WebView youtubeWebView = itemView.findViewById(R.id.youtubeWebView);
-
-        // Получите videoId
-        String videoId = videos.get(position).getId().getVideoId();
-
-        // Создайте iframe-код для встраивания видеоплеера YouTube
-        String iframeCode = "<html><body><iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/"
-                + videoId + "\" frameborder=\"0\" allowfullscreen></iframe></body></html>";
-
-        // Настройте WebView для отображения iframe-кода
-        WebSettings webSettings = youtubeWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        youtubeWebView.loadData(iframeCode, "text/html", "utf-8");
-
-        youtubeWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // Обработка нажатия на видеоплеер (открывается в приложении YouTube)
-                return false;
-            }
-        });
-
-        container.addView(itemView);
-
-        return itemView;
+        if (showErrorLayout) {
+            // Загружаем макет с ошибкой
+            View errorView = inflater.inflate(R.layout.layout_no_internet, container, false);
+            container.addView(errorView);
+            return errorView;
+        } else {
+            // Загружаем видео
+            View itemView = inflater.inflate(R.layout.video_item, container, false);
+            WebView youtubeWebView = itemView.findViewById(R.id.youtubeWebView);
+            String videoId = videos.get(position).getId().getVideoId();
+            String iframeCode = "<html><body><iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/" + videoId + "\" frameborder=\"0\" allowfullscreen></iframe></body></html>";
+            youtubeWebView.loadData(iframeCode, "text/html", "utf-8");
+            WebSettings webSettings = youtubeWebView.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+            youtubeWebView.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    return false;
+                }
+            });
+            container.addView(itemView);
+            return itemView;
+        }
     }
 
     @Override

@@ -60,6 +60,7 @@ public class YouTubeApiClient {
 
 
     public static void fetchLatestVideosAsync(Context context, OnVideosFetchedListener listener) {
+        Log.d(TAG, "fetchLatestVideosAsync called");
         new FetchVideosTask(context, listener).execute();
     }
 
@@ -68,9 +69,12 @@ public class YouTubeApiClient {
         private final Context context;
         private final OnVideosFetchedListener listener;
 
+        private final VideosDatabaseHelper databaseHelper;
+
         public FetchVideosTask(Context context, OnVideosFetchedListener listener) {
             this.context = context;
             this.listener = listener;
+            this.databaseHelper = new VideosDatabaseHelper(context);
         }
 
         @Override
@@ -107,13 +111,14 @@ public class YouTubeApiClient {
         protected void onPostExecute(List<SearchResult> searchResults) {
             super.onPostExecute(searchResults);
             if (searchResults != null) {
-                databaseHelper.setLastFetchTime(System.currentTimeMillis());
                 saveVideosToDatabase(searchResults);
+                databaseHelper.setLastFetchTime(System.currentTimeMillis());
             }
             if (listener != null) {
                 listener.onVideosFetched(searchResults);
             }
         }
+
 
         private void saveVideosToDatabase(List<SearchResult> videos) {
             for (SearchResult video : videos) {
