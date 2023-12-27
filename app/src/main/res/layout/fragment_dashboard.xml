@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:layout_marginBottom="60dp"
+    android:layout_marginBottom="56dp"
+    android:background="?android:colorBackground"
     >
 
     <TextView
@@ -31,7 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="2"
-        android:layout_below="@id/textViewSubTitle">
+        android:layout_below="@id/textViewSubTitle"
+        android:background="?attr/colorPrimary">
 
         <!-- Блок 1 -->
         <LinearLayout
@@ -55,7 +57,8 @@
                 android:layout_height="wrap_content"
                 android:text="Название карты 1"
                 android:textSize="16sp"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textColor="?android:textColor"/>
         </LinearLayout>
 
         <!-- Блок 2 -->
@@ -80,7 +83,8 @@
                 android:layout_height="wrap_content"
                 android:text="Название карты 2"
                 android:textSize="16sp"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textColor="?android:textColor"/>
         </LinearLayout>
 
     </GridLayout>
