@@ -17,11 +17,11 @@
 
 
 
-    <style name="FadeAnimation">
+    <!--<style name="FadeAnimation">
         <item name="android:activityOpenEnterAnimation">@transition/fade_in</item>
         <item name="android:activityOpenExitAnimation">@transition/fade_out</item>
         <item name="android:activityCloseEnterAnimation">@transition/fade_in</item>
         <item name="android:activityCloseExitAnimation">@transition/fade_out</item>
-    </style>
+    </style>-->
 
 </resources>
