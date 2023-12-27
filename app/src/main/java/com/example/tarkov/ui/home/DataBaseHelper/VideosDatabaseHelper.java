@@ -14,17 +14,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+
+
 public class VideosDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "tarkov.db";
-    private static final int DB_VERSION = 1; // Версия вашей базы данных
-
-    // Названия таблицы и столбцов
-    private static final String TABLE_NAME = "videos";
-    private static final String COLUMN_VIDEO_ID = "video_id";
-    private static final String COLUMN_TITLE = "title";
-    private static final String COLUMN_TIMESTAMP = "timestamp";
-    private static final String COLUMN_LAST_FETCH_TIME = "last_fetch_time";
+    private static final int DB_VERSION = 5;
     private final Context context;
+
+    // Названия таблиц и столбцов
+    private static final String TABLE_REQUEST_TIME = "request_time_manager";
+    private static final String COLUMN_REQUEST_TIME = "request_time";
+
+    private static final String TABLE_VIDEOS = "videos";
+    private static final String COLUMN_VIDEO_ID = "id";
+    public static final String COLUMN_VIDEO_IDENTIFIER = "video_identificator";
+    public static final String COLUMN_TITLE = "title";
+    private static final String COLUMN_PUBLICATION_DATE = "publication_date";
 
     public VideosDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -61,78 +70,100 @@ public class VideosDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+
+//    @Override
+//    public void onCreate(SQLiteDatabase db) {
+//        // Создание таблиц в базе данных
+//        db.execSQL("CREATE TABLE " + TABLE_REQUEST_TIME + " (" +
+//                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+//                "request_time TEXT)");
+//        db.execSQL("CREATE TABLE " + TABLE_VIDEOS + " (" +
+//                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+//                "video_identificator TEXT," +
+//                "title TEXT," +
+//                "publication_date TEXT)");
+//    }
+
+
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        String createTableQuery = "CREATE TABLE " + TABLE_NAME + " (" +
-//                COLUMN_VIDEO_ID + " TEXT PRIMARY KEY," +
+//        // Создание таблицы для времени запросов
+//        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_REQUEST_TIME + " (" +
+//                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+//                COLUMN_REQUEST_TIME + " TEXT)");
+//
+//        // Создание таблицы для видео
+//        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_VIDEOS + " (" +
+//                COLUMN_VIDEO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+//                COLUMN_VIDEO_IDENTIFIER + " TEXT," +
 //                COLUMN_TITLE + " TEXT," +
-//                COLUMN_TIMESTAMP + " INTEGER," +
-//                COLUMN_LAST_FETCH_TIME + " INTEGER DEFAULT 0)";
-//        db.execSQL(createTableQuery);
+//                COLUMN_PUBLICATION_DATE + " TEXT)");
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_LAST_FETCH_TIME + " INTEGER DEFAULT 0");
-        }
+//        if (oldVersion < 2) {
+//            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_LAST_FETCH_TIME + " INTEGER DEFAULT 0");
+//        }
     }
 
-    // Добавление видеоролика в базу данных
-    public void addVideo(String videoId, String title, long timestamp) {
+
+    // Добавление записи о видео в базу данных
+    public void addVideo(String videoIdentificator, String title, String publicationDate) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_VIDEO_ID, videoId);
+        values.put(COLUMN_VIDEO_IDENTIFIER, videoIdentificator);
         values.put(COLUMN_TITLE, title);
-        values.put(COLUMN_TIMESTAMP, timestamp);
-
-        int updated = db.update(TABLE_NAME, values, COLUMN_VIDEO_ID + " = ?", new String[]{videoId});
-        if (updated == 0) {
-            long rowId = db.insert(TABLE_NAME, null, values);
-            if (rowId == -1) {
-                Log.e("DatabaseHelper", "Failed to insert video: " + videoId);
-            } else {
-                Log.d("DatabaseHelper", "Video inserted: " + videoId);
-            }
-        } else {
-            Log.d("DatabaseHelper", "Video updated: " + videoId);
-        }
+        values.put(COLUMN_PUBLICATION_DATE, publicationDate); // Добавляем дату публикации
+        db.insert(TABLE_VIDEOS, null, values);
         db.close();
     }
+
 
 
 
     // Получение информации о видеороликах из базы данных
     public Cursor getVideos() {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.query(TABLE_NAME, null, null, null, null, null, null);
+        return db.query(TABLE_VIDEOS, null, null, null, null, null, null);
     }
 
-    // Установка времени последнего запроса к API
-    public void setLastFetchTime(long timestamp) {
-        Log.d("DatabaseHelper", "Setting last fetch time: " + timestamp);
+    // Метод для форматирования текущего времени в читаемый формат
+    public static String getCurrentFormattedTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date());
+    }
+
+    // Метод для сохранения времени запроса в базу данных
+    public void addRequestTime(long currentTimeMillis) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_LAST_FETCH_TIME, timestamp);
-        db.update(TABLE_NAME, values, null, null);
+        currentTimeMillis = System.currentTimeMillis();
+        values.put(COLUMN_REQUEST_TIME, currentTimeMillis);
+        db.insert(TABLE_REQUEST_TIME, null, values);
         db.close();
     }
 
-    // Получение времени последнего запроса к API
-    @SuppressLint("Range")
-    public long getLastFetchTime() {
-        long lastFetchTime = 0;
-        Log.d("DatabaseHelper", "Last fetch time: " + lastFetchTime);
+
+    // Получение последнего времени запроса к API
+    public String getLastRequestTime() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_LAST_FETCH_TIME}, null, null, null, null, null);
-        lastFetchTime = 0;
+        Cursor cursor = db.query(TABLE_REQUEST_TIME, new String[]{COLUMN_REQUEST_TIME}, null, null, null, null, "id DESC", "1");
         if (cursor != null && cursor.moveToFirst()) {
-            lastFetchTime = cursor.getLong(cursor.getColumnIndex(COLUMN_LAST_FETCH_TIME));
-            Log.d("DatabaseHelper", "Last fetch time: " + lastFetchTime);
+            @SuppressLint("Range") String lastRequestTime = cursor.getString(cursor.getColumnIndex(COLUMN_REQUEST_TIME));
             cursor.close();
+            return lastRequestTime;
         }
-        return lastFetchTime;
+        return null;
     }
+
+    public void clearVideos() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_VIDEOS, null, null);
+        db.close();
+    }
+
 
 
 

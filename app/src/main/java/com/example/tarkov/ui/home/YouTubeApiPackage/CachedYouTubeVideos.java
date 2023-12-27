@@ -21,7 +21,7 @@
         public static final long EXPIRATION_TIME_IN_MILLISECONDS = 86400000; // 24 часа
 
         private static List<SearchResult> cachedVideos;
-        private static long lastFetchedTimestamp = 0;
+        private static long lastFetchedTimestamp;
 
         public static List<SearchResult> getCachedVideos(Context context) {
             VideosDatabaseHelper databaseHelper = new VideosDatabaseHelper(context);
@@ -30,18 +30,19 @@
 
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    @SuppressLint("Range") String videoId = cursor.getString(cursor.getColumnIndex("video_id"));
-                    @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("title"));
-                    // Другие поля, такие как timestamp, можно также извлечь, если они нужны
+                    @SuppressLint("Range") String videoId = cursor.getString(cursor.getColumnIndex(VideosDatabaseHelper.COLUMN_VIDEO_IDENTIFIER));
+                    @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex(VideosDatabaseHelper.COLUMN_TITLE));
 
                     SearchResult searchResult = new SearchResult();
                     SearchResultSnippet snippet = new SearchResultSnippet();
                     snippet.setTitle(title);
 
+
                     ResourceId resourceId = new ResourceId();
                     resourceId.setVideoId(videoId);
 
                     searchResult.setId(resourceId);
+
                     searchResult.setSnippet(snippet);
 
                     results.add(searchResult);
@@ -53,6 +54,7 @@
         }
 
 
+
         public static void setCachedVideos(List<SearchResult> videos) {
             cachedVideos = videos;
             lastFetchedTimestamp = System.currentTimeMillis();
@@ -61,11 +63,13 @@
         public static boolean isExpired(Context context) {
             Log.d("CachedYouTubeVideos", "Checking if cache is expired");
             VideosDatabaseHelper databaseHelper = new VideosDatabaseHelper(context);
-            long lastFetchTime = databaseHelper.getLastFetchTime();
+            String lastFetchTimeStr = databaseHelper.getLastRequestTime();
+            long lastFetchTime = lastFetchTimeStr != null ? Long.parseLong(lastFetchTimeStr) : 0;
             boolean isExpired = System.currentTimeMillis() - lastFetchTime > EXPIRATION_TIME_IN_MILLISECONDS;
             Log.d("CachedYouTubeVideos", "Cache expired: " + isExpired);
             return isExpired;
         }
+
 
 
 

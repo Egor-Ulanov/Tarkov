@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -62,7 +64,12 @@ public class HomeFragment extends Fragment {
         viewPager = root.findViewById(R.id.viewPager);
 
         // Инициализация ViewPagerAdapter
-        sliderAdapter = new ImageSliderAdapter(this, latestVideos);
+        sliderAdapter = new ImageSliderAdapter(this, latestVideos, new ImageSliderAdapter.OnPageLoadListener() {
+            @Override
+            public void onPageLoad(int position) {
+                updateSlideIndicator(sliderIndicator, position);
+            }
+        });
         sliderAdapter.setShowErrorLayout(!isNetworkConnected());
 
 
@@ -78,6 +85,7 @@ public class HomeFragment extends Fragment {
         }
 
         viewPager.setAdapter(sliderAdapter);
+        viewPager.setOffscreenPageLimit(latestVideos.size());
 
 
 
@@ -106,19 +114,21 @@ public class HomeFragment extends Fragment {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                // Ignore scrolling events
+
             }
 
             @Override
             public void onPageSelected(int position) {
-                // Update the slide indicator
-                updateSlideIndicator(sliderIndicator, viewPager);
+                // Обновление индикатора слайдера при изменении выбранной страницы
+                updateSlideIndicator(sliderIndicator, position);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                // Ignore scrolling state change events
+
             }
+
+            // Игнорировать другие методы (onPageScrolled и onPageScrollStateChanged)
         });
 
         // Проверка и загрузка данных из YouTube API
@@ -211,7 +221,9 @@ public class HomeFragment extends Fragment {
         viewPager = view.findViewById(R.id.viewPager);
 
         // Установка адаптера с учетом состояния сети
-        sliderAdapter = new ImageSliderAdapter(this, latestVideos);
+        sliderAdapter = new ImageSliderAdapter(this, latestVideos, position -> {
+            updateIndicators();
+        });
         viewPager.setAdapter(sliderAdapter);
 
         // Инициализация индикатора слайдера
@@ -253,12 +265,13 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void updateSlideIndicator(LinearLayout sliderIndicator, ViewPager viewPager) {
+    private void updateSlideIndicator(LinearLayout sliderIndicator, int currentPosition) {
         for (int i = 0; i < sliderIndicator.getChildCount(); i++) {
             ImageView indicator = (ImageView) sliderIndicator.getChildAt(i);
-            indicator.setImageResource(i == viewPager.getCurrentItem() ? R.drawable.truedot1 : R.drawable.truedot2);
+            indicator.setImageResource(i == currentPosition ? R.drawable.truedot1 : R.drawable.truedot2);
         }
     }
+
 
     public class ParserTask extends AsyncTask<Context, Void, List<ParserNewsList.NewsItem>> {
 
@@ -376,5 +389,8 @@ public class HomeFragment extends Fragment {
     }
 
 
+    public void updateIndicators() {
+        setupSlideIndicator(sliderIndicator);
+    }
 
 }

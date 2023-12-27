@@ -1,6 +1,10 @@
 package com.example.tarkov.ui.home.YouTubeApiPackage;
 
+
+import static com.example.tarkov.ui.home.DataBaseHelper.VideosDatabaseHelper.COLUMN_TITLE;
+import static com.example.tarkov.ui.home.DataBaseHelper.VideosDatabaseHelper.COLUMN_VIDEO_IDENTIFIER;
 import static com.example.tarkov.ui.home.YouTubeApiPackage.CachedYouTubeVideos.EXPIRATION_TIME_IN_MILLISECONDS;
+import static com.example.tarkov.ui.home.YouTubeApiPackage.YouTubeApiClient.FetchVideosTask.getCachedVideosFromDatabase;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -26,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
+
 public class YouTubeApiClient {
 
     private static final String TAG = "YouTubeApiClient";
@@ -41,7 +47,8 @@ public class YouTubeApiClient {
             databaseHelper = new VideosDatabaseHelper(context);
         }
 
-        long lastFetchTime = databaseHelper.getLastFetchTime();
+        String lastFetchTimeStr = databaseHelper.getLastRequestTime();
+        long lastFetchTime = lastFetchTimeStr != null ? Long.parseLong(lastFetchTimeStr) : 0;
         long currentTime = System.currentTimeMillis();
 
         if (currentTime - lastFetchTime > EXPIRATION_TIME_IN_MILLISECONDS) {
@@ -57,14 +64,12 @@ public class YouTubeApiClient {
     }
 
 
-
-
     public static void fetchLatestVideosAsync(Context context, OnVideosFetchedListener listener) {
         Log.d(TAG, "fetchLatestVideosAsync called");
         new FetchVideosTask(context, listener).execute();
     }
 
-    private static class FetchVideosTask extends AsyncTask<Void, Void, List<SearchResult>> {
+    static class FetchVideosTask extends AsyncTask<Void, Void, List<SearchResult>> {
 
         private final Context context;
         private final OnVideosFetchedListener listener;
@@ -107,59 +112,86 @@ public class YouTubeApiClient {
             }
         }
 
+//        private void saveVideosToDatabase(List<SearchResult> videos) {
+//            for (SearchResult video : videos) {
+//                String videoId = video.getId().getVideoId();
+//                String title = video.getSnippet().getTitle();
+//                String publicationDate = // получите дату публикации из video.getSnippet()
+//
+//                        databaseHelper.addVideo(videoId, title, publicationDate);
+//            }
+//        }
+//
+//
+//
+//        private void saveVideosToDatabase(List<SearchResult> videos) {
+//            for (SearchResult video : videos) {
+//                String videoId = video.getId().getVideoId();
+//                String title = video.getSnippet().getTitle();
+//                long timestamp = System.currentTimeMillis();
+//
+//                databaseHelper.addVideo(videoId,
+//                        title,
+//                        timestamp);
+//            }
+//        }
+//    }
+
+        static List<SearchResult> getCachedVideosFromDatabase(Context context) {
+            VideosDatabaseHelper databaseHelper = new VideosDatabaseHelper(context);
+            List<SearchResult> cachedVideos = new ArrayList<>();
+
+            Cursor cursor = databaseHelper.getVideos();
+            if (cursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String videoId = cursor.getString(cursor.getColumnIndex(COLUMN_VIDEO_IDENTIFIER));
+                    @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE));
+
+                    SearchResult searchResult = new SearchResult();
+                    SearchResultSnippet snippet = new SearchResultSnippet();
+                    snippet.setTitle(title);
+
+                    ResourceId resourceId = new ResourceId();
+                    resourceId.setVideoId(videoId);
+
+                    searchResult.setId(resourceId);
+                    searchResult.setSnippet(snippet);
+
+                    cachedVideos.add(searchResult);
+                } while (cursor.moveToNext());
+            }
+
+            cursor.close();
+            return cachedVideos;
+        }
+
         @Override
         protected void onPostExecute(List<SearchResult> searchResults) {
             super.onPostExecute(searchResults);
-            if (searchResults != null) {
-                saveVideosToDatabase(searchResults);
-                databaseHelper.setLastFetchTime(System.currentTimeMillis());
-            }
-            if (listener != null) {
-                listener.onVideosFetched(searchResults);
+            if (searchResults != null && !searchResults.isEmpty()) {
+                databaseHelper.clearVideos();
+
+                for (SearchResult video : searchResults) {
+                    String videoId = video.getId().getVideoId();
+                    String title = video.getSnippet().getTitle();
+                    String publicationDate = video.getSnippet().getPublishedAt().toStringRfc3339(); // Извлекаем дату публикации
+
+                    databaseHelper.addVideo(videoId, title, publicationDate);
+                }
+
+                long currentTimeMillis = System.currentTimeMillis();
+                databaseHelper.addRequestTime(currentTimeMillis);
+
+                if (listener != null) {
+                    listener.onVideosFetched(searchResults);
+                }
+            } else {
+                Log.e(TAG, "No videos fetched or error occurred");
             }
         }
 
 
-        private void saveVideosToDatabase(List<SearchResult> videos) {
-            for (SearchResult video : videos) {
-                String videoId = video.getId().getVideoId();
-                String title = video.getSnippet().getTitle();
-                long timestamp = System.currentTimeMillis();
 
-                databaseHelper.addVideo(videoId,
-                        title,
-                        timestamp);
-            }
-        }
+
     }
-
-    private static List<SearchResult> getCachedVideosFromDatabase(Context context) {
-        VideosDatabaseHelper databaseHelper = new VideosDatabaseHelper(context);
-        List<SearchResult> cachedVideos = new ArrayList<>();
-
-        Cursor cursor = databaseHelper.getVideos();
-        if (cursor.moveToFirst()) {
-            do {
-                @SuppressLint("Range") String videoId = cursor.getString(cursor.getColumnIndex("video_id"));
-                @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("title"));
-
-                SearchResult searchResult = new SearchResult();
-                SearchResultSnippet snippet = new SearchResultSnippet();
-                snippet.setTitle(title);
-
-                // Создать новый объект ResourceId для идентификатора видео
-                ResourceId resourceId = new ResourceId();
-                resourceId.setVideoId(videoId);
-
-                searchResult.setId(resourceId);
-                searchResult.setSnippet(snippet);
-
-                cachedVideos.add(searchResult);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        return cachedVideos;
-    }
-
 }
