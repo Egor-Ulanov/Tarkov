@@ -1,5 +1,8 @@
 package com.example.tarkov.ui.notifications;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,16 +10,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.tarkov.databinding.FragmentNotificationsBinding;
-
-import android.widget.Switch;
-
 import com.example.tarkov.R;
+import com.example.tarkov.databinding.FragmentNotificationsBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class NotificationsFragment extends Fragment {
@@ -52,7 +53,6 @@ public class NotificationsFragment extends Fragment {
 
         SwitchMaterial themeSwitch = binding.themeSwitch;
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // ... ваш код
             isDarkTheme = isChecked;
             // Применение выбранной темы
             applyTheme();
@@ -71,28 +71,44 @@ public class NotificationsFragment extends Fragment {
         return root;
     }
 
-    private void applyTheme() {
+    public void applyTheme() {
         int textColorResId = isDarkTheme ? R.color.ForTextNewsDark : R.color.ForTextNewsLight;
         int backgroundColorResId = isDarkTheme ? R.color.ForBackgroundNewsDark : R.color.ForBackgroundNewsLight;
+        int navBackgroundColorResId = isDarkTheme ? R.color.nav_background_dark : R.color.nav_background_light;
+        int navIconColorResId = isDarkTheme ? R.color.nav_icon_light : R.color.nav_icon_dark;
 
-        // Применение текста в зависимости от выбранной темы
-        String themeText = isDarkTheme ? "Темная" : "Светлая";
-        binding.activeThemeLabel.setText(themeText);
-
-        // Применение цвета текста из ресурсов
+        // Обновление цветов фрагмента
         int textColor = ContextCompat.getColor(requireContext(), textColorResId);
-        binding.activeThemeLabel.setTextColor(textColor);
-
-        // Применение фона из ресурсов
         int backgroundColor = ContextCompat.getColor(requireContext(), backgroundColorResId);
+        binding.activeThemeLabel.setTextColor(textColor);
         binding.getRoot().setBackgroundColor(backgroundColor);
 
-        // Применение выбранного стиля к активности
-        getActivity().setTheme(isDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme_Light);
+        // Обновление цветов нижнего навигационного меню
+        BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
+        navView.setBackgroundColor(ContextCompat.getColor(requireContext(), navBackgroundColorResId));
+        navView.setItemIconTintList(ContextCompat.getColorStateList(requireContext(), navIconColorResId));
 
-        // Установка изображения при изменении темы
+        // Установка стиля активности
+        getActivity().setTheme(isDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme_Light);
         updateSwitchThumb();
+
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if (activity != null) {
+            if (isDarkTheme) {
+                activity.getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ForItemNewsDark)));
+            } else {
+                activity.getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ForItemNewsLight)));
+            }
+        }
+
+        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isDarkTheme", isDarkTheme);
+        editor.apply();
+
+
     }
+
     private void openLink(String url) {
         // Обработка нажатия на ссылку
     }

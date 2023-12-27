@@ -13,8 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -87,7 +85,9 @@ public class HomeFragment extends Fragment {
         viewPager.setAdapter(sliderAdapter);
         viewPager.setOffscreenPageLimit(latestVideos.size());
 
-
+//        BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
+//        boolean isDarkTheme = false;
+//        ThemeUtils.applyTheme(getActivity(), isDarkTheme, navView);
 
 //        sliderIndicator = root.findViewById(R.id.sliderIndicator);
 //        setupSlideIndicator(sliderIndicator);
