@@ -64,4 +64,10 @@ dependencies {
     implementation ("com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
     implementation ("androidx.core:core-ktx:1.6.0")
 
+    implementation ("com.google.android.material:material:1.4.0") // Для SwitchMaterial
+        implementation ("androidx.appcompat:appcompat:1.3.1") // Для SwitchCompat
+    implementation ("androidx.appcompat:appcompat:1.1.0")
+
+
+
 }

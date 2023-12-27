@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="NavigationStyle">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:textColorSecondary">?android:textColorPrimary</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/ForTextNewsLight</item>
+    </style>
+</resources>

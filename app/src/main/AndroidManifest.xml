@@ -13,10 +13,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Tarkov"
+
         tools:targetApi="34">
+        <!--android:theme="@style/Theme.Tarkov"-->
+        <!--android:theme="@style/AppTheme"-->
         <activity
             android:name=".MainActivity"
+            android:theme="@style/AppTheme.Light"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
@@ -39,9 +42,18 @@
 
         <activity android:name=".ui.home.NewsDetailActivity"
             android:exported="true"
-            android:label="@string/app_name">
-
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.Light"
+            >
         </activity>
+
+        <activity android:name=".ui.notifications.NotificationsFragment"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.Light"
+            >
+        </activity>
+
         <activity android:name=".ui.dashboard.MapOfBeregActivity"
             android:exported="true"
             android:label="@string/app_name">

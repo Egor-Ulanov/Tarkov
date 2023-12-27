@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/ForItemNewsLight</item>
+        <item name="android:colorBackground">@color/ForBackgroundNewsLight</item>
+        <item name="android:textColor">@color/ForTextNewsLight</item>
+        <!-- Другие атрибуты для светлой темы -->
+    </style>
+
+    <style name="AppTheme.Dark" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/ForItemNewsDark</item>
+        <item name="android:colorBackground">@color/ForBackgroundNewsDark</item>
+        <item name="android:textColor">@color/ForTextNewsDark</item>
+        <!-- Другие атрибуты для темной темы -->
+    </style>
+
+
+
+    <style name="FadeAnimation">
+        <item name="android:activityOpenEnterAnimation">@transition/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@transition/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@transition/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@transition/fade_out</item>
+    </style>
+
+</resources>
