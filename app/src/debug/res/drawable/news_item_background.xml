@@ -3,5 +3,5 @@
 <shape android:shape="rectangle"
     xmlns:android="http://schemas.android.com/apk/res/android">
             <solid android:color="#3c3f41"/> <!-- Цвет фона отдельной новости -->
-            <corners android:radius="0dp"/> <!-- Скругление углов (произвольно выберите значение) -->
+            <corners android:radius="5dp"/> <!-- Скругление углов (произвольно выберите значение) -->
         </shape>

@@ -7,6 +7,15 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorAccent">#F498AD</color>
 
-    <color name="colorAccent">#FF4081</color>
+    <!-- Цвета для светлой темы -->
+    <color name="ForBackgroundNewsLight">#d4d4d4</color>
+    <color name="ForItemNewsLight">#c3c0be</color>
+    <color name="ForTextNewsLight">#5b5c5c</color>
+
+    <!-- Цвета для темной темы -->
+    <color name="ForBackgroundNewsDark">#2b2b2b</color>
+    <color name="ForItemNewsDark">#3c3f41</color>
+    <color name="ForTextNewsDark">#a4a3a3</color>
 </resources>
