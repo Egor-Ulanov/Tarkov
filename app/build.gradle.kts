@@ -20,8 +20,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
             )
         }
     }
@@ -31,6 +31,16 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force ("com.google.api-client:google-api-client-jackson2:1.32.1")
+        }
     }
 }
 
@@ -69,5 +79,23 @@ dependencies {
     implementation ("androidx.appcompat:appcompat:1.6.1")
 
 
+
+    implementation ("com.google.api-client:google-api-client-android:1.32.1")
+    implementation ("com.google.api-client:google-api-client-gson:1.32.1")
+    implementation ("com.google.apis:google-api-services-youtube:v3-rev222-1.25.0")
+
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation ("com.google.api-client:google-api-client-jackson2:1.32.1")
+
+//    implementation ("com.google.http-client:google-http-client-android:1.39.0")
+//    implementation ("com.google.api-client:google-api-client-gson:1.39.0")
+    implementation ("com.google.http-client:google-http-client-jackson2:1.41.0")
+
+    implementation ("com.google.apis:google-api-services-youtube:v3-rev305-1.25.0")
+
+    // https://mavenlibs.com/maven/dependency/com.google.apis/google-api-services-youtube
+    implementation ("com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0")
 
 }

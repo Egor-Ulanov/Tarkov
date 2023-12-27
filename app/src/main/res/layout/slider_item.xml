@@ -4,22 +4,31 @@
     android:layout_height="match_parent"
     >
 
+    <!-- Превью видеоролика -->
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
-
-    <TextView
-        android:id="@+id/textOverlay"
+        android:id="@+id/videoThumbnail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:textColor="#FFFFFF"
+        android:scaleType="centerCrop" />
+
+    <!-- Заголовок видеоролика -->
+    <TextView
+        android:id="@+id/videoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/videoThumbnail"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textColor="#000000"
         android:textSize="16sp"
-        android:gravity="left"
         android:padding="16dp"
-        android:background="#80000000" /> <!-- Полупрозрачный фон для текста Linear-->
+        android:background="#FFFFFF" />
+
+    <!-- Кнопка для воспроизведения видео -->
+    <ImageView
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_play_button" />
 </RelativeLayout>
