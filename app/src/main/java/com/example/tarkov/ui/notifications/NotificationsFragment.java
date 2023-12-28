@@ -1,17 +1,24 @@
 package com.example.tarkov.ui.notifications;
 
 import android.content.res.ColorStateList;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.tarkov.MainActivity;
 import com.example.tarkov.R;
 import com.example.tarkov.databinding.FragmentNotificationsBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -70,12 +77,16 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void applyTheme() {
-        // Установка стиля темы для активности
-        getActivity().setTheme(isDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme_Light);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity != null) {
+            mainActivity.updateActionBarStyle(isDarkTheme);
+        }
 
         updateUIElements();
         updateSwitchThumb();
     }
+
+
 
     @Override
     public void onResume() {
@@ -83,8 +94,15 @@ public class NotificationsFragment extends Fragment {
         // Проверка, была ли активность пересоздана из-за смены темы
         if(isRecreating) {
             // Обновление цветов элементов
+
+            updateActionBar();
             updateUIElements();
             isRecreating = false;
+        }
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity != null) {
+            mainActivity.updateActionBarStyle(isDarkTheme);
         }
     }
 
@@ -92,17 +110,23 @@ public class NotificationsFragment extends Fragment {
         // Получение цветов из ресурсов
         int textColor = ContextCompat.getColor(requireContext(), isDarkTheme ? R.color.dark_text : R.color.light_text);
         int backgroundColor = ContextCompat.getColor(requireContext(), isDarkTheme ? R.color.dark_background : R.color.light_background);
-        int navIconColor = ContextCompat.getColor(requireContext(), isDarkTheme ? R.color.dark_nav_icon : R.color.light_nav_icon);
+        int navBackgroundColor = ContextCompat.getColor(requireContext(), isDarkTheme ? R.color.dark_nav_background : R.color.light_nav_background);
 
         // Установка цветов элементов
         binding.activeThemeLabel.setTextColor(textColor);
         binding.getRoot().setBackgroundColor(backgroundColor);
 
-        // Предположим, у вас есть нижняя навигационная панель BottomNavigationView
+        // Обновление цветов и фона нижней навигационной панели
         BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
-        navView.setItemIconTintList(ColorStateList.valueOf(navIconColor));
-        navView.setItemTextColor(ColorStateList.valueOf(navIconColor));
+        navView.setBackgroundColor(navBackgroundColor);
+
+        // Установка селекторов для цвета иконок и текста
+        int navIconColorResId = isDarkTheme ? R.color.dark_nav_icon_selector : R.color.light_nav_icon_selector;
+        ColorStateList navIconColor = ContextCompat.getColorStateList(requireContext(), navIconColorResId);
+        navView.setItemIconTintList(navIconColor);
+        navView.setItemTextColor(navIconColor);
     }
+
 
     private void openLink(String url) {
         // Обработка нажатия на ссылку
@@ -123,5 +147,27 @@ public class NotificationsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void updateActionBar() {
+        if (getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                // Установка цвета фона ActionBar
+                int backgroundColorId = isDarkTheme ? R.color.dark_nav_background : R.color.light_nav_background;
+                int backgroundColor = ContextCompat.getColor(getContext(), backgroundColorId);
+                actionBar.setBackgroundDrawable(new ColorDrawable(backgroundColor));
+
+                // Установка цвета текста заголовка
+                int textColorId = isDarkTheme ? R.color.dark_text : R.color.light_text;
+                int textColor = ContextCompat.getColor(getContext(), textColorId);
+
+                // Создание нового Spannable для изменения цвета текста заголовка
+                Spannable text = new SpannableString(actionBar.getTitle());
+                text.setSpan(new ForegroundColorSpan(textColor), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+                actionBar.setTitle(text);
+            }
+        }
     }
 }
