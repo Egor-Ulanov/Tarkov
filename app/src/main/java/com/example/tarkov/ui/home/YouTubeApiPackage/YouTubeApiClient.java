@@ -1,8 +1,6 @@
 package com.example.tarkov.ui.home.YouTubeApiPackage;
 
 
-import static com.example.tarkov.ui.home.DataBaseHelper.VideosDatabaseHelper.COLUMN_TITLE;
-import static com.example.tarkov.ui.home.DataBaseHelper.VideosDatabaseHelper.COLUMN_VIDEO_IDENTIFIER;
 import static com.example.tarkov.ui.home.YouTubeApiPackage.CachedYouTubeVideos.EXPIRATION_TIME_IN_MILLISECONDS;
 import static com.example.tarkov.ui.home.YouTubeApiPackage.YouTubeApiClient.FetchVideosTask.getCachedVideosFromDatabase;
 
@@ -144,8 +142,8 @@ public class YouTubeApiClient {
             Cursor cursor = databaseHelper.getVideos();
             if (cursor.moveToFirst()) {
                 do {
-                    @SuppressLint("Range") String videoId = cursor.getString(cursor.getColumnIndex(COLUMN_VIDEO_IDENTIFIER));
-                    @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE));
+                    @SuppressLint("Range") String videoId = cursor.getString(cursor.getColumnIndex(VideosDatabaseHelper.COLUMN_VIDEO_IDENTIFIER));
+                    @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex(VideosDatabaseHelper.COLUMN_TITLE));
 
                     SearchResult searchResult = new SearchResult();
                     SearchResultSnippet snippet = new SearchResultSnippet();

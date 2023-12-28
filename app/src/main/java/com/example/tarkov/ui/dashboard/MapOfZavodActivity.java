@@ -1,14 +1,14 @@
 package com.example.tarkov.ui.dashboard;
+
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tarkov.R;
-import android.widget.ImageView;
-import com.bumptech.glide.Glide;
 
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+
 public class MapOfZavodActivity extends AppCompatActivity{
 
     @Override

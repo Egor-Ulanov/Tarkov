@@ -16,58 +16,48 @@
         android:layout_marginEnd="183dp"
         android:layout_marginBottom="4dp"
         android:checked="false"
-        app:layout_constraintBottom_toTopOf="@+id/labelSwitch"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:thumbTint="@color/black"
-        app:trackTint="@color/white" />
+        app:trackTint="@color/white"
+        tools:ignore="UnknownId" />
 
-    <TextView
-        android:id="@+id/labelSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="147dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="147dp"
-        android:layout_marginBottom="21dp"
-        android:text="Смена темы"
-        android:textAlignment="center"
 
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/activeThemeLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/themeSwitch"
-        android:textColor="?android:textColor"/>
+    <!-- Добавлены контакты -->
 
     <TextView
         android:id="@+id/activeThemeLabel"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="155dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="543dp"
-        android:text="Светлая"
+        android:layout_width="167dp"
+        android:layout_height="27dp"
+        android:text="Выбор темы"
         android:textAlignment="center"
+        android:textColor="?android:textColor"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/themeSwitch"
-        app:layout_constraintVertical_bias="1.0"
-        android:textColor="?android:textColor"/>
+        app:layout_constraintEnd_toStartOf="@+id/themeSwitch"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="49dp" />
 
-    <!-- Добавлены контакты -->
+    <ImageView
+        android:id="@+id/myImageView"
+        android:layout_width="245dp"
+        android:layout_height="245dp"
+        android:layout_marginTop="252dp"
+        android:src="@drawable/mylogo_pixian_ai"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.566"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/contactsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="165dp"
         android:text="КОНТАКТЫ BATTLESTATE GAMES"
+        android:textColor="?android:textColor"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,6 +92,7 @@
         android:layout_marginBottom="70dp"
         android:autoLink="phone"
         android:text="Тел. : +36 1 471 9244"
+        android:textColor="?android:textColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

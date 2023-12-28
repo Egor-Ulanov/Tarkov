@@ -1,7 +1,5 @@
     package com.example.tarkov.ui.home.YouTubeApiPackage;
 
-    import static com.example.tarkov.ui.home.YouTubeApiPackage.YouTubeApiClient.fetchLatestVideosAsync;
-
     import android.annotation.SuppressLint;
     import android.content.Context;
     import android.database.Cursor;
@@ -78,7 +76,7 @@
             List<SearchResult> cachedVideos = getCachedVideos(context);
             if (isExpired(context) || cachedVideos == null || cachedVideos.isEmpty()) {
                 Log.d("CachedYouTubeVideos", "Cache expired or empty, fetching new videos");
-                fetchLatestVideosAsync(context, listener);
+                YouTubeApiClient.fetchLatestVideosAsync(context, listener);
             } else {
                 Log.d("CachedYouTubeVideos", "Using cached videos");
                 listener.onVideosFetched(cachedVideos);

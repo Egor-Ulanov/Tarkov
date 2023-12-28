@@ -55,6 +55,8 @@ public class NotificationsFragment extends Fragment {
 
         TextView activeThemeLabel = binding.activeThemeLabel;
 
+
+
         SwitchMaterial themeSwitch = binding.themeSwitch;
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // ... ваш код
@@ -84,6 +86,10 @@ public class NotificationsFragment extends Fragment {
 
         updateUIElements();
         updateSwitchThumb();
+
+
+        // Напиши установку цветов элементов здес
+
     }
 
 
@@ -100,20 +106,31 @@ public class NotificationsFragment extends Fragment {
             isRecreating = false;
         }
 
-        MainActivity mainActivity = (MainActivity) getActivity();
-        if (mainActivity != null) {
-            mainActivity.updateActionBarStyle(isDarkTheme);
-        }
+//        MainActivity mainActivity = (MainActivity) getActivity();
+//        if (mainActivity != null) {
+//            mainActivity.updateActionBarStyle(isDarkTheme);
+//        }
     }
 
     private void updateUIElements() {
-        // Получение цветов из ресурсов
-        int textColor = ContextCompat.getColor(requireContext(), isDarkTheme ? R.color.dark_text : R.color.light_text);
-        int backgroundColor = ContextCompat.getColor(requireContext(), isDarkTheme ? R.color.dark_background : R.color.light_background);
+//        // Получение цветов из ресурсов
+//        int textColor = ContextCompat.getColor(requireContext(), isDarkTheme ? R.color.dark_text : R.color.light_text);
+//        int backgroundColor = ContextCompat.getColor(requireContext(), isDarkTheme ? R.color.dark_background : R.color.light_background);
         int navBackgroundColor = ContextCompat.getColor(requireContext(), isDarkTheme ? R.color.dark_nav_background : R.color.light_nav_background);
+//
+//        // Установка цветов элементов
+//        binding.activeThemeLabel.setTextColor(textColor);
+//        binding.getRoot().setBackgroundColor(backgroundColor);
 
-        // Установка цветов элементов
+        // Обновление цветов фрагмента
+        int textColorResId = isDarkTheme ? R.color.dark_text : R.color.light_text;
+        int backgroundColorResId = isDarkTheme ? R.color.dark_background : R.color.light_background;
+
+        int textColor = ContextCompat.getColor(requireContext(), textColorResId);
+        int backgroundColor = ContextCompat.getColor(requireContext(), backgroundColorResId);
         binding.activeThemeLabel.setTextColor(textColor);
+        binding.contactsText.setTextColor(textColor);
+        binding.phoneText.setTextColor(textColor);
         binding.getRoot().setBackgroundColor(backgroundColor);
 
         // Обновление цветов и фона нижней навигационной панели
@@ -125,6 +142,25 @@ public class NotificationsFragment extends Fragment {
         ColorStateList navIconColor = ContextCompat.getColorStateList(requireContext(), navIconColorResId);
         navView.setItemIconTintList(navIconColor);
         navView.setItemTextColor(navIconColor);
+
+
+
+
+
+
+
+// Применение текста в зависимости от выбранной темы
+        String themeText = isDarkTheme ? "Темная" : "Светлая";
+        binding.activeThemeLabel.setText(themeText);
+// Применение цвета текста из ресурсов
+
+        binding.activeThemeLabel.setTextColor(textColor);
+// Применение фона из ресурсов
+
+        binding.getRoot().setBackgroundColor(backgroundColor);
+// Применение выбранного стиля к активности
+        getActivity().setTheme(isDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme_Light);
+// Установка изображения при изменении темыupdateSwitchThumb();
     }
 
 

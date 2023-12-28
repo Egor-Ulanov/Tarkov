@@ -72,8 +72,11 @@ public class HomeFragment extends Fragment {
         });
         sliderAdapter.setShowErrorLayout(!isNetworkConnected());
 
-        // Инфляция макета для этого фрагмента
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+
+
+//        // Инфляция макета для этого фрагмента
+//        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 
         // Проверка состояния сети и установка состояния ошибки для адаптера

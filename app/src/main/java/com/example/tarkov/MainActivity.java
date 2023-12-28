@@ -28,8 +28,8 @@
         @Override
         protected void onCreate(Bundle savedInstanceState) {
 
-            // Установка светлой темы перед setContentView
-           // setTheme(R.style.AppTheme_Light);
+//             //Установка светлой темы перед setContentView
+          //  setTheme(R.style.AppTheme_Dark);
 
             super.onCreate(savedInstanceState);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
