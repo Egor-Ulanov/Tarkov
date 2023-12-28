@@ -1,4 +1,4 @@
-package com.example.tarkov.ui.notifications;
+/*package com.example.tarkov.ui.notifications;
 
 import android.content.Context;
 
@@ -23,3 +23,4 @@ public class ThemeUtils {
         context.setTheme(isDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme_Light);
     }
 }
+*/

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Стиль для светлой темы -->
     <style name="AppTheme.Light" parent="Theme.AppCompat.Light">
-        <item name="colorPrimary">@color/ForItemNewsLight</item>
-        <item name="android:colorBackground">@color/ForBackgroundNewsLight</item>
-        <item name="android:textColor">@color/ForTextNewsLight</item>
+        <item name="colorPrimary">@color/light_item_background</item>
+        <item name="android:colorBackground">@color/light_background</item>
+        <item name="android:textColor">@color/light_text</item>
         <!-- Другие атрибуты для светлой темы -->
     </style>
 
+    <!-- Стиль для темной темы -->
     <style name="AppTheme.Dark" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/ForItemNewsDark</item>
-        <item name="android:colorBackground">@color/ForBackgroundNewsDark</item>
-        <item name="android:textColor">@color/ForTextNewsDark</item>
+        <item name="colorPrimary">@color/dark_item_background</item>
+        <item name="android:colorBackground">@color/dark_background</item>
+        <item name="android:textColor">@color/dark_text</item>
         <!-- Другие атрибуты для темной темы -->
     </style>
 
