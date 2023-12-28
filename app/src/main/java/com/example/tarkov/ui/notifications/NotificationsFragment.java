@@ -90,6 +90,8 @@ public class NotificationsFragment extends Fragment {
         // Применение выбранного стиля к активности
         getActivity().setTheme(isDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme_Light);
 
+
+
         // Установка изображения при изменении темы
         updateSwitchThumb();
     }
