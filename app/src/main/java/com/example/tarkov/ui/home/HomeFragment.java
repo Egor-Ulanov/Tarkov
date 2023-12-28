@@ -13,8 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -34,6 +32,8 @@ import com.google.api.services.youtube.model.SearchResult;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class HomeFragment extends Fragment {
 
@@ -73,6 +73,12 @@ public class HomeFragment extends Fragment {
         sliderAdapter.setShowErrorLayout(!isNetworkConnected());
 
 
+
+
+//        // Инфляция макета для этого фрагмента
+//        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+
         // Проверка состояния сети и установка состояния ошибки для адаптера
         if (!isNetworkConnected()) {
             sliderAdapter.setShowErrorLayout(true);
@@ -87,7 +93,9 @@ public class HomeFragment extends Fragment {
         viewPager.setAdapter(sliderAdapter);
         viewPager.setOffscreenPageLimit(latestVideos.size());
 
-
+//        BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
+//        boolean isDarkTheme = false;
+//        ThemeUtils.applyTheme(getActivity(), isDarkTheme, navView);
 
 //        sliderIndicator = root.findViewById(R.id.sliderIndicator);
 //        setupSlideIndicator(sliderIndicator);
@@ -171,9 +179,51 @@ public class HomeFragment extends Fragment {
             });
         }
 
+        // Можешь исправить ошибку
+        // Can you fix the error
+
+        // Please provide more details about the error that needs to be fixed.
+        // Non-static method 'applyTheme(androidx.fragment.app.FragmentActivity)' cannot be referenced from a static context
+        //   public void applyTheme(FragmentActivity activity) {
+        //        int textColorResId = isDarkTheme ? R.color.dark_text : R.color.light_text;
+        //        int backgroundColorResId = isDarkTheme ? R.color.dark_background : R.color.light_background;
+        //        int navBackgroundColorResId = isDarkTheme ? R.color.dark_nav_background : R.color.light_nav_background;
+        //        int navIconColorResId = isDarkTheme ? R.color.dark_nav_icon_selector : R.color.light_nav_icon_selector;
+        //
+        //        int textColor = ContextCompat.getColor(requireContext(), textColorResId);
+        //        int backgroundColor = ContextCompat.getColor(requireContext(), backgroundColorResId);
+        //        binding.activeThemeLabel.setTextColor(textColor);
+        //        binding.getRoot().setBackgroundColor(backgroundColor);
+        //
+        //        BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
+        //        navView.setBackgroundColor(ContextCompat.getColor(requireContext(), navBackgroundColorResId));
+        //        navView.setItemIconTintList(ContextCompat.getColorStateList(requireContext(), navIconColorResId));
+        //        navView.setItemTextColor(ContextCompat.getColorStateList(requireContext(), navIconColorResId));
+        //
+        //        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        //        if (activity != null) {
+        //            if (isDarkTheme) {
+        //                activity.getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.dark_item_background)));
+        //            } else {
+        //                activity.getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.light_item_background)));
+        //            }
+        //        }
+        //
+        //        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        //        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //        editor.putBoolean("isDarkTheme", isDarkTheme);
+        //        editor.apply();
+        //        updateSwitchThumb();
+        //    }
+
+        // Предложи исправление  NotificationsFragment.applyTheme(getActivity());
 
 
-        return root;
+
+
+
+
+    return root;
     }
 
 
@@ -392,5 +442,6 @@ public class HomeFragment extends Fragment {
     public void updateIndicators() {
         setupSlideIndicator(sliderIndicator);
     }
+
 
 }

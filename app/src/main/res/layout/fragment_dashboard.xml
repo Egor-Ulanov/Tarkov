@@ -4,36 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:layout_marginBottom="56dp"
+
     android:background="?android:colorBackground"
-    >
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/textViewMainTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Карты Таркова"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewSubTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Интерактивные карты Escape From Tarkov (EFT)"
-        android:textSize="18sp"
         android:layout_below="@id/textViewMainTitle"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:text="Интерактивные карты Escape From Tarkov (EFT)"
+        android:textSize="18sp" />
 
     <GridLayout
         android:id="@+id/gridLayoutMaps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="2"
         android:layout_below="@id/textViewSubTitle"
-        android:background="?attr/colorPrimary">
+        android:columnCount="2">
 
         <!-- Блок 1 -->
         <LinearLayout
@@ -41,24 +39,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:orientation="vertical"
-            android:layout_margin="8dp">
+            android:layout_margin="8dp"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/mapImage1"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:scaleType="centerCrop"
-                />
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:id="@+id/mapTitle1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Название карты 1"
-                android:textSize="16sp"
                 android:gravity="center"
-                android:textColor="?android:textColor"/>
+                android:text="Берег"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <!-- Блок 2 -->
@@ -67,24 +63,46 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:orientation="vertical"
-            android:layout_margin="8dp">
+            android:layout_margin="8dp"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/mapImage2"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:scaleType="centerCrop"
-                />
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:id="@+id/mapTitle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Название карты 2"
-                android:textSize="16sp"
                 android:gravity="center"
-                android:textColor="?android:textColor"/>
+                android:text="Завод"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Блок 3 -->
+        <LinearLayout
+            android:id="@+id/mapBlock3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/mapImage3"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/mapTitle3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Лес"
+                android:textSize="16sp" />
         </LinearLayout>
 
     </GridLayout>

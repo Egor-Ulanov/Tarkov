@@ -3,6 +3,7 @@ package com.example.tarkov.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -83,8 +84,11 @@ public class ImageSliderAdapter extends PagerAdapter {
 
             webSettings.setCacheMode(WebSettings.LOAD_DEFAULT); // Включаем кэширование
 
+            youtubeWebView.setBackgroundColor(Color.TRANSPARENT);
+
+
             String videoId = videos.get(position).getId().getVideoId();
-            String iframeCode = "<html><body><iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/" + videoId + "\" frameborder=\"0\" allowfullscreen></iframe></body></html>";
+            String iframeCode = "<!DOCTYPE html><html><head><style>body,html {margin: 0; padding: 0; height: 100%; overflow: hidden;} .container {position: relative; width: 100%; height: 0; padding-bottom: 56.25%;} .video {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}</style></head><body><div class='container'><iframe class='video' src='https://www.youtube.com/embed/" + videoId + "' frameborder='0' allowfullscreen></iframe></div></body></html>";
             youtubeWebView.loadData(iframeCode, "text/html", "utf-8");
 
 
