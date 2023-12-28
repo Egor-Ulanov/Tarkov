@@ -8,25 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorAccent">#F498AD</color>
-    <color name="grey">#FFC0C0C0</color>
-
-    <!-- Цвета для светлой темы -->
-    <color name="ForBackgroundNewsLight">#d4d4d4</color>
-    <color name="ForItemNewsLight">#c3c0be</color>
-    <color name="ForTextNewsLight">#5b5c5c</color>
-
-    <!-- Цвета для темной темы -->
-    <color name="ForBackgroundNewsDark">#2b2b2b</color>
-    <color name="ForItemNewsDark">#3c3f41</color>
-    <color name="ForTextNewsDark">#a4a3a3</color>
-
-    <!-- Цвета для иконок нижней панели навигации -->
-    <color name="nav_icon_light">#FFFFFF</color> <!-- Ярко-голубой для темной темы -->
-    <color name="nav_icon_dark">#FF000000</color>  <!-- Кобальтовый для светлой темы -->
-
-    <color name="nav_background_light">#d4d4d4</color> <!-- Светлый фон для светлой темы -->
-    <color name="nav_background_dark">#3c3f41</color>  <!-- Темный фон для темной темы -->
-
 
     <!-- Цвета для светлой темы -->
     <color name="light_background">#d4d4d4</color>
@@ -43,8 +24,4 @@
     <color name="dark_nav_background">#322628</color>
     <color name="dark_nav_icon">#8D8183</color>
     <color name="dark_nav_icon_selected">#FFE6EB</color>
-
-
-
-
 </resources>
