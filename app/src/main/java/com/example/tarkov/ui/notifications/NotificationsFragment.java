@@ -1,5 +1,6 @@
 package com.example.tarkov.ui.notifications;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,16 +8,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.tarkov.databinding.FragmentNotificationsBinding;
-
-import android.widget.Switch;
-
 import com.example.tarkov.R;
+import com.example.tarkov.databinding.FragmentNotificationsBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class NotificationsFragment extends Fragment {
@@ -72,29 +70,39 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void applyTheme() {
-        int textColorResId = isDarkTheme ? R.color.ForTextNewsDark : R.color.ForTextNewsLight;
-        int backgroundColorResId = isDarkTheme ? R.color.ForBackgroundNewsDark : R.color.ForBackgroundNewsLight;
-
-        // Применение текста в зависимости от выбранной темы
-        String themeText = isDarkTheme ? "Темная" : "Светлая";
-        binding.activeThemeLabel.setText(themeText);
-
-        // Применение цвета текста из ресурсов
-        int textColor = ContextCompat.getColor(requireContext(), textColorResId);
-        binding.activeThemeLabel.setTextColor(textColor);
-
-        // Применение фона из ресурсов
-        int backgroundColor = ContextCompat.getColor(requireContext(), backgroundColorResId);
-        binding.getRoot().setBackgroundColor(backgroundColor);
-
-        // Применение выбранного стиля к активности
+        // Установка стиля темы для активности
         getActivity().setTheme(isDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme_Light);
 
-
-
-        // Установка изображения при изменении темы
-        updateSwitchThumb();
+        updateUIElements();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Проверка, была ли активность пересоздана из-за смены темы
+        if(isRecreating) {
+            // Обновление цветов элементов
+            updateUIElements();
+            isRecreating = false;
+        }
+    }
+
+    private void updateUIElements() {
+        // Получение цветов из ресурсов
+        int textColor = ContextCompat.getColor(requireContext(), isDarkTheme ? R.color.dark_text : R.color.light_text);
+        int backgroundColor = ContextCompat.getColor(requireContext(), isDarkTheme ? R.color.dark_background : R.color.light_background);
+        int navIconColor = ContextCompat.getColor(requireContext(), isDarkTheme ? R.color.dark_nav_icon : R.color.light_nav_icon);
+
+        // Установка цветов элементов
+        binding.activeThemeLabel.setTextColor(textColor);
+        binding.getRoot().setBackgroundColor(backgroundColor);
+
+        // Предположим, у вас есть нижняя навигационная панель BottomNavigationView
+        BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
+        navView.setItemIconTintList(ColorStateList.valueOf(navIconColor));
+        navView.setItemTextColor(ColorStateList.valueOf(navIconColor));
+    }
+
     private void openLink(String url) {
         // Обработка нажатия на ссылку
     }
