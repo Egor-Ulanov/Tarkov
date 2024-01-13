@@ -9,7 +9,7 @@ import com.example.tarkov.R;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
-public class MapOfZavodActivity extends AppCompatActivity{
+public class MapOfWoodsActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

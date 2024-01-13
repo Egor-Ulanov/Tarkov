@@ -1,91 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:layout_marginBottom="56dp"
+    android:orientation="vertical"
     android:background="?android:colorBackground"
-    >
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/textViewMainTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Карты Таркова"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewSubTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="Интерактивные карты Escape From Tarkov (EFT)"
-        android:textSize="18sp"
-        android:layout_below="@id/textViewMainTitle"
-        android:layout_marginBottom="16dp"/>
+        android:textSize="20sp" />
 
-    <GridLayout
-        android:id="@+id/gridLayoutMaps"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="2"
-        android:layout_below="@id/textViewSubTitle"
-        android:background="?attr/colorPrimary">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingBottom="60dp"
+        />
 
-        <!-- Блок 1 -->
-        <LinearLayout
-            android:id="@+id/mapBlock1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:orientation="vertical"
-            android:layout_margin="8dp">
-
-            <ImageView
-                android:id="@+id/mapImage1"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:scaleType="centerCrop"
-                />
-
-            <TextView
-                android:id="@+id/mapTitle1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Название карты 1"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:textColor="?android:textColor"/>
-        </LinearLayout>
-
-        <!-- Блок 2 -->
-        <LinearLayout
-            android:id="@+id/mapBlock2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:orientation="vertical"
-            android:layout_margin="8dp">
-
-            <ImageView
-                android:id="@+id/mapImage2"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:scaleType="centerCrop"
-                />
-
-            <TextView
-                android:id="@+id/mapTitle2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Название карты 2"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:textColor="?android:textColor"/>
-        </LinearLayout>
-
-    </GridLayout>
-</RelativeLayout>
+</LinearLayout>

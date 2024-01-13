@@ -1,29 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+    <resources>
 
-    <!-- Стиль для светлой темы -->
-    <style name="AppTheme.Light" parent="Theme.AppCompat.Light">
-        <item name="colorPrimary">@color/light_item_background</item>
-        <item name="android:colorBackground">@color/light_background</item>
-        <item name="android:textColor">@color/light_text</item>
-        <!-- Другие атрибуты для светлой темы -->
-    </style>
+        <!-- Стиль для светлой темы -->
+        <style name="AppTheme.Light" parent="Theme.AppCompat.Light">
+            <item name="interfaceTextColor">@color/interface_text_color</item>
+            <item name="colorPrimary">@color/light_item_background</item>
+            <item name="android:colorBackground">@color/light_background</item>
+            <item name="android:textColor">@color/light_text</item>
+            <item name="actionBarStyle">@style/CustomActionBar.Light</item>
+            <!-- Другие атрибуты для светлой темы -->
+        </style>
 
-    <!-- Стиль для темной темы -->
-    <style name="AppTheme.Dark" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/dark_item_background</item>
-        <item name="android:colorBackground">@color/dark_background</item>
-        <item name="android:textColor">@color/dark_text</item>
-        <!-- Другие атрибуты для темной темы -->
-    </style>
+        <!-- Стиль для темной темы -->
+        <style name="AppTheme.Dark" parent="Theme.AppCompat">
+            <item name="interfaceTextColor">@color/lighter_interface_text_color</item>
+            <item name="colorPrimary">@color/dark_item_background</item>
+            <item name="android:colorBackground">@color/dark_background</item>
+            <item name="android:textColor">@color/dark_text</item>
+            <item name="actionBarStyle">@style/CustomActionBar.Dark</item>
+            <!-- Другие атрибуты для темной темы -->
+        </style>
+
+        <style name="CustomActionBar.Light" parent="Widget.AppCompat.ActionBar.Solid">
+            <item name="background">@color/light_nav_background</item>
+            <item name="titleTextStyle">@style/ActionBarTitleText.Light</item>
+        </style>
+
+        <style name="CustomActionBar.Dark" parent="Widget.AppCompat.ActionBar.Solid">
+            <item name="background">@color/dark_nav_background</item>
+            <item name="titleTextStyle">@style/ActionBarTitleText.Dark</item>
+        </style>
+
+        <style name="ActionBarTitleText.Light" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+            <item name="android:textColor">@color/light_text</item>
+        </style>
+
+        <style name="ActionBarTitleText.Dark" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+            <item name="android:textColor">@color/dark_text</item>
+        </style>
 
 
 
-    <!--<style name="FadeAnimation">
-        <item name="android:activityOpenEnterAnimation">@transition/fade_in</item>
-        <item name="android:activityOpenExitAnimation">@transition/fade_out</item>
-        <item name="android:activityCloseEnterAnimation">@transition/fade_in</item>
-        <item name="android:activityCloseExitAnimation">@transition/fade_out</item>
-    </style>-->
 
-</resources>
+
+        <!--<style name="FadeAnimation">
+            <item name="android:activityOpenEnterAnimation">@transition/fade_in</item>
+            <item name="android:activityOpenExitAnimation">@transition/fade_out</item>
+            <item name="android:activityCloseEnterAnimation">@transition/fade_in</item>
+            <item name="android:activityCloseExitAnimation">@transition/fade_out</item>
+        </style>-->
+
+    </resources>
