@@ -19,8 +19,12 @@ import com.squareup.picasso.Picasso;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import androidx.core.text.HtmlCompat;
 
@@ -54,8 +58,12 @@ public class NewsDetailActivity extends AppCompatActivity {
         // Получение ссылки на полную новость из предыдущей активности
         String fullNewsLink = getIntent().getStringExtra("fullNewsLink");
 
+
+
+        String newsTitle = getIntent().getStringExtra("newsTitle"); // Получение заголовка новости
+        new LoadNewsTask().execute(fullNewsLink, newsTitle); // Передайте заголовок как второй параметр
         // Новый экземпляр AsyncTask для выполнения сетевой операции в фоновом потоке
-        new LoadNewsTask().execute(fullNewsLink);
+//        new LoadNewsTask().execute(fullNewsLink);
 
         // Установка слушателя для кнопки закрытия
         closeButton.setOnClickListener(new View.OnClickListener() {
@@ -82,16 +90,46 @@ public class NewsDetailActivity extends AppCompatActivity {
             sourceLink.setVisibility(View.GONE);
             closeButton.setVisibility(View.GONE);
         }
+//        @Override
+//        protected Document doInBackground(String... params) {
+//            String fullNewsLink = params[0];
+//            try {
+//                return Jsoup.connect(fullNewsLink).get();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                return null;
+//            }
+//        }
+
         @Override
         protected Document doInBackground(String... params) {
-            String fullNewsLink = params[0];
+            String newsUrl = params[0];
+            String title = params[1];
+            String fileName = title.replaceAll("[^a-zA-Z0-9а-яА-Я]", "_") + ".html";
+            File file = new File(getExternalFilesDir(null), fileName);
+
+            Document doc = null;
             try {
-                return Jsoup.connect(fullNewsLink).get();
+                if (file.exists()) {
+                    doc = Jsoup.parse(file, "UTF-8");
+                } else {
+                    doc = Jsoup.connect(newsUrl).get();
+                    // Сохраняем документ в файл
+                    FileOutputStream fos = new FileOutputStream(file);
+                    OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+                    osw.write(doc.outerHtml());
+                    osw.close();
+                    fos.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
-                return null;
             }
+
+            return doc;
         }
+
+
+
 
         @Override
         protected void onPostExecute(Document doc) {
@@ -151,5 +189,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 finish();
             }
         }
+
+
     }
 }

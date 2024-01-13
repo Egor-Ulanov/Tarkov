@@ -42,9 +42,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         holder.bind(currentNews);
 
         holder.itemView.setOnClickListener(v -> {
-            // Переход к Activity подробной информации о новостях, когда элемент новости щелкивается
             Intent intent = new Intent(v.getContext(), NewsDetailActivity.class);
-            intent.putExtra("fullNewsLink", currentNews.getFullNewsLink()); // Передать полную ссылку на активность
+            intent.putExtra("fullNewsLink", currentNews.getFullNewsLink());
+            intent.putExtra("newsTitle", currentNews.getTitle()); // Добавьте это
             v.getContext().startActivity(intent);
         });
     }

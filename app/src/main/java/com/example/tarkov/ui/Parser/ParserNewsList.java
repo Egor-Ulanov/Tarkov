@@ -88,6 +88,9 @@ public class ParserNewsList {
                 NewsItem newsItem = new NewsItem(title, date, partialContent, imageUrl, fullNewsLink);
                 newsItems.add(newsItem);
 
+                // Вызов метода для загрузки и сохранения детальной новости
+                downloadAndSaveDetailedNews(context, fullNewsLink, title);
+
                 count++;
             }
         } catch (IOException e) {
@@ -96,6 +99,8 @@ public class ParserNewsList {
         }
         return newsItems;
     }
+
+
 
 
     public static class NewsItem {
@@ -138,4 +143,38 @@ public class ParserNewsList {
             return "Заголовок: " + title + "\nДата: " + date + "\nЧастичное содержание: " + partialContent + "\nURL изображения: " + imageUrl + "\nСсылка на полную новость: " + fullNewsLink;
         }
     }
+
+    public static void downloadAndSaveDetailedNews(Context context, String newsUrl, String title) {
+        String fileName = title.replaceAll("[^a-zA-Z0-9а-яА-Я]", "_") + ".html";
+        String filePath = context.getExternalFilesDir(null) + "/" + fileName;
+
+        try {
+            Document doc = Jsoup.connect(newsUrl).get();
+
+            // Удаление всех таблиц из документа
+            Elements tables = doc.select("table");
+            for (Element table : tables) {
+                table.remove();
+            }
+
+            // Сохранение измененного HTML-контента в файл
+            String htmlContent = doc.outerHtml();
+            File file = new File(filePath);
+            FileOutputStream fos = new FileOutputStream(file);
+            OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+            osw.write(htmlContent);
+            osw.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Обработка ошибок
+        }
+    }
+
+
+
+
+
+
+
 }
