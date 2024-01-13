@@ -70,6 +70,9 @@ public class NotificationsFragment extends Fragment {
         TextView websiteText = binding.websiteText;
         TextView emailText = binding.emailText;
         TextView phoneText = binding.phoneText;
+        TextView themeText = binding.themeText;
+        TextView interfaceText = binding.interfacePril;
+        View liniaText = binding.liniaText;
 
         websiteText.setOnClickListener(v -> openLink("https://www.escapefromtarkov.com/support"));
         emailText.setOnClickListener(v -> openLink("mailto:gaijinpass@gaijindistribution.com"));
@@ -125,6 +128,7 @@ public class NotificationsFragment extends Fragment {
         // Обновление цветов фрагмента
         int textColorResId = isDarkTheme ? R.color.dark_text : R.color.light_text;
         int backgroundColorResId = isDarkTheme ? R.color.dark_background : R.color.light_background;
+        int interfaceTextColorID = isDarkTheme ? R.color.lighter_interface_text_color : R.color.interface_text_color;
 
         int textColor = ContextCompat.getColor(requireContext(), textColorResId);
         int backgroundColor = ContextCompat.getColor(requireContext(), backgroundColorResId);
@@ -144,9 +148,17 @@ public class NotificationsFragment extends Fragment {
         navView.setItemTextColor(navIconColor);
 
 
+        // Обновление цветов "Интерфейс приложения"
+        int interfaceTextColor = ContextCompat.getColor(requireContext(), interfaceTextColorID);
+        binding.interfacePril.setTextColor(interfaceTextColor);
 
+        // Обновление цветов "Тема приложения"
+        int themeTextColor = ContextCompat.getColor(requireContext(), textColorResId);
+        binding.themeText.setTextColor(themeTextColor);
 
-
+        // Обновление цвета полоски
+        int dividerColor = ContextCompat.getColor(requireContext(), interfaceTextColorID);
+        binding.liniaText.setBackgroundColor(dividerColor);
 
 
 // Применение текста в зависимости от выбранной темы

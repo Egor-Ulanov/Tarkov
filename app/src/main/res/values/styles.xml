@@ -3,6 +3,7 @@
 
         <!-- Стиль для светлой темы -->
         <style name="AppTheme.Light" parent="Theme.AppCompat.Light">
+            <item name="interfaceTextColor">@color/interface_text_color</item>
             <item name="colorPrimary">@color/light_item_background</item>
             <item name="android:colorBackground">@color/light_background</item>
             <item name="android:textColor">@color/light_text</item>
@@ -12,6 +13,7 @@
 
         <!-- Стиль для темной темы -->
         <style name="AppTheme.Dark" parent="Theme.AppCompat">
+            <item name="interfaceTextColor">@color/lighter_interface_text_color</item>
             <item name="colorPrimary">@color/dark_item_background</item>
             <item name="android:colorBackground">@color/dark_background</item>
             <item name="android:textColor">@color/dark_text</item>

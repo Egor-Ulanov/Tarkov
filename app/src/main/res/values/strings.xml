@@ -3,4 +3,6 @@
     <string name="title_home">Новости</string>
     <string name="title_dashboard">Карта</string>
     <string name="title_notifications">Настройки</string>
+    <attr name="interfaceTextColor" format="color" />
+    <attr name="lighterInterfaceTextColor" format="color" />
 </resources>

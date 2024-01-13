@@ -10,14 +10,16 @@
     <color name="colorAccent">#F498AD</color>
 
     <!-- Цвета для светлой темы -->
-    <color name="light_background">#d4d4d4</color>
+    <color name="interface_text_color">#C8FB6588</color>
+    <color name="light_background">#576542</color>
     <color name="light_text">#130E12</color>
-    <color name="light_item_background">#FBF2F5</color>
-    <color name="light_nav_background">#F5ECF1</color>
-    <color name="light_nav_icon">#968D92</color>
+    <color name="light_item_background"> #8c9c6d</color>
+    <color name="light_nav_background">#628323</color>
+    <color name="light_nav_icon">#60585C</color>
     <color name="light_nav_icon_selected">#1A1116</color>
 
     <!-- Цвета для темной темы -->
+    <color name="lighter_interface_text_color">#A06E7E</color>
     <color name="dark_background">#201A1A</color>
     <color name="dark_text">#F0E7EA</color>
     <color name="dark_item_background">#251F21</color>
