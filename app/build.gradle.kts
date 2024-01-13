@@ -34,7 +34,9 @@ android {
     }
 
     packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
+        resources {
+            excludes += setOf("META-INF/DEPENDENCIES")
+        }
     }
 
     configurations.all {
@@ -75,7 +77,7 @@ dependencies {
     implementation ("androidx.core:core-ktx:1.12.0")
 
     implementation ("com.google.android.material:material:1.11.0") // Для SwitchMaterial
-        implementation ("androidx.appcompat:appcompat:1.6.1") // Для SwitchCompat
+    implementation ("androidx.appcompat:appcompat:1.6.1") // Для SwitchCompat
     implementation ("androidx.appcompat:appcompat:1.6.1")
 
 

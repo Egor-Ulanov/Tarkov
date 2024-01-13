@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:orientation="vertical"
     android:background="?android:colorBackground"
     android:padding="16dp">
 
@@ -21,89 +22,16 @@
         android:id="@+id/textViewSubTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textViewMainTitle"
         android:layout_marginBottom="16dp"
         android:text="Интерактивные карты Escape From Tarkov (EFT)"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
-    <GridLayout
-        android:id="@+id/gridLayoutMaps"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewSubTitle"
-        android:columnCount="2">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingBottom="60dp"
+        />
 
-        <!-- Блок 1 -->
-        <LinearLayout
-            android:id="@+id/mapBlock1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="8dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/mapImage1"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:scaleType="centerCrop" />
-
-            <TextView
-                android:id="@+id/mapTitle1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Берег"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <!-- Блок 2 -->
-        <LinearLayout
-            android:id="@+id/mapBlock2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="8dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/mapImage2"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:scaleType="centerCrop" />
-
-            <TextView
-                android:id="@+id/mapTitle2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Завод"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <!-- Блок 3 -->
-        <LinearLayout
-            android:id="@+id/mapBlock3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_margin="8dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/mapImage3"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:scaleType="centerCrop" />
-
-            <TextView
-                android:id="@+id/mapTitle3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Лес"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-    </GridLayout>
-</RelativeLayout>
+</LinearLayout>
