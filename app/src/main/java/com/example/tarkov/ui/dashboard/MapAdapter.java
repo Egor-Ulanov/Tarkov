@@ -1,6 +1,7 @@
 package com.example.tarkov.ui.dashboard;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.List;
 
 public class MapAdapter extends RecyclerView.Adapter<MapAdapter.MapViewHolder> {
 
+    private static final String TAG = "MapAdapter";
     private List<MapItem> mapItemList;
 
     public MapAdapter(List<MapItem> mapItemList) {
@@ -26,12 +28,16 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.MapViewHolder> {
     @NonNull
     @Override
     public MapViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d(TAG, "onCreateViewHolder: создание view holder");
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_map, parent, false);
         return new MapViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MapViewHolder holder, int position) {
+        Log.d(TAG, "onBindViewHolder: позиция = " + position);
+
         MapItem mapItem = mapItemList.get(position);
 
         Glide.with(holder.itemView.getContext())
@@ -42,6 +48,8 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.MapViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: нажатие на элемент с позицией " + position);
+
                 Intent intent = new Intent(holder.itemView.getContext(), mapItem.getActivityClass());
                 // Добавьте дополнительные данные, если необходимо (например, передача параметров в новую активность)
                 // intent.putExtra("key", "value");

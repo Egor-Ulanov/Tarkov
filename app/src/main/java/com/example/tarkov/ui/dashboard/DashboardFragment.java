@@ -2,6 +2,7 @@ package com.example.tarkov.ui.dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +25,16 @@ import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
+    private static final String TAG = "DashboardFragment";
     private FragmentDashboardBinding binding;
     private RecyclerView recyclerView;
     private MapAdapter mapAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        Log.d(TAG, "onCreateView: начало");
+
         DashboardViewModel dashboardViewModel =
                 new ViewModelProvider(this).get(DashboardViewModel.class);
 
@@ -53,6 +58,8 @@ public class DashboardFragment extends Fragment {
         mapAdapter = new MapAdapter(mapItemList);
         recyclerView.setAdapter(mapAdapter);
 
+
+        Log.d(TAG, "onCreateView: recyclerView установлен");
         return root;
     }
 
