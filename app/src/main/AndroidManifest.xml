@@ -57,12 +57,14 @@
 
         <activity android:name=".ui.dashboard.MapOfBeregActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true"
             android:label="@string/app_name">
 
         </activity>
         <activity android:name=".ui.dashboard.MapOfZavodActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true"
             android:label="@string/app_name">
 

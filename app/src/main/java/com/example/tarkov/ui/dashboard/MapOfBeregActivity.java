@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,26 +38,32 @@ public class MapOfBeregActivity extends AppCompatActivity {
         imageView = findViewById(R.id.mapImageView);
 
         RadioGroup radioGroup = findViewById(R.id.RadioGroup); // Assuming you have a RadioGroup in your layout
-        Button rotateButton = findViewById(R.id.rotateButton);
-        Drawable rotateIcon = ContextCompat.getDrawable(this, R.drawable.ic_full_dis_24dp);
-        rotateIcon = DrawableCompat.wrap(rotateIcon);
-        DrawableCompat.setTint(rotateIcon, ContextCompat.getColor(this, R.color.white));
-        rotateButton.setCompoundDrawablesWithIntrinsicBounds(rotateIcon, null, null, null);
+
+
+
+        // Для rotateButton
+        Drawable rotateDrawable = ContextCompat.getDrawable(this, R.drawable.ic_full_dis_24dp);
+        rotateDrawable = DrawableCompat.wrap(rotateDrawable);
+        DrawableCompat.setTint(rotateDrawable, ContextCompat.getColor(this, R.color.white));
+        ImageButton rotateButton = findViewById(R.id.rotateButton);
+        rotateButton.setImageDrawable(rotateDrawable);
+
         rotateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Вызывайте метод для поворота экрана
-                rotateScreen();
+                toggleFullscreenMap();
             }
         });
 
 
 
-        Button backButton = findViewById(R.id.backButton);
-        Drawable backIcon = ContextCompat.getDrawable(this, R.drawable.ic_back_24dp);
-        backIcon = DrawableCompat.wrap(backIcon);
-        DrawableCompat.setTint(backIcon, ContextCompat.getColor(this, R.color.white));
-        backButton.setCompoundDrawablesWithIntrinsicBounds(backIcon, null, null, null);
+        Drawable backDrawable = ContextCompat.getDrawable(this, R.drawable.ic_back_24dp);
+        backDrawable = DrawableCompat.wrap(backDrawable);
+        DrawableCompat.setTint(backDrawable, ContextCompat.getColor(this, R.color.white));
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setImageDrawable(backDrawable);
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +137,14 @@ public class MapOfBeregActivity extends AppCompatActivity {
         Log.d(TAG, "goBack: возврат на предыдущую страницу");
         // Возврат на предыдущую страницу
         onBackPressed();
+    }
+
+    private void toggleFullscreenMap() {
+        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 
 }
