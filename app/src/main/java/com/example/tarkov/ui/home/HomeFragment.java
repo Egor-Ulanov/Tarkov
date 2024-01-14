@@ -1,6 +1,9 @@
 package com.example.tarkov.ui.home;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -15,6 +18,7 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -219,11 +223,21 @@ public class HomeFragment extends Fragment {
         // Предложи исправление  NotificationsFragment.applyTheme(getActivity());
 
 
-
+        // Установка цвета фона в соответствии с темой
+        updateBackgroundColor();
 
 
 
     return root;
+    }
+
+    private void updateBackgroundColor() {
+        SharedPreferences prefs = getActivity().getSharedPreferences("AppThemePrefs", MODE_PRIVATE);
+        boolean isDarkTheme = prefs.getBoolean("isDarkTheme", false);
+
+        int backgroundColorResId = isDarkTheme ? R.color.dark_background : R.color.light_background;
+        int backgroundColor = ContextCompat.getColor(requireContext(), backgroundColorResId);
+        binding.getRoot().setBackgroundColor(backgroundColor);
     }
 
 

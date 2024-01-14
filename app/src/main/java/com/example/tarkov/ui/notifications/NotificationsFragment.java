@@ -1,5 +1,8 @@
 package com.example.tarkov.ui.notifications;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -56,11 +59,17 @@ public class NotificationsFragment extends Fragment {
         TextView activeThemeLabel = binding.activeThemeLabel;
 
 
+        // Загрузка сохраненного состояния темы
+        loadThemePreference();
 
+        // Установка состояния переключателя в соответствии с сохраненной темой
         SwitchMaterial themeSwitch = binding.themeSwitch;
+        themeSwitch.setChecked(isDarkTheme);
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // ... ваш код
             isDarkTheme = isChecked;
+
+            saveThemePreference(isDarkTheme);
             // Применение выбранной темы
             applyTheme();
         });
@@ -79,6 +88,12 @@ public class NotificationsFragment extends Fragment {
         phoneText.setOnClickListener(v -> openLink("tel:+3614719244"));
         applyTheme();
         return root;
+    }
+
+    private void loadThemePreference() {
+        SharedPreferences prefs = getActivity().getSharedPreferences("AppThemePrefs", MODE_PRIVATE);
+        isDarkTheme = prefs.getBoolean("isDarkTheme", false);
+        applyTheme(); // Примените тему в соответствии с сохраненным состоянием
     }
 
     private void applyTheme() {
@@ -191,6 +206,11 @@ public class NotificationsFragment extends Fragment {
         outState.putBoolean("isDarkTheme", isDarkTheme);
     }
 
+    private void saveThemePreference(boolean isDarkTheme) {
+        SharedPreferences prefs = getActivity().getSharedPreferences("AppThemePrefs", MODE_PRIVATE);
+        prefs.edit().putBoolean("isDarkTheme", isDarkTheme).apply();
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -218,4 +238,6 @@ public class NotificationsFragment extends Fragment {
             }
         }
     }
+
+
 }
