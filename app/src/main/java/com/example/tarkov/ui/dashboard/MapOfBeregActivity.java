@@ -2,15 +2,14 @@ package com.example.tarkov.ui.dashboard;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +35,8 @@ public class MapOfBeregActivity extends AppCompatActivity {
 
     private List<Target> targets = new ArrayList<>();
 
+    private ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,8 @@ public class MapOfBeregActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_of_bereg);
+
+        progressBar = findViewById(R.id.progressBar);
 
         imageView = findViewById(R.id.mapImageView);
 
@@ -169,6 +172,9 @@ public class MapOfBeregActivity extends AppCompatActivity {
 
     // Метод для загрузки и склеивания изображений
     private void loadAndMergeImages(String[] imageUrls) {
+        // Показать ProgressBar
+        runOnUiThread(() -> progressBar.setVisibility(View.VISIBLE));
+
         final int parts = imageUrls.length; // Количество изображений для загрузки
         final Bitmap[] images = new Bitmap[parts]; // Массив, хранящий загруженные изображения в формате Bitmap
         final AtomicInteger counter = new AtomicInteger(0); // Счетчик успешно загруженных фотографий
@@ -185,12 +191,19 @@ public class MapOfBeregActivity extends AppCompatActivity {
                     Log.d(TAG, "Изображение загружено: " + imageUrls[index]);
                     if (counter.incrementAndGet() == parts) {
                         mergeImages(images);
+                        // Скрыть ProgressBar здесь
+                        runOnUiThread(() -> progressBar.setVisibility(View.GONE));
                     }
                 }
 
                 @Override
                 public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                     Log.e(TAG, "Ошибка загрузки изображения: " + imageUrls[index], e);
+                    // После загрузки всех изображений и их склеивания
+                    runOnUiThread(() -> {
+                        // Скрыть ProgressBar
+                        progressBar.setVisibility(View.GONE);
+                    });
                 }
 
                 @Override
@@ -202,6 +215,8 @@ public class MapOfBeregActivity extends AppCompatActivity {
             // Задержка для уменьшения нагрузки на память и CPU
             handler.postDelayed(() -> Picasso.get().load(imageUrls[index]).into(imageTarget), i * 100);
         }
+
+
     }
 
     // Метод для склеивания изображений в одно большое
@@ -235,11 +250,13 @@ public class MapOfBeregActivity extends AppCompatActivity {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 imageView.setImage(ImageSource.bitmap(bitmap));
+
             }
 
             @Override
             public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                 Log.e(TAG, "Ошибка загрузки изображения", e);
+                runOnUiThread(() -> progressBar.setVisibility(View.GONE));
                 // Показать запасное изображение или сообщение об ошибке
                 // Например, imageView.setImage(ImageSource.resource(R.drawable.placeholder));
             }
