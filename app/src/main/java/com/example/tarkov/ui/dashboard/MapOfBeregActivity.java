@@ -1,16 +1,21 @@
 package com.example.tarkov.ui.dashboard;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +25,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.example.tarkov.R;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -29,12 +35,39 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MapOfBeregActivity extends AppCompatActivity {
 
+    // Определение переменных для работы с изображением, прогресс-баром и URL карт
     private SubsamplingScaleImageView imageView;
+    private ProgressBar progressBar;
+    private String[] BeregimageUrls = {
+            "https://drive.google.com/uc?export=view&id=1bYGCesXZEY7ZfhaVtoXDVO94j5573LdP",
+            "https://drive.google.com/uc?export=view&id=1ZuxuT-E_pSOy1zmtq9letWWjtGDXjqyU",
+            "https://drive.google.com/uc?export=view&id=1B2UNmO8-K28apau6HTAWN8wyElxVv84D",
+            "https://drive.google.com/uc?export=view&id=1tBSIfqNGa2ohSXpAmpSbmWAGUCntNDv3",
+            "https://drive.google.com/uc?export=view&id=158u9k6EM96MLgIFHsnbl0VVXYv9QNtMG",
+            "https://drive.google.com/uc?export=view&id=1-FLj87lmqIbbNcsFMbzbMPbwUwmkQCcp",
+            "https://drive.google.com/uc?export=view&id=1FNqYlfm6Me4uu6TRqb6pjTHP6x6NSexp",
+            "https://drive.google.com/uc?export=view&id=1qejLWwVMcTuVv6dJteir6jPNlJrLELas",
+            "https://drive.google.com/uc?export=view&id=1EMjOSw2oqBYod1eCGrXeyhgPo4EI6hR8",
+    };
+    // Переменные для обработки загрузки изображений и отслеживания состояния интернет-соединения
+    private List<Target> targets = new ArrayList<>();
+    private boolean isCheckingInternet = false;
+    private boolean internetWasLost = false;
+    private int internetCheckAttempts = 0;
+    private Handler handler = new Handler();
 
     private static final String TAG = "MapOfBeregActivity";
     private Target loadImageTarget; // Поле для сильной ссылки на Target
 
-    private List<Target> targets = new ArrayList<>();
+
+    // Runnable для периодической проверки состояния интернет-соединения
+    private final Runnable internetCheckRunnable = new Runnable() {
+        @Override
+        public void run() {
+            checkInternetConnection();
+        }
+    };
+
 
 
     @Override
@@ -43,6 +76,8 @@ public class MapOfBeregActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_of_bereg);
+
+        progressBar = findViewById(R.id.progressBar);
 
         imageView = findViewById(R.id.mapImageView);
 
@@ -82,6 +117,10 @@ public class MapOfBeregActivity extends AppCompatActivity {
         });
 
         Log.d(TAG, "onCreate: макет установлен");
+
+        // Запуск проверки подключения к интернету с задержкой
+        handler.postDelayed(internetCheckRunnable, 1000);
+
 
         // Ссылки на части карты берег
         String[] BeregimageUrls = {
@@ -169,6 +208,9 @@ public class MapOfBeregActivity extends AppCompatActivity {
 
     // Метод для загрузки и склеивания изображений
     private void loadAndMergeImages(String[] imageUrls) {
+        // Показать ProgressBar
+        runOnUiThread(() -> progressBar.setVisibility(View.VISIBLE));
+
         final int parts = imageUrls.length; // Количество изображений для загрузки
         final Bitmap[] images = new Bitmap[parts]; // Массив, хранящий загруженные изображения в формате Bitmap
         final AtomicInteger counter = new AtomicInteger(0); // Счетчик успешно загруженных фотографий
@@ -185,12 +227,19 @@ public class MapOfBeregActivity extends AppCompatActivity {
                     Log.d(TAG, "Изображение загружено: " + imageUrls[index]);
                     if (counter.incrementAndGet() == parts) {
                         mergeImages(images);
+                        // Скрыть ProgressBar здесь
+                        runOnUiThread(() -> progressBar.setVisibility(View.GONE));
                     }
                 }
 
                 @Override
                 public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                     Log.e(TAG, "Ошибка загрузки изображения: " + imageUrls[index], e);
+                    // После загрузки всех изображений и их склеивания
+                    runOnUiThread(() -> {
+                        // Скрыть ProgressBar
+                        progressBar.setVisibility(View.GONE);
+                    });
                 }
 
                 @Override
@@ -202,6 +251,8 @@ public class MapOfBeregActivity extends AppCompatActivity {
             // Задержка для уменьшения нагрузки на память и CPU
             handler.postDelayed(() -> Picasso.get().load(imageUrls[index]).into(imageTarget), i * 100);
         }
+
+
     }
 
     // Метод для склеивания изображений в одно большое
@@ -235,11 +286,13 @@ public class MapOfBeregActivity extends AppCompatActivity {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 imageView.setImage(ImageSource.bitmap(bitmap));
+
             }
 
             @Override
             public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                 Log.e(TAG, "Ошибка загрузки изображения", e);
+                runOnUiThread(() -> progressBar.setVisibility(View.GONE));
                 // Показать запасное изображение или сообщение об ошибке
                 // Например, imageView.setImage(ImageSource.resource(R.drawable.placeholder));
             }
@@ -254,19 +307,122 @@ public class MapOfBeregActivity extends AppCompatActivity {
         Picasso.get().load(imageUrl).into(this.loadImageTarget);
     }
 
-
+    // Метод для возврата на предыдущую страницу
     private void goBack() {
         Log.d(TAG, "goBack: возврат на предыдущую страницу");
         // Возврат на предыдущую страницу
         onBackPressed();
     }
 
+    // Метод для переключения ориентации экрана
     private void toggleFullscreenMap() {
         if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+    }
+
+
+
+    // Метод для проверки интернет-соединения
+    private void checkInternetConnection() {
+        if (isCheckingInternet) {
+            return; // Если уже выполняется проверка, выходим из метода
+        }
+        isCheckingInternet = true;
+
+        if (!isInternetAvailable()) {
+            internetWasLost = true;
+            if (internetCheckAttempts < 3) {
+                showSnackbarWithCountdown();
+                internetCheckAttempts++;
+            } else {
+                showFinalSnackbar();
+            }
+        } else {
+            if (internetWasLost) {
+                // Интернет был потерян, но теперь восстановлен
+                Snackbar.make(findViewById(android.R.id.content), "Подключение восстановлено", Snackbar.LENGTH_SHORT).show();
+                loadAndMergeImages(BeregimageUrls);
+                internetWasLost = false;
+                internetCheckAttempts = 0;
+            }
+            isCheckingInternet = false;
+        }
+    }
+
+
+    // Метод для отображения Snackbar с обратным отсчетом
+    private void showSnackbarWithCountdown() {
+        final int[] countdownSeconds = {5};
+        final Handler handler = new Handler();
+
+        final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "", Snackbar.LENGTH_INDEFINITE);
+
+        final Runnable countdownRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (countdownSeconds[0] > 0) {
+                    snackbar.setText("Нет интернет-соединения. Повторная проверка через " + countdownSeconds[0] + " секунд...");
+                    countdownSeconds[0]--;
+                    handler.postDelayed(this, 1000);
+                } else {
+                    snackbar.dismiss();
+                    isCheckingInternet = false;
+                    checkInternetConnection(); // Повторная проверка
+                }
+            }
+        };
+
+        handler.post(countdownRunnable);
+        snackbar.show();
+    }
+
+
+    // Метод для отображения Snackbar с предложением проверить соединение
+    private void showFinalSnackbar() {
+        Snackbar.make(findViewById(android.R.id.content), "Нет подключения к интернету. Проверить соединение", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Проверить", v -> {
+                    isCheckingInternet = false;
+                    internetCheckAttempts = 0; // Сброс счетчика попыток
+                    checkInternetConnection();
+                }).show();
+    }
+
+    // Метод для проверки доступности интернета
+    private boolean isInternetAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        }
+        return false;
+    }
+
+    // BroadcastReceiver для обработки изменений состояния сети
+    private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
+                checkInternetConnection(); // Немедленно проверяем состояние сети
+            }
+        }
+    };
+
+
+    // Обработчики жизненного цикла активности для управления BroadcastReceiver
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkStateReceiver, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(networkStateReceiver);
     }
 
 }

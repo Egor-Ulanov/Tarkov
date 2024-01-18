@@ -183,50 +183,8 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        // Можешь исправить ошибку
-        // Can you fix the error
-
-        // Please provide more details about the error that needs to be fixed.
-        // Non-static method 'applyTheme(androidx.fragment.app.FragmentActivity)' cannot be referenced from a static context
-        //   public void applyTheme(FragmentActivity activity) {
-        //        int textColorResId = isDarkTheme ? R.color.dark_text : R.color.light_text;
-        //        int backgroundColorResId = isDarkTheme ? R.color.dark_background : R.color.light_background;
-        //        int navBackgroundColorResId = isDarkTheme ? R.color.dark_nav_background : R.color.light_nav_background;
-        //        int navIconColorResId = isDarkTheme ? R.color.dark_nav_icon_selector : R.color.light_nav_icon_selector;
-        //
-        //        int textColor = ContextCompat.getColor(requireContext(), textColorResId);
-        //        int backgroundColor = ContextCompat.getColor(requireContext(), backgroundColorResId);
-        //        binding.activeThemeLabel.setTextColor(textColor);
-        //        binding.getRoot().setBackgroundColor(backgroundColor);
-        //
-        //        BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
-        //        navView.setBackgroundColor(ContextCompat.getColor(requireContext(), navBackgroundColorResId));
-        //        navView.setItemIconTintList(ContextCompat.getColorStateList(requireContext(), navIconColorResId));
-        //        navView.setItemTextColor(ContextCompat.getColorStateList(requireContext(), navIconColorResId));
-        //
-        //        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        //        if (activity != null) {
-        //            if (isDarkTheme) {
-        //                activity.getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.dark_item_background)));
-        //            } else {
-        //                activity.getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.light_item_background)));
-        //            }
-        //        }
-        //
-        //        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        //        SharedPreferences.Editor editor = sharedPreferences.edit();
-        //        editor.putBoolean("isDarkTheme", isDarkTheme);
-        //        editor.apply();
-        //        updateSwitchThumb();
-        //    }
-
-        // Предложи исправление  NotificationsFragment.applyTheme(getActivity());
-
-
         // Установка цвета фона в соответствии с темой
         updateBackgroundColor();
-
-
 
     return root;
     }
@@ -257,7 +215,7 @@ public class HomeFragment extends Fragment {
                 if (count > 0) {
                     for (int i = 0; i < count; i++) {
                         ImageView indicator = new ImageView(requireContext());
-                        indicator.setImageResource(i == 0 ? R.drawable.truedot1 : R.drawable.truedot2);
+                        indicator.setImageResource(i == 0 ? R.drawable.circle_fill : R.drawable.circle_fill2);
 
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -332,7 +290,7 @@ public class HomeFragment extends Fragment {
     private void updateSlideIndicator(LinearLayout sliderIndicator, int currentPosition) {
         for (int i = 0; i < sliderIndicator.getChildCount(); i++) {
             ImageView indicator = (ImageView) sliderIndicator.getChildAt(i);
-            indicator.setImageResource(i == currentPosition ? R.drawable.truedot1 : R.drawable.truedot2);
+            indicator.setImageResource(i == currentPosition ? R.drawable.circle_fill : R.drawable.circle_fill2);
         }
     }
 
