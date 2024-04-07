@@ -8,23 +8,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000">
-
+        <androidx.cardview.widget.CardView
+            android:layout_margin="5dp"
+            android:layout_width="44dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="5dp">
+            <ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/free_icon_person"
+                android:background="@color/light_item_background"/>
+        </androidx.cardview.widget.CardView>
 
         <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
             android:id="@+id/mapImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="-2dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="2dp" />
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:translationY="52dp" />
 
         <ImageButton
         android:id="@+id/rotateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="0dp"
@@ -32,66 +44,57 @@
         android:background="?android:selectableItemBackgroundBorderless"
         android:src="@drawable/ic_full_dis_24dp" />
 
-    <ImageButton
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:background="?android:selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_back_24dp" />
-
-    <RadioGroup
-        android:id="@+id/RadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/mapImageView"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true">
-
-        <RadioButton
-            android:id="@+id/radioButton4"
-            android:layout_width="wrap_content"
+<!--android:background="?android:selectableItemBackgroundBorderless" -->
+        <RadioGroup
+            android:id="@+id/RadioGroup"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Очистить все"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FF0000"
-            android:textColorLink="#D10000" />
+            android:layout_below="@+id/mapImageView"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:translationY="50dp">
 
-        <RadioButton
-            android:id="@+id/radioButton1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="0dp"
-            android:text="Добавить все"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FF0000"
-            android:textColorLink="#D10000"/>
+            <RadioButton
+                android:id="@+id/radioButton4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Очистить все"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FF0000"
+                android:textColorLink="#D10000" />
 
-
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Выходы"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FF0000"
-            android:textColorLink="#D10000"/>
-
-        <RadioButton
-            android:id="@+id/radioButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Лут и метки"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FF0000"
-            android:textColorLink="#D10000"/>
+            <RadioButton
+                android:id="@+id/radioButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="0dp"
+                android:text="Добавить все"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FF0000"
+                android:textColorLink="#D10000" />
 
 
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Выходы"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FF0000"
+                android:textColorLink="#D10000" />
+
+            <RadioButton
+                android:id="@+id/radioButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Лут и метки"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FF0000"
+                android:textColorLink="#D10000" />
+
+
+        </RadioGroup>
 
     <ImageView
         android:id="@+id/imageView2"

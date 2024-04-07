@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:colorBackground">
 
     <RelativeLayout
@@ -66,14 +67,26 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp" />
 
-        <ImageButton
-            android:id="@+id/closeButton"
+        <androidx.cardview.widget.CardView
+
             android:layout_width="44dp"
-            android:layout_height="34dp"
+            android:layout_height="48dp"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="15dp"
-            android:contentDescription="Закрыть новость"
-            android:src="@android:drawable/ic_menu_close_clear_cancel" /><!--android:background="?android:attr/selectableItemBackground"-->
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="5dp">
+
+            <ImageButton
+                android:id="@+id/closeButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="Закрыть новость"
+                android:src="@drawable/free_icon_person"
+                android:background="@color/light_item_background"/>
+
+        </androidx.cardview.widget.CardView>
+        <!--android:background="?android:attr/selectableItemBackground"-->
     </RelativeLayout>
 </ScrollView>
