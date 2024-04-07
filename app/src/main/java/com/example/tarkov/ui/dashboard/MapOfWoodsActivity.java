@@ -1,8 +1,19 @@
 package com.example.tarkov.ui.dashboard;
 
+import static android.app.PendingIntent.getActivity;
+
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.example.tarkov.R;
 
@@ -10,13 +21,54 @@ import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 public class MapOfWoodsActivity extends AppCompatActivity{
-
+    private static final String TAG = "MapOfBeregActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Загрузка сохраненной темы перед установкой содержимого вида
+        SharedPreferences prefs = getSharedPreferences("AppThemePrefs", MODE_PRIVATE);
+        boolean isDarkTheme = prefs.getBoolean("isDarkTheme", false); // false - значение по умолчанию
+
+        setTheme(isDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme_Light);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_of_zavod);
 
         SubsamplingScaleImageView imageView = findViewById(R.id.mapImageView);
-        imageView.setImage(ImageSource.resource(R.drawable.map_of_zavod));
+        imageView.setImage(ImageSource.resource(R.drawable.map_in_progress));
+
+        Drawable backDrawable = ContextCompat.getDrawable(this, R.drawable.free_icon_person);
+        backDrawable = DrawableCompat.wrap(backDrawable);
+        DrawableCompat.setTint(backDrawable, ContextCompat.getColor(this, R.color.black));
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setImageDrawable(backDrawable);
+
+        loadThemePreference();
+        // Обработчик события - возвращение на предыдущюю страницу
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goBack();
+            }
+        });
+    }
+
+    private void goBack() {
+        Log.d(TAG, "goBack: возврат на предыдущую страницу");
+        // Возврат на предыдущую страницу
+        onBackPressed();
+    }
+    private void loadThemePreference() {
+        SharedPreferences prefs = getSharedPreferences("AppThemePrefs", MODE_PRIVATE);
+        boolean isDarkTheme = prefs.getBoolean("isDarkTheme", false);
+        // Устанавливайте тему в соответствии с предпочтением
+        setAppTheme(isDarkTheme);
+    }
+
+    private void setAppTheme(boolean isDarkTheme) {
+        // Устанавливайте тему приложения в зависимости от предпочтения
+        setTheme(isDarkTheme ? R.style.AppTheme_Dark : R.style.AppTheme_Light);
+        // После изменения темы пересоздайте активность
+
     }
 }
