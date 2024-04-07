@@ -41,26 +41,32 @@
         <ImageView
             android:id="@+id/detailImage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@id/detailDate"
-            android:scaleType="centerCrop"
-            android:layout_marginTop="8dp" />
+                android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"/>
 
         <TextView
             android:id="@+id/detailContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Содержание новости"
+            android:textAlignment="viewStart"
             android:layout_below="@id/detailImage"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="24dp" />
 
         <TextView
             android:id="@+id/sourceLink"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Источник"
+
             android:layout_below="@id/detailContent"
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
