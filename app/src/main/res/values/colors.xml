@@ -17,10 +17,12 @@
     </color>
     <color name="light_nav_background">#F5ECF1
     </color>
-    <color name="light_nav_icon">#000000
+    <color name="light_nav_icon">#988F94
     </color>
-    <color name="light_nav_icon_selected">#988F94
+    <color name="light_nav_icon_selected">#000000
     </color>
+    <color name="light_thumb">#80C0C0C0</color>
+    <color name="light_thumber">#FFFFFF</color>
 
     <!-- Цвета для темной темы -->
     <color name="lighter_interface_text_color">#A06E7E</color>
@@ -30,4 +32,6 @@
     <color name="dark_nav_background">#322628</color>
     <color name="dark_nav_icon">#8D8183</color>
     <color name="dark_nav_icon_selected">#FFE6EB</color>
+    <color name="dark_thumb">#dcdcdc</color>
+    <color name="dark_thumber">#FFFFFF</color>
 </resources>

@@ -35,11 +35,10 @@ public class MapOfWoodsActivity extends AppCompatActivity{
         setContentView(R.layout.map_of_zavod);
 
         SubsamplingScaleImageView imageView = findViewById(R.id.mapImageView);
-        imageView.setImage(ImageSource.resource(R.drawable.map_in_progress));
+        imageView.setImage(ImageSource.resource(R.drawable.eft_without_bckgrnd2));
 
-        Drawable backDrawable = ContextCompat.getDrawable(this, R.drawable.free_icon_person);
+        Drawable backDrawable = ContextCompat.getDrawable(this, R.drawable.circle_close_button2);
         backDrawable = DrawableCompat.wrap(backDrawable);
-        DrawableCompat.setTint(backDrawable, ContextCompat.getColor(this, R.color.black));
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setImageDrawable(backDrawable);
 

@@ -3,23 +3,39 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:colorBackground">
-    <androidx.cardview.widget.CardView
-        android:layout_margin="5dp"
-        android:layout_width="44dp"
-        android:layout_height="48dp"
-        app:cardCornerRadius="10dp"
-        app:cardBackgroundColor="@android:color/transparent"
-        app:cardElevation="5dp">
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/free_icon_person"
-            android:background="@color/light_item_background"/>
-    </androidx.cardview.widget.CardView>
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Закрыть карту"
+        android:src="@drawable/circle_close_button2"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="12dp"
+        android:background="@android:color/transparent" />
+
     <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:id="@+id/mapImageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?android:attr/actionBarSize" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="300dp"
+         />
+    <!--android:layout_marginTop="?android:attr/actionBarSize"-->
+    <TextView
+        android:id="@+id/InProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mapImageView"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:padding="8dp"
+        android:text="Карта в разработке..."
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 </RelativeLayout>
