@@ -102,9 +102,9 @@ public class MapOfBeregActivity extends AppCompatActivity {
 
 
 
-        Drawable backDrawable = ContextCompat.getDrawable(this, R.drawable.free_icon_person);
+        Drawable backDrawable = ContextCompat.getDrawable(this, R.drawable.circle_close_button2);
         backDrawable = DrawableCompat.wrap(backDrawable);
-        DrawableCompat.setTint(backDrawable, ContextCompat.getColor(this, R.color.black));
+
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setImageDrawable(backDrawable);
 
