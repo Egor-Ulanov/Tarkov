@@ -72,7 +72,7 @@ dependencies {
     implementation ("org.jsoup:jsoup:1.14.3")
 
 
-    implementation ("com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
+    //implementation ("com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
     implementation ("androidx.core:core-ktx:1.12.0")
 
     implementation ("com.google.android.material:material:1.11.0") // Для SwitchMaterial
@@ -98,5 +98,7 @@ dependencies {
 
     // https://mavenlibs.com/maven/dependency/com.google.apis/google-api-services-youtube
     implementation ("com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0")
+
+    implementation ("com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0")
 
 }

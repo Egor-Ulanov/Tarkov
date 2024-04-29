@@ -1,27 +1,20 @@
 package com.example.tarkov.ui.dashboard;
-
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-
 import com.example.tarkov.R;
-
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-
 public class MapOfZavodActivity extends AppCompatActivity{
-
     private static final String TAG = "MapOfBeregActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 // Загрузка сохраненной темы перед установкой содержимого вида
         SharedPreferences prefs = getSharedPreferences("AppThemePrefs", MODE_PRIVATE);
         boolean isDarkTheme = prefs.getBoolean("isDarkTheme", false); // false - значение по умолчанию
