@@ -89,8 +89,6 @@
                 android:textColor="#FFFFFF"
                 android:textColorHighlight="#FF0000"
                 android:textColorLink="#D10000" />
-
-
         </RadioGroup>
 
     <ImageView
