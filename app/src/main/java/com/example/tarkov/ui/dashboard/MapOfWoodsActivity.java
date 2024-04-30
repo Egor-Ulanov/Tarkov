@@ -58,16 +58,17 @@ public class MapOfWoodsActivity extends AppCompatActivity {
     // Определение переменных для работы с изображением, прогресс-баром и URL карт
     private SubsamplingScaleImageView imageView;
     private ProgressBar progressBar;
-    private String[] BeregimageUrls = {
-            "https://drive.google.com/uc?export=view&id=1bYGCesXZEY7ZfhaVtoXDVO94j5573LdP",
-            "https://drive.google.com/uc?export=view&id=1ZuxuT-E_pSOy1zmtq9letWWjtGDXjqyU",
-            "https://drive.google.com/uc?export=view&id=1B2UNmO8-K28apau6HTAWN8wyElxVv84D",
-            "https://drive.google.com/uc?export=view&id=1tBSIfqNGa2ohSXpAmpSbmWAGUCntNDv3",
-            "https://drive.google.com/uc?export=view&id=158u9k6EM96MLgIFHsnbl0VVXYv9QNtMG",
-            "https://drive.google.com/uc?export=view&id=1-FLj87lmqIbbNcsFMbzbMPbwUwmkQCcp",
-            "https://drive.google.com/uc?export=view&id=1FNqYlfm6Me4uu6TRqb6pjTHP6x6NSexp",
-            "https://drive.google.com/uc?export=view&id=1qejLWwVMcTuVv6dJteir6jPNlJrLELas",
-            "https://drive.google.com/uc?export=view&id=1EMjOSw2oqBYod1eCGrXeyhgPo4EI6hR8",
+    private String[] WoodsimageUrls = {
+            "https://drive.google.com/uc?export=view&id=1sZSZBCO8P6aZezrB3uXW9Boifp5VYDhN",
+            "https://drive.google.com/uc?export=view&id=1RV_2dYknZhr27k4I9CoEG0WiUHLkzKuQ",
+            "https://drive.google.com/uc?export=view&id=1w9YssAB_BT-oT0Tz1MotCJi5z92F246k",
+            "https://drive.google.com/uc?export=view&id=1caBPyTToCvKMz05XstPlHw_S3lctq3iY",
+            "https://drive.google.com/uc?export=view&id=16aXnqKs9fI1X2cOcllAXbwaZx63Di_oq",
+            "https://drive.google.com/uc?export=view&id=1PXjPSM9G3UvVAZWIu2nGXfyviEWoXYwT",
+            "https://drive.google.com/uc?export=view&id=1Gj-liVAoOEvRK1x8VMMMls9JeiIBEQiy",
+            "https://drive.google.com/uc?export=view&id=1TZ8ftRlCNhZcP_lCeklT_Cy8H9KwMK_Y",
+            "https://drive.google.com/uc?export=view&id=1Hjb8cC2TyqvoX6gQpP9ayIeQUOOq8orY",
+
     };
     // Переменные для обработки загрузки изображений и отслеживания состояния интернет-соединения
     private List<Target> targets = new ArrayList<>();
@@ -97,6 +98,10 @@ public class MapOfWoodsActivity extends AppCompatActivity {
         setContentView(R.layout.map_of_woods);
         expandButton = findViewById(R.id.expandButton);
         categoryList = findViewById(R.id.categoryList);
+        Button selectAllButton = findViewById(R.id.selectAllButton);
+        Button clearAllButton = findViewById(R.id.clearAllButton);
+        Button PMCExtractsButton = findViewById(R.id.PMCExtractsButton);
+        Button scavExtractsButton = findViewById(R.id.scavExtractsButton);
 
         // Загрузка сохраненной темы перед установкой содержимого вида
         SharedPreferences prefs = getSharedPreferences("AppThemePrefs", MODE_PRIVATE);
@@ -107,7 +112,11 @@ public class MapOfWoodsActivity extends AppCompatActivity {
         expandButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int maxHeight = 100;
+                categoryList.getLayoutParams().height = maxHeight;
+                categoryList.requestLayout();
                 toggleList();
+
             }
         });
 
@@ -154,60 +163,60 @@ public class MapOfWoodsActivity extends AppCompatActivity {
         // Запуск проверки подключения к интернету с задержкой
         handler.postDelayed(internetCheckRunnable, 1000);
         // Ссылки на части карты берег
-        String[] BeregimageUrls = {
-                "https://drive.google.com/uc?export=view&id=1bYGCesXZEY7ZfhaVtoXDVO94j5573LdP",
-                "https://drive.google.com/uc?export=view&id=1ZuxuT-E_pSOy1zmtq9letWWjtGDXjqyU",
-                "https://drive.google.com/uc?export=view&id=1B2UNmO8-K28apau6HTAWN8wyElxVv84D",
-                "https://drive.google.com/uc?export=view&id=1tBSIfqNGa2ohSXpAmpSbmWAGUCntNDv3",
-                "https://drive.google.com/uc?export=view&id=158u9k6EM96MLgIFHsnbl0VVXYv9QNtMG",
-                "https://drive.google.com/uc?export=view&id=1-FLj87lmqIbbNcsFMbzbMPbwUwmkQCcp",
-                "https://drive.google.com/uc?export=view&id=1FNqYlfm6Me4uu6TRqb6pjTHP6x6NSexp",
-                "https://drive.google.com/uc?export=view&id=1qejLWwVMcTuVv6dJteir6jPNlJrLELas",
-                "https://drive.google.com/uc?export=view&id=1EMjOSw2oqBYod1eCGrXeyhgPo4EI6hR8",
+        String[] WoodsimageUrls = {
+                "https://drive.google.com/uc?export=view&id=1sZSZBCO8P6aZezrB3uXW9Boifp5VYDhN",
+                "https://drive.google.com/uc?export=view&id=1RV_2dYknZhr27k4I9CoEG0WiUHLkzKuQ",
+                "https://drive.google.com/uc?export=view&id=1w9YssAB_BT-oT0Tz1MotCJi5z92F246k",
+                "https://drive.google.com/uc?export=view&id=1caBPyTToCvKMz05XstPlHw_S3lctq3iY",
+                "https://drive.google.com/uc?export=view&id=16aXnqKs9fI1X2cOcllAXbwaZx63Di_oq",
+                "https://drive.google.com/uc?export=view&id=1PXjPSM9G3UvVAZWIu2nGXfyviEWoXYwT",
+                "https://drive.google.com/uc?export=view&id=1Gj-liVAoOEvRK1x8VMMMls9JeiIBEQiy",
+                "https://drive.google.com/uc?export=view&id=1TZ8ftRlCNhZcP_lCeklT_Cy8H9KwMK_Y",
+                "https://drive.google.com/uc?export=view&id=1Hjb8cC2TyqvoX6gQpP9ayIeQUOOq8orY",
         };
 
         // Ссылки на части карты БерегПлюс
-        String[] BeregPlusAllimageUrls = {
-                "https://drive.google.com/uc?export=view&id=1j7DlT1uC_kJbNdU9pEJUyG3nQ73GBGxy",
-                "https://drive.google.com/uc?export=view&id=1SokgS0F4aiFZ35b_31Fq0d0i_twt9vTX",
-                "https://drive.google.com/uc?export=view&id=1sm_Q7l3Zir44CZfAmW2YylJQX7yjCwxl",
-                "https://drive.google.com/uc?export=view&id=1QZskBR5BlHt-VwzQrqdAqcF4ox2Kbiz6",
-                "https://drive.google.com/uc?export=view&id=1X1zT2T79D1p7zDboh__FFcvNKraNXZGX",
-                "https://drive.google.com/uc?export=view&id=1NnFLl_rl0vk3vYaLfJOmG0PJpndIHi8a",
-                "https://drive.google.com/uc?export=view&id=1z-OjwekUHL0SOpqJBSDuC4Z0klEPpG-s",
-                "https://drive.google.com/uc?export=view&id=16cJa4qubQpJif5etwXwIhqdeLLQmqWJT",
-                "https://drive.google.com/uc?export=view&id=18c6-YrYuIZN1sPCbXOCkKgHd3MCBc0sI",
+        String[] WoodsPlusAllimageUrls = {
+                "https://drive.google.com/uc?export=view&id=1kV917GgP0zwqeTdLy-zjQ7HKdIIBWlE1",
+                "https://drive.google.com/uc?export=view&id=1xrIY82FMiX7gqnlGtuIuAELuHBOLRxPJ",
+                "https://drive.google.com/uc?export=view&id=1X7tghMsv5l9knwEbiu8civbr4LG9eA37",
+                "https://drive.google.com/uc?export=view&id=1y7wHqrpOmidMi3yx7vKxGdcLKhH9clxm",
+                "https://drive.google.com/uc?export=view&id=1odrj54DYhULIkiNHrpBCB7e814Aq-GaX",
+                "https://drive.google.com/uc?export=view&id=12DJEy1OapwjWmTHuiBxlwa_PoiMdHRAP",
+                "https://drive.google.com/uc?export=view&id=1YS-uBgP_qKlJbS907OhcBzDesBUFOIdJ",
+                "https://drive.google.com/uc?export=view&id=1XCvgNgmCXzMk67wFXvSSVG2sR1_Es9Ej",
+                "https://drive.google.com/uc?export=view&id=16d1jgfvS7OnI8bAyvEqp5yTgjm5jIv_O",
         };
 
         // Ссылки на части карты БерегПлюсВыходы
-        String[] BeregPlusExsimageUrls = {
-                "https://drive.google.com/uc?export=view&id=1tZ9GBMWg7cBbNKqAILR-GPeGe-yyP_gj",
-                "https://drive.google.com/uc?export=view&id=1PS2HzHRrx9RjbNwiuN3xZem2BYmEAl5s",
-                "https://drive.google.com/uc?export=view&id=1wugwW7R85uNuhxEitvpjUt0crRgYqC4R",
-                "https://drive.google.com/uc?export=view&id=1Usl_9RGzH4JMay6pB4ZR2JN4Fic3loKt",
-                "https://drive.google.com/uc?export=view&id=1ZllKr5Dp77rXkWtj0tvCvqlAjZrsvrhy",
-                "https://drive.google.com/uc?export=view&id=1BVlda_i9ukRwRLkhBRPNaxelj_kXAvyb",
-                "https://drive.google.com/uc?export=view&id=18KjNMuCLGtWI8rlg_ULxCtbE0_VlAUDw",
-                "https://drive.google.com/uc?export=view&id=16hNGlcJ-AJ0Ukgf1tspnICYdPbQVdnOC",
-                "https://drive.google.com/uc?export=view&id=1w_jNEDeNvXKfmMvA9GJsbo7NdRVI9jEp",
+        String[] WoodsPlusPMCimageUrls = {
+                "https://drive.google.com/uc?export=view&id=13DNonHZD1BVqfhMgYy5gR2b14C1ImX4W",
+                "https://drive.google.com/uc?export=view&id=1Cl-6cCj9kEcXh6a9pU7Ev2xlglmXNLCa",
+                "https://drive.google.com/uc?export=view&id=1A7T3layQjzTukjkpUNUYT72NW-FPm5G1",
+                "https://drive.google.com/uc?export=view&id=1F-6YDio6iVz7le3gy_igvutRxyFtUgtf",
+                "https://drive.google.com/uc?export=view&id=1TK2ZYWqldkb0Cg2Q81KvJNEe685ucwbF",
+                "https://drive.google.com/uc?export=view&id=1eQjJAMFxz8pXyvZkl_7VkrPTU9ZCR0Nb",
+                "https://drive.google.com/uc?export=view&id=1N55hQ63c9U63PaVvFEQQ5WmAeyCjj14M",
+                "https://drive.google.com/uc?export=view&id=1e8NfT--vqIAOM7M3l7wP2Aaik0kMbnbd",
+                "https://drive.google.com/uc?export=view&id=1oZlQDx8E8oC7MU0Y3FwzwEhiHW0FNTde",
         };
 
         // Ссылки на части карты БерегПлюсВыходы
-        String[] BeregPlusIconimageUrls = {
-                "https://drive.google.com/uc?export=view&id=1ht_KiHrB_45jVUYhTmZTFwhcIb9GTJIG",
-                "https://drive.google.com/uc?export=view&id=1mUmsswzfhFazCmMvGMnrohAIViVeCl11",
-                "https://drive.google.com/uc?export=view&id=1xqdqHIbF_PA02M4YNk--mgUzm_ExaMWS",
-                "https://drive.google.com/uc?export=view&id=1eI9c-3Lqea0CugwOrZfV2ax16Lq1HAzV",
-                "https://drive.google.com/uc?export=view&id=15HCpvw6YdgyBuSgkG9L1ASgp-IlKCI--",
-                "https://drive.google.com/uc?export=view&id=1sD99wGle3xG2V9SbHTtXBvSzJU1dHe9G",
-                "https://drive.google.com/uc?export=view&id=1omcygok19wL0o8spq7N2693Bj-POOmKi",
-                "https://drive.google.com/uc?export=view&id=1NsbkJCS6nShi9MtQHHnIGHz4StlXhtI8",
-                "https://drive.google.com/uc?export=view&id=1JCm6B94BqRrgemBGcAD7BU6ImjNZPT8m",
+        String[] WoodsPlusSCAVimageUrls = {
+                "https://drive.google.com/uc?export=view&id=10xOT6cLT-Z3tOx7IByB0IYEw2vfOj7FV",
+                "https://drive.google.com/uc?export=view&id=1BG41hTfFDhdIhEPygNHhe2Pb3g-xVOcZ",
+                "https://drive.google.com/uc?export=view&id=18c42WezAa80G6YJFfHILSS9r9PTiny5M",
+                "https://drive.google.com/uc?export=view&id=1yqyr_04XHHJuaIgTmo8GwgV6Wp6Xrmq-",
+                "https://drive.google.com/uc?export=view&id=1rlgL9vRHEdkU_DUarzjJ0mNXFYnpH8gA",
+                "https://drive.google.com/uc?export=view&id=15hzZTIY0I5G1kvFEGYGJT_Dz0KTXNmWF",
+                "https://drive.google.com/uc?export=view&id=15mhCMHPxqTfANxmjJi457c8tqshGMl-l",
+                "https://drive.google.com/uc?export=view&id=1riFxnh8yOg0-nxVJdcmkGULH-1G6fRr7",
+                "https://drive.google.com/uc?export=view&id=17Yez09Nmv0fsa4nDHumw_8GSWiHv97aC",
         };
 
 
         // Установка карты берег
-        loadAndMergeImages(BeregimageUrls);
+        loadAndMergeImages(WoodsimageUrls, WoodsimageUrls);
 
         /*radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -227,22 +236,59 @@ public class MapOfWoodsActivity extends AppCompatActivity {
                 }
             }
         });*/
-    }
 
+       /* selectAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Логика для загрузки всех изображений
+                loadAndMergeImages(WoodsPlusAllimageUrls);
+            }
+        });
+
+        clearAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Логика для очистки всех изображений
+                loadAndMergeImages(WoodsimageUrls);
+            }
+        });*/
+
+        PMCExtractsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Логика для загрузки изображений PMC
+                loadAndMergeImages(WoodsimageUrls, WoodsPlusPMCimageUrls);
+            }
+        });
+
+        scavExtractsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Логика для загрузки изображений SCAV
+                loadAndMergeImages(WoodsimageUrls, WoodsPlusSCAVimageUrls);
+            }
+        });
+    }
     // Метод для открытия/закрытия списка
     private void toggleList() {
+        // Получаем максимальную высоту списка
+        int maxHeight = 100; // Измените это значение на желаемое
+
         if (isListExpanded) {
             // Если список уже открыт, закрываем его и меняем изображение кнопки на стрелку вниз
             categoryList.setVisibility(View.GONE);
             expandButton.setImageResource(R.drawable.icon_up);
         } else {
-            // Если список закрыт, открываем его и меняем изображение кнопки на стрелку вверх
+            // Если список закрыт, устанавливаем максимальную высоту списка и открываем его
+            categoryList.getLayoutParams().height = maxHeight;
+            categoryList.requestLayout();
             categoryList.setVisibility(View.VISIBLE);
             expandButton.setImageResource(R.drawable.icon_down);
         }
         // Инвертируем состояние списка
         isListExpanded = !isListExpanded;
     }
+
     /*
     Сильные Ссылки на Target: Для каждого изображения создается отдельный объект Target, который сохраняется в списке targets.
     Это предотвращает утилизацию объектов Target сборщиком мусора до того, как изображение будет загружено, поскольку на них сохраняются сильные ссылки.
@@ -252,39 +298,66 @@ public class MapOfWoodsActivity extends AppCompatActivity {
     */
 
     // Метод для загрузки и склеивания изображений
-    private void loadAndMergeImages(String[] imageUrls) {
+    private void loadAndMergeImages(String[] baseImageUrls, String[] overlayImageUrls) {
         // Показать ProgressBar
         runOnUiThread(() -> progressBar.setVisibility(View.VISIBLE));
 
-        final int parts = imageUrls.length; // Количество изображений для загрузки
-        final Bitmap[] images = new Bitmap[parts]; // Массив, хранящий загруженные изображения в формате Bitmap
-        final AtomicInteger counter = new AtomicInteger(0); // Счетчик успешно загруженных фотографий
-        final Handler handler = new Handler(); // Handler используется для задержки загрузки каждого изображения
+        final int baseParts = baseImageUrls.length; // Количество изображений для загрузки из базового набора
+        final int overlayParts = overlayImageUrls.length; // Количество изображений для загрузки из накладываемого набора
+        final Bitmap[] baseImages = new Bitmap[baseParts]; // Массив для базовых изображений
+        final Bitmap[] overlayImages = new Bitmap[overlayParts]; // Массив для накладываемых изображений
+
+        // Общее количество строк и столбцов в склеенном изображении (может быть изменено по вашему усмотрению)
+        int totalRows = 3;
+        int totalCols = 3;
+
+        final AtomicInteger baseCounter = new AtomicInteger(0); // Счетчик успешно загруженных базовых изображений
+        final AtomicInteger overlayCounter = new AtomicInteger(0); // Счетчик успешно загруженных накладываемых изображений
+
+        // Загрузка базовых изображений
+        loadImages(baseImageUrls, baseImages, baseCounter, new OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete() {
+                // Загрузка накладываемых изображений
+                loadImages(overlayImageUrls, overlayImages, overlayCounter, new OnLoadCompleteListener() {
+                    @Override
+                    public void onLoadComplete() {
+                        // Все изображения загружены, можно склеить и отобразить
+                        mergeAndDisplayImages(baseImages, overlayImages, totalRows, totalCols);
+                        // Скрыть ProgressBar
+                        runOnUiThread(() -> progressBar.setVisibility(View.GONE));
+                    }
+                });
+            }
+        });
+    }
+
+    // Интерфейс для обратного вызова при завершении загрузки изображений
+    interface OnLoadCompleteListener {
+        void onLoadComplete();
+    }
+
+    // Метод для загрузки массива изображений
+    private void loadImages(String[] imageUrls, Bitmap[] images, AtomicInteger counter, OnLoadCompleteListener listener) {
+        final int parts = imageUrls.length;
 
         for (int i = 0; i < parts; i++) {
             final int index = i;
 
-            // Создание нового Target для каждого изображения
             Target imageTarget = new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     images[index] = bitmap;
                     Log.d(TAG, "Изображение загружено: " + imageUrls[index]);
                     if (counter.incrementAndGet() == parts) {
-                        mergeAndDisplayImages(images);
-                        // Скрыть ProgressBar здесь
-                        runOnUiThread(() -> progressBar.setVisibility(View.GONE));
+                        listener.onLoadComplete(); // Все изображения загружены
                     }
                 }
 
                 @Override
                 public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                     Log.e(TAG, "Ошибка загрузки изображения: " + imageUrls[index], e);
-                    // После загрузки всех изображений и их склеивания
-                    runOnUiThread(() -> {
-                        // Скрыть ProgressBar
-                        progressBar.setVisibility(View.GONE);
-                    });
+                    // Обработка ошибки загрузки (если нужно)
                 }
 
                 @Override
@@ -292,39 +365,47 @@ public class MapOfWoodsActivity extends AppCompatActivity {
                     Log.d(TAG, "Подготовка к загрузке изображения: " + imageUrls[index]);
                 }
             };
-            targets.add(imageTarget); // Сохранение сильной ссылки на Target
-            // Задержка для уменьшения нагрузки на память и CPU
-            handler.postDelayed(() -> Picasso.get().load(imageUrls[index]).into(imageTarget), i * 100);
+            targets.add(imageTarget);
+            Picasso.get().load(imageUrls[index]).into(imageTarget);
         }
     }
 
-
     // Метод для склеивания и отображения изображений в одно большое
-    private void mergeAndDisplayImages(Bitmap[] images) {
-        int width = images[0].getWidth();
-        int height = images[0].getHeight();
-        int totalRows = 3; // Общее количество строк в склеенном изображении
-        int totalCols = 3; // Общее количество столбцов в склеенном изображении
+    // Метод для склеивания и отображения изображений
+    // Метод для склеивания и отображения изображений
+    private void mergeAndDisplayImages(Bitmap[] baseImages, Bitmap[] overlayImages, int totalRows, int totalCols) {
+        int width = baseImages[0].getWidth();
+        int height = baseImages[0].getHeight();
 
-        // Создаем новое большое изображение, которое будет хранить склеенную карту
+        // Создание нового большого изображения, которое будет хранить склеенную карту
         Bitmap result = Bitmap.createBitmap(width * totalCols, height * totalRows, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(result);
 
-        // Определяем, какие части карты уже загружены, чтобы склеить только их
-        int loadedParts = Math.min(totalRows * totalCols, images.length);
-
-        for (int i = 0; i < loadedParts; i++) {
-            int row = i / totalCols; // Вычисляем номер строки для текущей части карты
-            int col = i % totalCols; // Вычисляем номер столбца для текущей части карты
-            canvas.drawBitmap(images[i], col * width, row * height, null);
+        for (int row = 0; row < totalRows; row++) {
+            for (int col = 0; col < totalCols; col++) {
+                // Рассчитываем индекс изображения в базовом массиве
+                int baseIndex = row * totalCols + col;
+                // Проверяем, существует ли такой индекс в массиве базовых изображений
+                if (baseIndex < baseImages.length) {
+                    canvas.drawBitmap(baseImages[baseIndex], col * width, row * height, null);
+                }
+                // Рассчитываем индекс изображения в массиве накладываемых изображений
+                int overlayIndex = row * totalCols + col;
+                // Проверяем, существует ли такой индекс в массиве накладываемых изображений
+                if (overlayIndex < overlayImages.length) {
+                    canvas.drawBitmap(overlayImages[overlayIndex], col * width, row * height, null);
+                }
+            }
         }
 
-        // Устанавливаем склеенное изображение в ImageView на основном потоке
+        // Устанавливаем склеенное изображение в SubsamplingScaleImageView
         runOnUiThread(() -> {
+            SubsamplingScaleImageView imageView = findViewById(R.id.mapImageView);
             imageView.setImage(ImageSource.bitmap(result));
-            Log.d(TAG, "Изображения склеены и установлены в imageView");
+            Log.d(TAG, "Изображения склеены и установлены в SubsamplingScaleImageView");
         });
     }
+
 
 
 
@@ -396,7 +477,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             if (internetWasLost) {
                 // Интернет был потерян, но теперь восстановлен
                 Snackbar.make(findViewById(android.R.id.content), "Подключение восстановлено", Snackbar.LENGTH_SHORT).show();
-                loadAndMergeImages(BeregimageUrls);
+                loadAndMergeImages(WoodsimageUrls,WoodsimageUrls);
                 internetWasLost = false;
                 internetCheckAttempts = 0;
             }
