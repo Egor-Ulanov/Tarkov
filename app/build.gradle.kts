@@ -104,4 +104,8 @@ dependencies {
     implementation ("androidx.core:core-ktx:1.7.0")
     implementation ("androidx.legacy:legacy-support-v4:+")
     implementation ("androidx.lifecycle:lifecycle-common:2.5.1")
+
+    // Отправка http Запросов
+    implementation ("com.android.volley:volley:1.2.1")
+
 }
