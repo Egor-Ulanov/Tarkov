@@ -26,13 +26,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.tarkov.R;
 import com.example.tarkov.databinding.FragmentHomeBinding;
 import com.example.tarkov.ui.Parser.ParserCookie.NewsViewModel;
 import com.example.tarkov.ui.Parser.ParserNewsList;
-import com.example.tarkov.ui.home.YouTubeApiPackage.CachedYouTubeVideos;
-import com.example.tarkov.ui.home.YouTubeApiPackage.YouTubeApiClient;
+import com.google.api.services.youtube.model.ResourceId;
 import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.SearchResultSnippet;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +63,8 @@ public class HomeFragment extends Fragment {
     private List<SearchResult> latestVideos = new ArrayList<>();
 
     private boolean isFetchingVideos = false; // Флаг для отслеживания состояния загрузки
+
+    private static final String VIDEOS_URL = "http://213.171.14.43:8000/videos/"; // URL вашего сервера
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -143,45 +153,10 @@ public class HomeFragment extends Fragment {
             // Игнорировать другие методы (onPageScrolled и onPageScrollStateChanged)
         });
 
-        // Проверка и загрузка данных из YouTube API
-        if (CachedYouTubeVideos.isExpired(requireContext()) || CachedYouTubeVideos.getCachedVideos(requireContext()) == null) {
-            // Проверка состояния сети и установка состояния ошибки для адаптера
-            if (!isNetworkConnected()) {
-                Log.d("HomeFragment", "Нет интернета при загрузке и нет кэша");
-
-            } else {
-                Log.d("HomeFragment", "Загрузка данных, интернет есть и есть кэш");
-                loadYouTubeData();
-            }
-        } else {
-            // Используем кэшированные данные
-            processFetchedVideos(CachedYouTubeVideos.getCachedVideos(requireContext()));
-        }
 
 
-        // Загрузка последних 5 видео с канала Battlestategames
-        if (!isNetworkConnected()) {
-            Log.d("HomeFragment", "Нет интернета, показываем ошибку");
-            // Если нет интернета, показать сообщение об ошибке
-            sliderAdapter.setShowErrorLayout(true);
-        } else if (!isFetchingVideos) { // Добавьте проверку флага
-            isFetchingVideos = true; // Устанавливаем флаг в true перед вызовом fetchVideos
-            CachedYouTubeVideos.fetchVideos(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
-                @Override
-                public void onVideosFetched(List<SearchResult> videos) {
-                    isFetchingVideos = false; // Устанавливаем флаг в false после завершения загрузки
-                    if (videos != null && !videos.isEmpty()) {
-                        Log.d("HomeFragment", "Данные YouTube получены");
-                        CachedYouTubeVideos.setCachedVideos(videos);
-                        processFetchedVideos(videos);
-                        setupSlideIndicator(sliderIndicator); // Инициализация индикаторов, когда есть данные
-                    } else {
-                        Log.d("HomeFragment", "Видео не найдены или ошибка");
-                        sliderAdapter.setShowErrorLayout(true);
-                    }
-                }
-            });
-        }
+
+
 
         // Установка цвета фона в соответствии с темой
         updateBackgroundColor();
@@ -346,25 +321,11 @@ public class HomeFragment extends Fragment {
         Log.d("HomeFragment", "Начало загрузки данных YouTube");
         if (!isNetworkConnected()) {
             Log.d("HomeFragment", "Нет интернета, показываем ошибку");
-            // Если нет интернета, показать сообщение об ошибке
             sliderAdapter.setShowErrorLayout(true);
-        } else if (!isFetchingVideos) { // Добавьте проверку флага
-            isFetchingVideos = true; // Устанавливаем флаг в true перед вызовом fetchVideos
-            CachedYouTubeVideos.fetchVideos(requireContext(), new YouTubeApiClient.OnVideosFetchedListener() {
-                @Override
-                public void onVideosFetched(List<SearchResult> videos) {
-                    isFetchingVideos = false; // Устанавливаем флаг в false после завершения загрузки
-                    if (videos != null && !videos.isEmpty()) {
-                        Log.d("HomeFragment", "Данные YouTube получены");
-                        CachedYouTubeVideos.setCachedVideos(videos);
-                        processFetchedVideos(videos);
-                        setupSlideIndicator(sliderIndicator); // Инициализация индикаторов, когда есть данные
-                    } else {
-                        Log.d("HomeFragment", "Видео не найдены или ошибка");
-                        sliderAdapter.setShowErrorLayout(true);
-                    }
-                }
-            });
+        } else if (!isFetchingVideos) {
+            isFetchingVideos = true;
+            // Выполняем HTTP-запрос для получения видео
+            fetchVideosFromServer();
         }
     }
 
@@ -372,14 +333,7 @@ public class HomeFragment extends Fragment {
 
 
 
-    private void processFetchedVideos(List<SearchResult> videos) {
-        if (videos != null && !videos.isEmpty()) {
-            latestVideos.clear();
-            latestVideos.addAll(videos);
-            sliderAdapter.notifyDataSetChanged(); // Обновить адаптер
-            setupSlideIndicator(sliderIndicator); // Обновить индикатор слайдера
-        }
-    }
+
 
     public boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -413,6 +367,47 @@ public class HomeFragment extends Fragment {
 
     public void updateIndicators() {
         setupSlideIndicator(sliderIndicator);
+    }
+
+    private void fetchVideosFromServer() {
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, VIDEOS_URL,
+                response -> {
+                    isFetchingVideos = false;
+                    try {
+                        JSONObject jsonResponse = new JSONObject(response);
+                        JSONArray videosArray = jsonResponse.getJSONArray("videos");
+                        List<SearchResult> searchResults = new ArrayList<>();
+                        for (int i = 0; i < videosArray.length(); i++) {
+                            JSONObject videoObject = videosArray.getJSONObject(i);
+                            String videoId = videoObject.getString("video_id");
+                            String title = videoObject.getString("title");
+                            // Создаем объект SearchResult
+                            SearchResult searchResult = new SearchResult();
+                            SearchResultSnippet snippet = new SearchResultSnippet();
+                            snippet.setTitle(title);
+                            ResourceId resourceId = new ResourceId();
+                            resourceId.setVideoId(videoId);
+                            searchResult.setId(resourceId);
+                            searchResult.setSnippet(snippet);
+                            searchResults.add(searchResult);
+                        }
+                        // Обновляем адаптер с полученными данными
+                        latestVideos.clear();
+                        latestVideos.addAll(searchResults);
+                        sliderAdapter.notifyDataSetChanged();
+                        setupSlideIndicator(sliderIndicator);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e("HomeFragment", "Ошибка парсинга JSON: " + e.getMessage());
+                        sliderAdapter.setShowErrorLayout(true);
+                    }
+                }, error -> {
+            isFetchingVideos = false;
+            Log.e("HomeFragment", "Ошибка HTTP-запроса: " + error.getMessage());
+            sliderAdapter.setShowErrorLayout(true);
+        });
+        queue.add(stringRequest);
     }
 
 

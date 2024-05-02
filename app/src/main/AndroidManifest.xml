@@ -17,6 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:largeHeap="true"
+        android:usesCleartextTraffic="true"
 
         tools:targetApi="34">
         <!--android:theme="@style/Theme.Tarkov"-->
