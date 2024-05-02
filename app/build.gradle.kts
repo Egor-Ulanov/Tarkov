@@ -56,7 +56,6 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.7.6")
 
     implementation("com.android.volley:volley:1.2.1")
-    implementation("androidx.core:core:1.13.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -73,6 +72,7 @@ dependencies {
     implementation ("org.jsoup:jsoup:1.14.3")
 
 
+    implementation ("com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
     implementation ("androidx.core:core-ktx:1.12.0")
 
     implementation ("com.google.android.material:material:1.11.0") // Для SwitchMaterial
@@ -98,6 +98,8 @@ dependencies {
 
     // https://mavenlibs.com/maven/dependency/com.google.apis/google-api-services-youtube
     implementation ("com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0")
+
+    implementation ("com.android.volley:volley:1.2.1")
 
     implementation ("com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0")
     implementation ("com.google.android.material:material:1.4.0")
