@@ -24,6 +24,9 @@
     <color name="light_thumb">#80C0C0C0</color>
     <color name="light_thumber">#FFFFFF</color>
 
+    <color name="light_sourceLink">#E1E1E1</color>
+
+
     <!-- Цвета для темной темы -->
     <color name="lighter_interface_text_color">#A06E7E</color>
     <color name="dark_background">#201A1A</color>
@@ -34,4 +37,7 @@
     <color name="dark_nav_icon_selected">#FFE6EB</color>
     <color name="dark_thumb">#dcdcdc</color>
     <color name="dark_thumber">#FFFFFF</color>
+
+    <color name="dark_sourceLink">#8A8787</color>
+
 </resources>

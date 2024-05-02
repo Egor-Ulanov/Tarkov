@@ -190,7 +190,7 @@ public class HomeFragment extends Fragment {
                 if (count > 0) {
                     for (int i = 0; i < count; i++) {
                         ImageView indicator = new ImageView(requireContext());
-                        indicator.setImageResource(i == 0 ? R.drawable.circle_fill : R.drawable.circle_fill2);
+                        indicator.setImageResource(i == 0 ? R.drawable.circle_fill2 : R.drawable.circle_fill);
 
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -265,7 +265,7 @@ public class HomeFragment extends Fragment {
     private void updateSlideIndicator(LinearLayout sliderIndicator, int currentPosition) {
         for (int i = 0; i < sliderIndicator.getChildCount(); i++) {
             ImageView indicator = (ImageView) sliderIndicator.getChildAt(i);
-            indicator.setImageResource(i == currentPosition ? R.drawable.circle_fill : R.drawable.circle_fill2);
+            indicator.setImageResource(i == currentPosition ? R.drawable.circle_fill2 : R.drawable.circle_fill);
         }
     }
 

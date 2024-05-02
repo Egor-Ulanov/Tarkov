@@ -1,5 +1,5 @@
 <!-- news_detail_layout.xml -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,15 +7,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/header_news">
 
-        <!-- Добавлен ProgressBar -->
-        <ProgressBar
-            android:id="@+id/progressBarDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="visible" />
         <TextView
             android:id="@+id/detailTitle"
             android:layout_width="320dp"
@@ -38,39 +32,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp" />
 
-        <ImageView
-            android:id="@+id/detailImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/detailDate"
-                android:scaleType="fitCenter"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="8dp"/>
-
-        <TextView
-            android:id="@+id/detailContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Содержание новости"
-            android:textAlignment="viewStart"
-            android:layout_below="@id/detailImage"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="24dp" />
-
-        <TextView
-            android:id="@+id/sourceLink"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Источник"
-            android:layout_below="@id/detailContent"
-            android:background="@android:color/darker_gray"
-            android:padding="8dp"
-             />
-
         <ImageButton
             android:id="@+id/closeButton"
             android:layout_width="wrap_content"
@@ -83,9 +44,65 @@
             android:layout_marginTop="16dp"
             android:background="@android:color/transparent" />
 
-
-
-        <!--android:background="?android:attr/selectableItemBackground"-->
-
     </RelativeLayout>
-</ScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/sourceLink"
+        android:layout_below="@+id/header_news"
+        android:layout_marginTop="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Добавлен ProgressBar -->
+            <ProgressBar
+                android:id="@+id/progressBarDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/detailImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/detailContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Содержание новости"
+                android:textAlignment="viewStart"
+                android:layout_below="@id/detailImage"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="24dp" />
+
+            <!--android:background="?android:attr/selectableItemBackground"-->
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/sourceLink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Источник: "
+        android:textColor="@color/black"
+        android:background=""
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="20dp"
+        android:layout_alignParentBottom="true"
+        />
+
+</RelativeLayout>
