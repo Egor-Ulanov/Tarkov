@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment {
 
     private static final String VIDEOS_URL = "http://213.171.14.43:8000/videos/"; // URL вашего сервера
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
+    public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         Log.d("HomeFragment", "onCreateView");
@@ -152,11 +152,6 @@ public class HomeFragment extends Fragment {
 
             // Игнорировать другие методы (onPageScrolled и onPageScrollStateChanged)
         });
-
-
-
-
-
 
         // Установка цвета фона в соответствии с темой
         updateBackgroundColor();

@@ -25,18 +25,13 @@ public class DashboardFragment extends Fragment {
     private RecyclerView recyclerView;
     private MapAdapter mapAdapter;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: начало");
 
-        DashboardViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+        View view =  inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        recyclerView = root.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Пример картинок из интернета. Замените ссылками на ваши изображения.
@@ -49,13 +44,11 @@ public class DashboardFragment extends Fragment {
         mapItemList.add(new MapItem(imageUrl2, MapOfZavodActivity.class, "Завод"));
         mapItemList.add(new MapItem(imageUrl3, MapOfWoodsActivity.class, "Лес"));
 
-
         mapAdapter = new MapAdapter(mapItemList);
         recyclerView.setAdapter(mapAdapter);
 
-
         Log.d(TAG, "onCreateView: recyclerView установлен");
-        return root;
+        return view;
     }
 
     @Override
@@ -64,4 +57,3 @@ public class DashboardFragment extends Fragment {
         binding = null;
     }
 }
-
