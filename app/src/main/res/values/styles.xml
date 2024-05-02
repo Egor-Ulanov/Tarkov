@@ -11,6 +11,7 @@
             <!-- Другие атрибуты для светлой темы -->
         </style>
 
+
         <!-- Стиль для темной темы -->
         <style name="AppTheme.Dark" parent="Theme.AppCompat">
             <item name="interfaceTextColor">@color/lighter_interface_text_color</item>
