@@ -99,7 +99,7 @@
         android:layout_height="wrap_content"
         android:text="Источник: "
         android:textColor="@color/black"
-        android:background=""
+        android:background="#E1E1E1"
         android:paddingHorizontal="15dp"
         android:paddingVertical="20dp"
         android:layout_alignParentBottom="true"
