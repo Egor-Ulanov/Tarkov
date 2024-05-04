@@ -1,10 +1,665 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-        android:id="@+id/mapImageView"
+    <!-- Блок с картой и интерактивными элементами -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?android:attr/actionBarSize" />
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="200dp">
+
+        <!-- Карта -->
+        <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+            android:id="@+id/mapImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            />
+        <ImageButton
+            android:id="@+id/PlusMach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="30dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Увеличить масштаб"
+            android:src="@drawable/plus_mach" />
+        <ImageButton
+            android:id="@+id/MinusMach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="75dp"
+            android:layout_marginStart="30dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Уменьшить масштаб"
+            android:src="@drawable/minus_mach" />
+        <ImageButton
+            android:id="@+id/ShowMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
+            android:layout_marginStart="29dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Скрыть/Показать карту"
+            android:src="@drawable/show_icon_map" />
+        <!--<ImageButton
+            android:id="@+id/rotateButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_full_dis_24dp" />-->
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+        <!-- Название карты -->
+        <TextView
+            android:id="@+id/mapTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:text="Карта Лес"
+            android:textColor="?android:textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Кнопка закрыть -->
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="Закрыть карту"
+            android:src="@drawable/circle_close_button2" />
+
+    </RelativeLayout>
+
+    <!-- Нижний блок с фильтрами -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:background="#222222">
+
+        <!-- Кнопка для открытия/закрытия списка -->
+        <ImageButton
+            android:id="@+id/expandButton"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/icon_up"
+            android:background="#80CBC4"
+            android:contentDescription="Открыть/закрыть список"
+            android:onClick="toggleList"
+             />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Фильтры"
+            android:textColor="#80CBC4"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="center_horizontal" />
+
+        <LinearLayout
+            android:id="@+id/buttonsAll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <!-- Кнопка "Выбрать всё" -->
+            <Button
+                android:id="@+id/selectAllButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/button_plus"
+                android:text=" Выбрать всё"
+                android:textColor="#80CBC4" />
+
+            <!-- Разделитель между кнопками -->
+            <View
+                android:layout_width="20dp"
+                android:layout_height="match_parent" />
+
+            <!-- Кнопка "Очистить всё" -->
+            <Button
+                android:id="@+id/clearAllButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/button_minus"
+                android:text=" Очистить всё"
+                android:textColor="#80CBC4" />
+
+        </LinearLayout>
+
+        <!-- Список с категориями -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:animateLayoutChanges="true"
+            android:isScrollContainer="true">
+
+            <LinearLayout
+                android:id="@+id/categoryList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/expandButton"
+                android:fadeScrollbars="true"
+                android:fadingEdge="vertical"
+                android:fadingEdgeLength="20dp"
+                android:isScrollContainer="true"
+                android:nestedScrollingEnabled="true"
+                android:orientation="vertical"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:verticalScrollbarPosition="right"
+                android:visibility="gone">
+
+                <!-- Категория "Extracts" -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Extracts"
+                    android:textColor="#FFC165"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+                <!-- Блок с кнопками для категории "Extracts" -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp">
+
+                        <Button
+                            android:id="@+id/PMCExtractsButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="8 x PMC Extracts"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/scavExtractsButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="15 x Scav Extracts"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+                    </LinearLayout>
+
+                    <!-- Второй ряд кнопок для категории "Extracts" -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp"></LinearLayout>
+                </LinearLayout>
+
+                <!-- Категория "Legend" -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Legend"
+                    android:textColor="#FFC165"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp">
+
+                        <Button
+                            android:id="@+id/IconLegendBoss"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="1 x Boss"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconLegendCache"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="36 x Cache"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconLegendCorpse"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="6 x Corpse"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconLegendCultists"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="3 x Cultists"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconLegendGoons"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="2 x Goons"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconLegendBTRStop"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="7 x BTR Stop"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+                    </LinearLayout>
+
+                    <!-- Второй ряд кнопок для категории "Extracts" -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp">
+
+                        <Button
+                            android:id="@+id/IconLegendMines"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="20 x Mines"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconLegendRitual"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="2 x Ritual Spot"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconLegendScavs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="11 x AI Scav"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconLegendScavSniper"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="1 x Scav Sniper"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconLegendSniper"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="8 x Sniper"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconLegendPMCSpawn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="29 x PMC Spawn"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Категория "Quests" -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Quests"
+                    android:textColor="#FFC165"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp">
+
+                        <Button
+                            android:id="@+id/IconBloodOfWar3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="3 x Blood of War 3"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconChumming"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="1 x Chumming"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconGratitude"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="1 x Gratitude"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconHCarePriv3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="1 x Healthcare Priv. 3"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconInformedMeansArmed"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="1 x Informed Means Armed"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconIntroduction"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="1 x Introduction"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+                    </LinearLayout>
+
+                    <!-- Второй ряд кнопок для категории "Extracts" -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp">
+
+                        <Button
+                            android:id="@+id/IconLendLease1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="2 x Lend Lease 1"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconSearchMission"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="2 x Search Mission"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconSupplyPlans"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="1 x Supply Plans"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconThrifty"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="2 x The Survivalist Path - Thrifty"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Категория "Another" -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Another"
+                    android:textColor="#FFC165"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp">
+
+                        <Button
+                            android:id="@+id/IconScavSpots"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="8 x Scav Spots"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconPMCSpots"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="3 x PMC Spots"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+
+                        <Button
+                            android:id="@+id/IconNeutralSpots"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFC165"
+                            android:text="5 x Neutral Spots"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:singleLine="true"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"/>
+                    </LinearLayout>
+
+                    <!-- Второй ряд кнопок для категории "Extracts" -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp">
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+    <!-- Прогресс-бар -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="285dp"
+        android:visibility="visible" />
+</FrameLayout>

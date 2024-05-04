@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -196,8 +197,22 @@ public class NotificationsFragment extends Fragment {
     }
     private void updateSwitchThumb() {
         SwitchMaterial themeSwitch = binding.themeSwitch;
-        int thumbImageResId = isDarkTheme() ? R.drawable.moon : R.drawable.sun;
+        /*int thumbImageResId = isDarkTheme() ? R.drawable.moon : R.drawable.sun;
         themeSwitch.setThumbDrawable(ContextCompat.getDrawable(requireContext(), thumbImageResId));
+        Drawable thumbDrawable = ContextCompat.getDrawable(requireContext(), thumbImageResId);
+        themeSwitch.setThumbDrawable(thumbDrawable);*/
+        int thumbBackgroundColorResId = isDarkTheme() ? R.color.light_thumb : R.color.dark_thumb;
+        // Получение ресурсов цвета заднего фона ползунка
+        int thumbBackgroundColor = ContextCompat.getColor(requireContext(), thumbBackgroundColorResId);
+        // Установка цвета заднего фона ползунка
+        themeSwitch.setTrackTintList(ColorStateList.valueOf(thumbBackgroundColor));
+
+        int thumberBackgroundColorResId = isDarkTheme() ? R.color.light_thumber : R.color.dark_thumber;
+        // Получение цвета thumber из ресурсов
+        int thumberBackgroundColor = ContextCompat.getColor(requireContext(), thumberBackgroundColorResId);
+        // Установка цвета thumber
+        themeSwitch.setThumbTintList(ColorStateList.valueOf(thumberBackgroundColor));
+
     }
     // Сохранение состояния темы при уничтожении фрагмента
     @Override
