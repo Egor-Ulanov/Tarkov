@@ -27,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="220dp"
             android:layout_marginBottom="4dp"
+            android:layout_marginTop="15dp"
             android:contentDescription="Описание вашего ViewPager"
             />
 
@@ -46,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/viewPager"
             android:layout_marginTop="24dp"
-
+            android:layout_marginBottom="10dp"
             />
     </RelativeLayout>
 </androidx.core.widget.NestedScrollView>

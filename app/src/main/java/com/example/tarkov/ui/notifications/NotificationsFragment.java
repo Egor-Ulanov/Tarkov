@@ -81,7 +81,6 @@ public class NotificationsFragment extends Fragment {
         TextView emailText = binding.emailText;
         TextView phoneText = binding.phoneText;
         TextView themeText = binding.themeText;
-        TextView interfaceText = binding.interfacePril;
         View liniaText = binding.liniaText;
 
         websiteText.setOnClickListener(v -> openLink("https://www.escapefromtarkov.com/support"));
@@ -162,11 +161,6 @@ public class NotificationsFragment extends Fragment {
         ColorStateList navIconColor = ContextCompat.getColorStateList(requireContext(), navIconColorResId);
         navView.setItemIconTintList(navIconColor);
         navView.setItemTextColor(navIconColor);
-
-
-        // Обновление цветов "Интерфейс приложения"
-        int interfaceTextColor = ContextCompat.getColor(requireContext(), interfaceTextColorID);
-        binding.interfacePril.setTextColor(interfaceTextColor);
 
         // Обновление цветов "Тема приложения"
         int themeTextColor = ContextCompat.getColor(requireContext(), textColorResId);
