@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -95,6 +96,11 @@ public class MapOfWoodsActivity extends AppCompatActivity {
     private LinearLayout buttonsContainer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Скрыть ActionBar
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
         super.onCreate(savedInstanceState);
         loadThemePreference();
         setContentView(R.layout.map_of_woods);
@@ -566,6 +572,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLegendBoss);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusBossimageUrls);
             }
         });
@@ -573,6 +580,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLegendBTRStop);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusBTRStopimageUrls);
             }
         });
@@ -580,6 +588,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLegendCache);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusCasheimageUrls);
             }
         });
@@ -587,6 +596,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLegendCorpse);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusCorpseimageUrls);
             }
         });
@@ -594,6 +604,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLegendCultists);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusCultistsimageUrls);
             }
         });
@@ -601,6 +612,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLegendGoons);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusGoonsimageUrls);
             }
         });
@@ -608,6 +620,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLegendMines);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusMinesimageUrls);
             }
         });
@@ -615,6 +628,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLegendPMCSpawn);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusPMCSpawnimageUrls);
             }
         });
@@ -622,6 +636,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLegendRitual);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusRitualimageUrls);
             }
         });
@@ -629,6 +644,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLegendScavs);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusScavsimageUrls);
             }
         });
@@ -636,6 +652,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLegendScavSniper);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusScavSniperimageUrls);
             }
         });
@@ -643,6 +660,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLegendSniper);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusSniperimageUrls);
             }
         });
@@ -650,6 +668,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconBloodOfWar3);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusBloodOfWar3imageUrls);
             }
         });
@@ -657,6 +676,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconChumming);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusChummingimageUrls);
             }
         });
@@ -664,6 +684,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconGratitude);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusGratitudeimageUrls);
             }
         });
@@ -671,6 +692,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconHCarePriv3);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusHCarePriv3imageUrls);
             }
         });
@@ -678,6 +700,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconInformedMeansArmed);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusInformedMeansArmedimageUrls);
             }
         });
@@ -685,6 +708,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconIntroduction);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusIntroductionimageUrls);
             }
         });
@@ -692,6 +716,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconLendLease1);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusLendLease1imageUrls);
             }
         });
@@ -699,6 +724,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconSearchMission);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusSearchMissionimageUrls);
             }
         });
@@ -706,6 +732,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconSupplyPlans);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusSupplyPlansimageUrls);
             }
         });
@@ -713,6 +740,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconThrifty);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusThriftyimageUrls);
             }
         });
@@ -720,6 +748,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(ScavSpots);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusSCAVSpotsimageUrls);
             }
         });
@@ -727,6 +756,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconPMCSpots);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusPMCSpotsimageUrls);
             }
         });
@@ -734,6 +764,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
+                setActiveButton(IconNeutralSpots);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusNeutralSpotsimageUrls);
             }
         });
@@ -833,7 +864,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             activeButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFC165")));
         }
         activeButton = button;
-        activeButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFD5D5D5")));
+        activeButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#cec7a6")));
     }
     // Метод для загрузки и склеивания изображений
     private void loadAndMergeImages(String[] baseImageUrls, String[] overlayImageUrls) {
