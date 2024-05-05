@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -60,6 +62,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
     // Определение переменных для работы с изображением, прогресс-баром и URL карт
     private SubsamplingScaleImageView imageView;
     private ProgressBar progressBar;
+    private Button activeButton = null;
     private String[] WoodsimageUrls = {
             "https://drive.google.com/uc?export=view&id=1sZSZBCO8P6aZezrB3uXW9Boifp5VYDhN",
             "https://drive.google.com/uc?export=view&id=1RV_2dYknZhr27k4I9CoEG0WiUHLkzKuQ",
@@ -526,7 +529,6 @@ public class MapOfWoodsActivity extends AppCompatActivity {
 
         // Установка карты берег
         loadAndMergeImages(WoodsimageUrls, WoodsPlusCompassimageUrls);
-
         selectAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -535,18 +537,19 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             }
         });
 
-        clearAllButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Логика для очистки всех изображений
-                loadAndMergeImages(WoodsimageUrls,WoodsPlusCompassimageUrls);
-            }
-        });
+            clearAllButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Логика для очистки всех изображений
+                    loadAndMergeImages(WoodsimageUrls,WoodsPlusCompassimageUrls);
+                }
+            });
 
         PMCExtractsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений PMC
+                setActiveButton(PMCExtractsButton);
                 loadAndMergeImages(WoodsimageUrls, WoodsPlusPMCimageUrls);
             }
         });
@@ -555,7 +558,8 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Логика для загрузки изображений SCAV
-                loadAndMergeImages(WoodsimageUrls, WoodsPlusSCAVimageUrls);
+                setActiveButton(scavExtractsButton);
+                loadAndMergeImages(WoodsimageUrls, WoodsPlusSCAVimageUrls);// Установите фон активной кнопки
             }
         });
         IconLegendBoss.setOnClickListener(new View.OnClickListener() {
@@ -824,7 +828,13 @@ public class MapOfWoodsActivity extends AppCompatActivity {
     Это снижает нагрузку на память и CPU, предотвращая одновременную загрузку всех изображений.
     Задержка в 100 миллисекунд между каждым запросом помогает равномерно распределить загрузку.
     */
-
+    private void setActiveButton(Button button) {
+        if (activeButton != null) {
+            activeButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFC165")));
+        }
+        activeButton = button;
+        activeButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFD5D5D5")));
+    }
     // Метод для загрузки и склеивания изображений
     private void loadAndMergeImages(String[] baseImageUrls, String[] overlayImageUrls) {
         // Показать ProgressBar
