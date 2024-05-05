@@ -18,6 +18,146 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             />
+
+        <ImageView
+            android:id="@+id/pmc_extracts_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="300dp"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/scav_extracts_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/boss_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/cache_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/corpse_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/cultists_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/goons_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/btr_stop_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/mines_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/ritual_spot_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/ai_scav_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/scav_sniper_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/sniper_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/pmc_spawn_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/BloodOfWar3_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/chumming_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/gratitude_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/HCarePriv3_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/InformedMeansArmed_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/introduction_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/lend_lease_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/search_mission_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/supply_plans_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/TheSurvivalistPath_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/scav_spots_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/pmc_spots_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/neutral_spots_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
