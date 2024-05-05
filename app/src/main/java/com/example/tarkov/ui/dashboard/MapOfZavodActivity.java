@@ -4,7 +4,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -33,6 +37,11 @@ public class MapOfZavodActivity extends AppCompatActivity{
         backButton.setImageDrawable(backDrawable);
 
         loadThemePreference();
+        // Скрыть ActionBar
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
 
         // Обработчик события - возвращение на предыдущюю страницу
         backButton.setOnClickListener(new View.OnClickListener() {
