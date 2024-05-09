@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ import com.example.tarkov.R;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MapOfWoodsActivity extends AppCompatActivity {
@@ -73,6 +75,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             checkInternetConnection();
         }
     };*/
+    private List<ImageView> markers = new ArrayList<>();
 
     private LinearLayout buttonsContainer;
     @Override
@@ -119,7 +122,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
         buttonsContainer  = findViewById(R.id.buttonsAll);
         ImageButton plusButton = findViewById(R.id.PlusMach);
         ImageButton minusButton = findViewById(R.id.MinusMach);
-        ImageButton showMapButton = findViewById(R.id.ShowMap);
+
 
         //Metki/////////////////
         String mapImageUrl = "http://213.171.14.43:8000/images/Карта с границами.png";
@@ -179,6 +182,13 @@ public class MapOfWoodsActivity extends AppCompatActivity {
         ImageView pmc_spots_marker = findViewById(R.id.pmc_spots_marker);
 
         ImageView neutral_spots_marker = findViewById(R.id.neutral_spots_marker);
+        markers.addAll(Arrays.asList(pmcExtractsMarker, scav_extracts_marker, boss_marker, cache_marker, corpse_marker, cultists_marker, goons_marker,
+                btr_stop_marker, mines_marker, ritual_spot_marker, ai_scav_marker,scav_sniper_marker, sniper_marker, pmc_spawn_marker,
+                BloodOfWar3_marker, chumming_marker, gratitude_marker, HCarePriv3_marker, InformedMeansArmed_marker, introduction_marker,
+                lend_lease_marker, search_mission_marker, supply_plans_marker, TheSurvivalistPath_marker, scav_spots_marker,
+                pmc_spots_marker, neutral_spots_marker));
+
+
 
         // Скрыть все метки по умолчанию
         pmcExtractsMarker.setVisibility(View.GONE);
@@ -388,7 +398,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setActiveButton(PMCExtractsButton);
                 if (PMCExtractsButton.getVisibility() == View.GONE) {
-                    loadMarkerImage("http://213.171.14.43:8000/images/pmc extracts.png", pmcExtractsMarker);
+                    loadMarkerImage("http://213.171.14.43:8000/images/pmc%20extracts.png", pmcExtractsMarker);
                     pmcExtractsMarker.setVisibility(View.VISIBLE);
                 } else {
                     pmcExtractsMarker.setVisibility(View.GONE);
@@ -748,20 +758,71 @@ public class MapOfWoodsActivity extends AppCompatActivity {
                 zoomOut();
             }
         });
-        // Установка слушателя кликов на кнопку
-        showMapButton.setOnClickListener(new View.OnClickListener() {
+        // Установка слушателя событий изменения масштаба
+        imageView.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
             @Override
-            public void onClick(View v) {
-                // Проверяем текущую видимость карты
-                if (imageView.getVisibility() == View.VISIBLE) {
-                    // Если карта видима, скрываем её
-                    imageView.setVisibility(View.GONE);
-                } else {
-                    // Если карта скрыта, показываем её
-                    imageView.setVisibility(View.VISIBLE);
-                }
+            public void onReady() {
+
+            }
+
+            @Override
+            public void onImageLoaded() {
+
+            }
+
+            @Override
+            public void onPreviewLoadError(Exception e) {
+
+            }
+
+            @Override
+            public void onImageLoadError(Exception e) {
+
+            }
+
+            @Override
+            public void onTileLoadError(Exception e) {
+
+            }
+
+            @Override
+            public void onPreviewReleased() {
+
+            }
+
+            public void onZoomChanged(float newZoom, int origin) {
+                updateMarkerPositionsAndSizes(newZoom);
             }
         });
+
+    }
+
+    private void updateMarkerPositionsAndSizes(float newZoom) {
+        for (ImageView marker : markers) {
+            // Получить исходные параметры разметки
+            ViewGroup.LayoutParams params = marker.getLayoutParams();
+
+            // Рассчитать новое положение (пример)
+            float originalX = marker.getX(); // Исходная координата X метки
+            float originalY = marker.getY(); // Исходная координата Y метки
+            float centerX = imageView.getCenter().x;
+            float centerY = imageView.getCenter().y;
+            float newX = centerX + (originalX - centerX) * newZoom;
+            float newY = centerY + (originalY - centerY) * newZoom;
+
+            // Рассчитать новый размер (пример)
+            int originalWidth = marker.getWidth(); // Исходная ширина метки
+            int originalHeight = marker.getHeight(); // Исходная высота метки
+            int newWidth = (int) (originalWidth * newZoom);
+            int newHeight = (int) (originalHeight * newZoom);
+
+            // Обновить параметры разметки
+            params.width = newWidth;
+            params.height = newHeight;
+            marker.setX(newX);
+            marker.setY(newY);
+            marker.setLayoutParams(params);
+        }
     }
     private void zoomIn() {
         // Получаем текущий масштаб карты
@@ -826,12 +887,23 @@ public class MapOfWoodsActivity extends AppCompatActivity {
     Задержка в 100 миллисекунд между каждым запросом помогает равномерно распределить загрузку.
     */
     private void setActiveButton(Button button) {
-        if (activeButton != null) {
-            activeButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFC165")));
+        Button prevActiveButton = (Button) button.getTag();
+
+        if (prevActiveButton != null && prevActiveButton != button) {
+            prevActiveButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#cec7a6")));
         }
-        activeButton = button;
-        activeButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#cec7a6")));
+
+        if (prevActiveButton == button) {
+            button.setTag(null); // Сбросить активность кнопки
+            button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#cec7a6"))); // Вернуть исходный цвет
+        } else {
+            button.setTag(button);
+            button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFC165")));
+        }
     }
+
+
+
     // Метод для загрузки и склеивания изображений
 
 

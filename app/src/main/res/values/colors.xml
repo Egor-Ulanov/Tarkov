@@ -40,6 +40,6 @@
 
     <color name="dark_sourceLink">#8A8787</color>
 
-    <color name="your_active_color">#cec7a6</color> <!-- Цвет для активной кнопки -->
-    <color name="your_inactive_color">#FFC165</color> <!-- Цвет для неактивной кнопки -->
+    <color name="your_active_color">#FFC165</color> <!-- Цвет для активной кнопки -->
+    <color name="your_inactive_color">#cec7a6</color> <!-- Цвет для неактивной кнопки -->
 </resources>
