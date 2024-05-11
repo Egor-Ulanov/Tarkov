@@ -758,72 +758,8 @@ public class MapOfWoodsActivity extends AppCompatActivity {
                 zoomOut();
             }
         });
-        // Установка слушателя событий изменения масштаба
-        imageView.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
-            @Override
-            public void onReady() {
-
-            }
-
-            @Override
-            public void onImageLoaded() {
-
-            }
-
-            @Override
-            public void onPreviewLoadError(Exception e) {
-
-            }
-
-            @Override
-            public void onImageLoadError(Exception e) {
-
-            }
-
-            @Override
-            public void onTileLoadError(Exception e) {
-
-            }
-
-            @Override
-            public void onPreviewReleased() {
-
-            }
-
-            public void onZoomChanged(float newZoom, int origin) {
-                updateMarkerPositionsAndSizes(newZoom);
-            }
-        });
-
     }
 
-    private void updateMarkerPositionsAndSizes(float newZoom) {
-        for (ImageView marker : markers) {
-            // Получить исходные параметры разметки
-            ViewGroup.LayoutParams params = marker.getLayoutParams();
-
-            // Рассчитать новое положение (пример)
-            float originalX = marker.getX(); // Исходная координата X метки
-            float originalY = marker.getY(); // Исходная координата Y метки
-            float centerX = imageView.getCenter().x;
-            float centerY = imageView.getCenter().y;
-            float newX = centerX + (originalX - centerX) * newZoom;
-            float newY = centerY + (originalY - centerY) * newZoom;
-
-            // Рассчитать новый размер (пример)
-            int originalWidth = marker.getWidth(); // Исходная ширина метки
-            int originalHeight = marker.getHeight(); // Исходная высота метки
-            int newWidth = (int) (originalWidth * newZoom);
-            int newHeight = (int) (originalHeight * newZoom);
-
-            // Обновить параметры разметки
-            params.width = newWidth;
-            params.height = newHeight;
-            marker.setX(newX);
-            marker.setY(newY);
-            marker.setLayoutParams(params);
-        }
-    }
     private void zoomIn() {
         // Получаем текущий масштаб карты
         float currentZoom = imageView.getScale();
@@ -887,64 +823,18 @@ public class MapOfWoodsActivity extends AppCompatActivity {
     Задержка в 100 миллисекунд между каждым запросом помогает равномерно распределить загрузку.
     */
     private void setActiveButton(Button button) {
-        Button prevActiveButton = (Button) button.getTag();
+        Boolean isSelected = (Boolean) button.getTag(); // Проверяем, активна ли кнопка
 
-        if (prevActiveButton != null && prevActiveButton != button) {
-            prevActiveButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#cec7a6")));
-        }
-
-        if (prevActiveButton == button) {
-            button.setTag(null); // Сбросить активность кнопки
-            button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#cec7a6"))); // Вернуть исходный цвет
+        if (isSelected == null || !isSelected) {
+            // Если кнопка не была выбрана, делаем ее активной
+            button.setTag(true);
+            button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFC165"))); // Устанавливаем цвет активности
         } else {
-            button.setTag(button);
-            button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFC165")));
+            // Если кнопка уже была выбрана, делаем ее неактивной
+            button.setTag(false);
+            button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#cec7a6"))); // Устанавливаем цвет неактивности
         }
     }
-
-
-
-    // Метод для загрузки и склеивания изображений
-
-
-    // Интерфейс для обратного вызова при завершении загрузки изображений
-
-
-    // Метод для загрузки массива изображений
-
-
-    // Метод для склеивания и отображения изображений в одно большое
-
-    //New code//
-    /*private void loadMapImage(String imageUrl, ImageView imageView) {
-        Log.d(TAG, "loadMapImage: попытка загрузить изображение из " + imageUrl);
-        // Создание Target и сохранение сильной ссылки
-        this.loadImageTarget = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                imageView.setImageBitmap(bitmap);
-                runOnUiThread(() -> progressBar.setVisibility(View.GONE));  // Скрыть ProgressBar
-            }
-
-            @Override
-            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                Log.e(TAG, "Ошибка загрузки изображения", e);
-                runOnUiThread(() -> progressBar.setVisibility(View.GONE));  // Скрыть ProgressBar
-                // Показать запасное изображение или сообщение об ошибке
-                // Например, imageView.setImage(ImageSource.resource(R.drawable.placeholder));
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                // Подготовка к загрузке
-            }
-        };
-
-        // Использование Picasso для загрузки изображения
-        Picasso.get().load(imageUrl).networkPolicy(NetworkPolicy.NO_CACHE)
-                .memoryPolicy(MemoryPolicy.NO_CACHE).into(this.loadImageTarget);
-    }*/
-
 
     private void loadMapImage(String imageUrl) {
         Log.d(TAG, "loadMapImage: попытка загрузить изображение из " + imageUrl);
@@ -977,107 +867,4 @@ public class MapOfWoodsActivity extends AppCompatActivity {
         // Возврат на предыдущую страницу
         onBackPressed();
     }
-
-    // Метод для переключения ориентации экрана
-
-    // Метод для проверки интернет-соединения
-    /*private void checkInternetConnection() {
-        if (isCheckingInternet) {
-            return; // Если уже выполняется проверка, выходим из метода
-        }
-        isCheckingInternet = true;
-
-        if (!isInternetAvailable()) {
-            internetWasLost = true;
-            if (internetCheckAttempts < 3) {
-                showSnackbarWithCountdown();
-                internetCheckAttempts++;
-            } else {
-                showFinalSnackbar();
-            }
-        } else {
-            if (internetWasLost) {
-                // Интернет был потерян, но теперь восстановлен
-                Snackbar.make(findViewById(android.R.id.content), "Подключение восстановлено", Snackbar.LENGTH_SHORT).show();
-                loadAndMergeImages(WoodsimageUrls,WoodsimageUrls);
-                internetWasLost = false;
-                internetCheckAttempts = 0;
-            }
-            isCheckingInternet = false;
-        }
-    }
-
-
-    // Метод для отображения Snackbar с обратным отсчетом
-    private void showSnackbarWithCountdown() {
-        final int[] countdownSeconds = {5};
-        final Handler handler = new Handler();
-
-        final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "", Snackbar.LENGTH_INDEFINITE);
-
-        final Runnable countdownRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (countdownSeconds[0] > 0) {
-                    snackbar.setText("Нет интернет-соединения. Повторная проверка через " + countdownSeconds[0] + " секунд...");
-                    countdownSeconds[0]--;
-                    handler.postDelayed(this, 1000);
-                } else {
-                    snackbar.dismiss();
-                    isCheckingInternet = false;
-                    checkInternetConnection(); // Повторная проверка
-                }
-            }
-        };
-
-        handler.post(countdownRunnable);
-        snackbar.show();
-    }
-
-
-    // Метод для отображения Snackbar с предложением проверить соединение
-    private void showFinalSnackbar() {
-        Snackbar.make(findViewById(android.R.id.content), "Нет подключения к интернету. Проверить соединение", Snackbar.LENGTH_INDEFINITE)
-                .setAction("Проверить", v -> {
-                    isCheckingInternet = false;
-                    internetCheckAttempts = 0; // Сброс счетчика попыток
-                    checkInternetConnection();
-                }).show();
-    }
-
-    // Метод для проверки доступности интернета
-    private boolean isInternetAvailable() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm != null) {
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        }
-        return false;
-    }
-
-    // BroadcastReceiver для обработки изменений состояния сети
-    private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
-                checkInternetConnection(); // Немедленно проверяем состояние сети
-            }
-        }
-    };
-
-
-    // Обработчики жизненного цикла активности для управления BroadcastReceiver
-    @Override
-    protected void onResume() {
-        super.onResume();
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkStateReceiver, filter);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(networkStateReceiver);
-    }*/
-
 }
