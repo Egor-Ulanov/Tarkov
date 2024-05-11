@@ -99,7 +99,7 @@ dependencies {
     // https://mavenlibs.com/maven/dependency/com.google.apis/google-api-services-youtube
     implementation ("com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0")
 
-    implementation ("com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0")
+
     implementation ("com.google.android.material:material:1.4.0")
     implementation ("androidx.core:core-ktx:1.7.0")
     implementation ("androidx.legacy:legacy-support-v4:+")
@@ -107,5 +107,8 @@ dependencies {
 
     // Отправка http Запросов
     implementation ("com.android.volley:volley:1.2.1")
+    implementation ("com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0")
+    implementation ("com.github.bumptech.glide:glide:4.14.2")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
 
 }

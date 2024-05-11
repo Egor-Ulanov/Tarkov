@@ -8,6 +8,7 @@
             <item name="android:textColor">@color/light_text</item>
             <item name="actionBarStyle">@style/CustomActionBar.Light</item>
             <item name="backgroundColor">@color/light_thumb</item>
+            <item name="color">@color/light_sourceLink</item>
             <!-- Другие атрибуты для светлой темы -->
         </style>
 
@@ -20,6 +21,7 @@
             <item name="android:textColor">@color/dark_text</item>
             <item name="actionBarStyle">@style/CustomActionBar.Dark</item>
             <item name="backgroundColor">@color/dark_thumb</item>
+            <item name="color">@color/dark_sourceLink</item>
             <!-- Другие атрибуты для темной темы -->
         </style>
 

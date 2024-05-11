@@ -1,28 +1,20 @@
 package com.example.tarkov.ui.dashboard;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,15 +29,11 @@ import com.bumptech.glide.request.transition.Transition;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.example.tarkov.R;
-import com.google.android.material.snackbar.Snackbar;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class MapOfWoodsActivity extends AppCompatActivity {
 
@@ -87,6 +75,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             checkInternetConnection();
         }
     };*/
+    private List<ImageView> markers = new ArrayList<>();
 
     private LinearLayout buttonsContainer;
     @Override
@@ -133,7 +122,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
         buttonsContainer  = findViewById(R.id.buttonsAll);
         ImageButton plusButton = findViewById(R.id.PlusMach);
         ImageButton minusButton = findViewById(R.id.MinusMach);
-        ImageButton showMapButton = findViewById(R.id.ShowMap);
+
 
         //Metki/////////////////
         String mapImageUrl = "http://213.171.14.43:8000/images/Карта с границами.png";
@@ -141,59 +130,70 @@ public class MapOfWoodsActivity extends AppCompatActivity {
 
         // Загрузка изображений меток с сервера
         ImageView pmcExtractsMarker = findViewById(R.id.pmc_extracts_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/pmc extracts.png").into(pmcExtractsMarker);
+
         ImageView scav_extracts_marker = findViewById(R.id.pmc_extracts_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/scav extracts.png").into(scav_extracts_marker);
+
         ImageView boss_marker = findViewById(R.id.boss_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_legend_Boss.png ").into(boss_marker);
+
         ImageView cache_marker = findViewById(R.id.cache_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_legend_Cashe.png").into(cache_marker);
+
         ImageView corpse_marker = findViewById(R.id.corpse_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_legend_Corpess.png").into(corpse_marker);
+
         ImageView cultists_marker = findViewById(R.id.cultists_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_legend_Cultists.png ").into(cultists_marker);
+
         ImageView goons_marker = findViewById(R.id.goons_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_legend_Goons.png").into(goons_marker);
+
         ImageView btr_stop_marker = findViewById(R.id.btr_stop_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_legend_Btrstop.png ").into(btr_stop_marker);
+
         ImageView mines_marker = findViewById(R.id.mines_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_legend_Mines.png").into(mines_marker);
+
         ImageView ritual_spot_marker = findViewById(R.id.ritual_spot_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_legend_Ritual.png").into(ritual_spot_marker);
+
         ImageView ai_scav_marker = findViewById(R.id.ai_scav_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_legend_Scavs.png").into(ai_scav_marker);
+
         ImageView scav_sniper_marker = findViewById(R.id.scav_sniper_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_legend_ScavSniper.png").into(scav_sniper_marker);
+
         ImageView sniper_marker = findViewById(R.id.sniper_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_legend_Sniper.png").into(sniper_marker);
+
         ImageView pmc_spawn_marker = findViewById(R.id.pmc_spawn_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_legend_PMCSpawn.png").into(pmc_spawn_marker);
+
         ImageView BloodOfWar3_marker = findViewById(R.id.BloodOfWar3_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_BloodOfWar3(Quests).png").into(BloodOfWar3_marker);
+
         ImageView chumming_marker = findViewById(R.id.chumming_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_chumming(Quests).png").into(chumming_marker);
+
         ImageView gratitude_marker = findViewById(R.id.gratitude_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_Gratitude(Quests).png").into(gratitude_marker);
+
         ImageView HCarePriv3_marker = findViewById(R.id.HCarePriv3_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_HCarePt3(Quests).png").into(HCarePriv3_marker);
+
         ImageView InformedMeansArmed_marker = findViewById(R.id.InformedMeansArmed_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_IntormedMeansArmed(Quests).png").into(InformedMeansArmed_marker);
+
         ImageView introduction_marker = findViewById(R.id.introduction_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_Introduction(Quests).png").into(introduction_marker);
+
         ImageView lend_lease_marker = findViewById(R.id.lend_lease_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_LendLeasePt1(Quests).png").into(lend_lease_marker);
+
         ImageView search_mission_marker = findViewById(R.id.search_mission_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_SerchMession(Quests).png").into(search_mission_marker);
+
         ImageView supply_plans_marker = findViewById(R.id.supply_plans_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_SupplyPlans(Quests).png").into(supply_plans_marker);
+
         ImageView TheSurvivalistPath_marker = findViewById(R.id.TheSurvivalistPath_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/icon_Thrifty(Quests).png").into(TheSurvivalistPath_marker);
+
         ImageView scav_spots_marker = findViewById(R.id.scav_spots_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/scav точки(Another).png").into(scav_spots_marker);
+
         ImageView pmc_spots_marker = findViewById(R.id.pmc_spots_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/pmc точки(Another).png").into(pmc_spots_marker);
+
         ImageView neutral_spots_marker = findViewById(R.id.neutral_spots_marker);
-        Picasso.get().load("http://213.171.14.43:8000/images/netral точки(Another).png").into(neutral_spots_marker);
+        markers.addAll(Arrays.asList(pmcExtractsMarker, scav_extracts_marker, boss_marker, cache_marker, corpse_marker, cultists_marker, goons_marker,
+                btr_stop_marker, mines_marker, ritual_spot_marker, ai_scav_marker,scav_sniper_marker, sniper_marker, pmc_spawn_marker,
+                BloodOfWar3_marker, chumming_marker, gratitude_marker, HCarePriv3_marker, InformedMeansArmed_marker, introduction_marker,
+                lend_lease_marker, search_mission_marker, supply_plans_marker, TheSurvivalistPath_marker, scav_spots_marker,
+                pmc_spots_marker, neutral_spots_marker));
+
+
+
+        // Скрыть все метки по умолчанию
+        pmcExtractsMarker.setVisibility(View.GONE);
+        scav_extracts_marker.setVisibility(View.GONE);
+
         //Metki/////////////////
 
         // Загрузка сохраненной темы перед установкой содержимого вида
@@ -244,60 +244,89 @@ public class MapOfWoodsActivity extends AppCompatActivity {
         selectAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки всех изображений
+                // Показать все метки
                 setActiveButton(PMCExtractsButton);
                 setActiveButton(scavExtractsButton);
                 setActiveButton(IconLegendBoss);
                 setActiveButton(IconLegendBTRStop);
                 setActiveButton(IconLegendCache);
                 setActiveButton(IconLegendCorpse);
-                pmcExtractsMarker.setVisibility(View.VISIBLE);
-                scav_extracts_marker.setVisibility(View.VISIBLE);
-                boss_marker.setVisibility(View.VISIBLE);
-                btr_stop_marker.setVisibility(View.VISIBLE);
-                cache_marker.setVisibility(View.VISIBLE);
-                corpse_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconLegendCultists);
-                cultists_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconLegendGoons);
-                goons_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconLegendMines);
-                mines_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconLegendPMCSpawn);
-                pmc_spawn_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconLegendRitual);
-                ritual_spot_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconLegendScavs);
-                scav_spots_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconLegendScavSniper);
-                scav_sniper_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconLegendSniper);
-                sniper_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconBloodOfWar3);
-                BloodOfWar3_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconChumming);
-                chumming_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconGratitude);
-                gratitude_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconHCarePriv3);
-                HCarePriv3_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconInformedMeansArmed);
-                InformedMeansArmed_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconIntroduction);
-                introduction_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconLendLease1);
-                lend_lease_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconSearchMission);
-                search_mission_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconSupplyPlans);
-                supply_plans_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconThrifty);
-                TheSurvivalistPath_marker.setVisibility(View.VISIBLE);
                 setActiveButton(ScavSpots);
-                scav_spots_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconPMCSpots);
-                pmc_spots_marker.setVisibility(View.VISIBLE);
                 setActiveButton(IconNeutralSpots);
+
+                // Загрузить и показать все метки
+                loadMarkerImage("http://213.171.14.43:8000/images/pmc%20extracts.png", pmcExtractsMarker);
+                pmcExtractsMarker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/scav%20extracts.png", scav_extracts_marker);
+                scav_extracts_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Boss.png", boss_marker);
+                boss_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Btrstop.png", btr_stop_marker);
+                btr_stop_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Cashe.png", cache_marker);
+                cache_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Corpess.png", corpse_marker);
+                corpse_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Cultists.png", cultists_marker);
+                cultists_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Goons.png", goons_marker);
+                goons_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Mines.png", mines_marker);
+                mines_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_PMCSpawn.png", pmc_spawn_marker);
+                pmc_spawn_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Ritual.png", ritual_spot_marker);
+                ritual_spot_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Scavs.png", scav_spots_marker);
+                scav_spots_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_ScavSniper.png", scav_sniper_marker);
+                scav_sniper_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Sniper.png", sniper_marker);
+                sniper_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_BloodOfWar3(Quests).png", BloodOfWar3_marker);
+                BloodOfWar3_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_chumming(Quests).png", chumming_marker);
+                chumming_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_Gratitude(Quests).png", gratitude_marker);
+                gratitude_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_HCarePt3(Quests).png", HCarePriv3_marker);
+                HCarePriv3_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_IntormedMeansArmed(Quests).png", InformedMeansArmed_marker);
+                InformedMeansArmed_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_Introduction(Quests).png", introduction_marker);
+                introduction_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_LendLeasePt1(Quests).png", lend_lease_marker);
+                lend_lease_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_SerchMession(Quests).png", search_mission_marker);
+                search_mission_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_SupplyPlans(Quests).png", supply_plans_marker);
+                supply_plans_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/icon_Thrifty(Quests).png", TheSurvivalistPath_marker);
+                TheSurvivalistPath_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/scav%20точки(Another).png", scav_spots_marker);
+                scav_spots_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/pmc%20точки(Another).png", pmc_spots_marker);
+                pmc_spots_marker.setVisibility(View.VISIBLE);
+                loadMarkerImage("http://213.171.14.43:8000/images/netral%20точки(Another).png", neutral_spots_marker);
                 neutral_spots_marker.setVisibility(View.VISIBLE);
             }
         });
@@ -363,221 +392,356 @@ public class MapOfWoodsActivity extends AppCompatActivity {
                 }
             });
 
+        // Пример обработчика клика для чекбокса "PMC Extracts"
         PMCExtractsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений PMC
                 setActiveButton(PMCExtractsButton);
-                pmcExtractsMarker.setVisibility(View.VISIBLE);
+                if (PMCExtractsButton.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/pmc%20extracts.png", pmcExtractsMarker);
+                    pmcExtractsMarker.setVisibility(View.VISIBLE);
+                } else {
+                    pmcExtractsMarker.setVisibility(View.GONE);
+                }
             }
         });
 
+        // Обработчики кликов для кнопок:
         scavExtractsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(scavExtractsButton);
-                scav_extracts_marker.setVisibility(View.VISIBLE);
+                if (scav_extracts_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/scav%20extracts.png", scav_extracts_marker);
+                    scav_extracts_marker.setVisibility(View.VISIBLE);
+                } else {
+                    scav_extracts_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLegendBoss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLegendBoss);
-                boss_marker.setVisibility(View.VISIBLE);
+                if (boss_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Boss.png", boss_marker);
+                    boss_marker.setVisibility(View.VISIBLE);
+                } else {
+                    boss_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLegendBTRStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLegendBTRStop);
-                btr_stop_marker.setVisibility(View.VISIBLE);
+                if (btr_stop_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Btrstop.png", btr_stop_marker);
+                    btr_stop_marker.setVisibility(View.VISIBLE);
+                } else {
+                    btr_stop_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLegendCache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLegendCache);
-                cache_marker.setVisibility(View.VISIBLE);
+                if (cache_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Cashe.png", cache_marker);
+                    cache_marker.setVisibility(View.VISIBLE);
+                } else {
+                    cache_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLegendCorpse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLegendCorpse);
-                corpse_marker.setVisibility(View.VISIBLE);
+                if (corpse_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Corpess.png", corpse_marker);
+                    corpse_marker.setVisibility(View.VISIBLE);
+                } else {
+                    corpse_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLegendCultists.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLegendCultists);
-                cultists_marker.setVisibility(View.VISIBLE);
+                if (cultists_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Cultists.png", cultists_marker);
+                    cultists_marker.setVisibility(View.VISIBLE);
+                } else {
+                    cultists_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLegendGoons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLegendGoons);
-                goons_marker.setVisibility(View.VISIBLE);
+                if (goons_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Goons.png", goons_marker);
+                    goons_marker.setVisibility(View.VISIBLE);
+                } else {
+                    goons_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLegendMines.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLegendMines);
-                mines_marker.setVisibility(View.VISIBLE);
+                if (mines_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Mines.png", mines_marker);
+                    mines_marker.setVisibility(View.VISIBLE);
+                } else {
+                    mines_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLegendPMCSpawn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLegendPMCSpawn);
-                pmc_spawn_marker.setVisibility(View.VISIBLE);
+                if (pmc_spawn_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_PMCSpawn.png", pmc_spawn_marker);
+                    pmc_spawn_marker.setVisibility(View.VISIBLE);
+                } else {
+                    pmc_spawn_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLegendRitual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLegendRitual);
-                ritual_spot_marker.setVisibility(View.VISIBLE);
+                if (ritual_spot_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Ritual.png", ritual_spot_marker);
+                    ritual_spot_marker.setVisibility(View.VISIBLE);
+                } else {
+                    ritual_spot_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLegendScavs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLegendScavs);
-                scav_spots_marker.setVisibility(View.VISIBLE);
+                if (scav_spots_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Scavs.png", scav_spots_marker);
+                    scav_spots_marker.setVisibility(View.VISIBLE);
+                } else {
+                    scav_spots_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLegendScavSniper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLegendScavSniper);
-                scav_sniper_marker.setVisibility(View.VISIBLE);
+                if (scav_sniper_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_ScavSniper.png", scav_sniper_marker);
+                    scav_sniper_marker.setVisibility(View.VISIBLE);
+                } else {
+                    scav_sniper_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLegendSniper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLegendSniper);
-                sniper_marker.setVisibility(View.VISIBLE);
+                if (sniper_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Sniper.png", sniper_marker);
+                    sniper_marker.setVisibility(View.VISIBLE);
+                } else {
+                    sniper_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconBloodOfWar3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconBloodOfWar3);
-                BloodOfWar3_marker.setVisibility(View.VISIBLE);
+                if (BloodOfWar3_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_BloodOfWar3(Quests).png", BloodOfWar3_marker);
+                    BloodOfWar3_marker.setVisibility(View.VISIBLE);
+                } else {
+                    BloodOfWar3_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconChumming.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconChumming);
-                chumming_marker.setVisibility(View.VISIBLE);
+                if (chumming_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_chumming(Quests).png", chumming_marker);
+                    chumming_marker.setVisibility(View.VISIBLE);
+                } else {
+                    chumming_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconGratitude.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconGratitude);
-                gratitude_marker.setVisibility(View.VISIBLE);
+                if (gratitude_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_Gratitude(Quests).png", gratitude_marker);
+                    gratitude_marker.setVisibility(View.VISIBLE);
+                } else {
+                    gratitude_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconHCarePriv3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconHCarePriv3);
-                HCarePriv3_marker.setVisibility(View.VISIBLE);
+                if (HCarePriv3_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_HCarePt3(Quests).png", HCarePriv3_marker);
+                    HCarePriv3_marker.setVisibility(View.VISIBLE);
+                } else {
+                    HCarePriv3_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconInformedMeansArmed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconInformedMeansArmed);
-                InformedMeansArmed_marker.setVisibility(View.VISIBLE);
+                if (InformedMeansArmed_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_IntormedMeansArmed(Quests).png", InformedMeansArmed_marker);
+                    InformedMeansArmed_marker.setVisibility(View.VISIBLE);
+                } else {
+                    InformedMeansArmed_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconIntroduction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconIntroduction);
-                introduction_marker.setVisibility(View.VISIBLE);
+                if (introduction_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_Introduction(Quests).png", introduction_marker);
+                    introduction_marker.setVisibility(View.VISIBLE);
+                } else {
+                    introduction_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconLendLease1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconLendLease1);
-                lend_lease_marker.setVisibility(View.VISIBLE);
+                if (lend_lease_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_LendLeasePt1(Quests).png", lend_lease_marker);
+                    lend_lease_marker.setVisibility(View.VISIBLE);
+                } else {
+                    lend_lease_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconSearchMission.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconSearchMission);
-                search_mission_marker.setVisibility(View.VISIBLE);
+                if (search_mission_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_SerchMession(Quests).png", search_mission_marker);
+                    search_mission_marker.setVisibility(View.VISIBLE);
+                } else {
+                    search_mission_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconSupplyPlans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconSupplyPlans);
-                supply_plans_marker.setVisibility(View.VISIBLE);
+                if (supply_plans_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_SupplyPlans(Quests).png", supply_plans_marker);
+                    supply_plans_marker.setVisibility(View.VISIBLE);
+                } else {
+                    supply_plans_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconThrifty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconThrifty);
-                TheSurvivalistPath_marker.setVisibility(View.VISIBLE);
+                if (TheSurvivalistPath_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/icon_Thrifty(Quests).png", TheSurvivalistPath_marker);
+                    TheSurvivalistPath_marker.setVisibility(View.VISIBLE);
+                } else {
+                    TheSurvivalistPath_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         ScavSpots.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(ScavSpots);
-                scav_spots_marker.setVisibility(View.VISIBLE);
+                if (scav_spots_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/scav%20точки(Another).png", scav_spots_marker);
+                    scav_spots_marker.setVisibility(View.VISIBLE);
+                } else {
+                    scav_spots_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconPMCSpots.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconPMCSpots);
-                pmc_spots_marker.setVisibility(View.VISIBLE);
+                if (pmc_spots_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/pmc%20точки(Another).png", pmc_spots_marker);
+                    pmc_spots_marker.setVisibility(View.VISIBLE);
+                } else {
+                    pmc_spots_marker.setVisibility(View.GONE);
+                }
             }
         });
+
         IconNeutralSpots.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Логика для загрузки изображений SCAV
                 setActiveButton(IconNeutralSpots);
-                neutral_spots_marker.setVisibility(View.VISIBLE);
+                if (neutral_spots_marker.getVisibility() == View.GONE) {
+                    loadMarkerImage("http://213.171.14.43:8000/images/netral%20точки(Another).png", neutral_spots_marker);
+                    neutral_spots_marker.setVisibility(View.VISIBLE);
+                } else {
+                    neutral_spots_marker.setVisibility(View.GONE);
+                }
             }
         });
         plusButton.setOnClickListener(new View.OnClickListener() {
@@ -594,21 +758,8 @@ public class MapOfWoodsActivity extends AppCompatActivity {
                 zoomOut();
             }
         });
-        // Установка слушателя кликов на кнопку
-        showMapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Проверяем текущую видимость карты
-                if (imageView.getVisibility() == View.VISIBLE) {
-                    // Если карта видима, скрываем её
-                    imageView.setVisibility(View.GONE);
-                } else {
-                    // Если карта скрыта, показываем её
-                    imageView.setVisibility(View.VISIBLE);
-                }
-            }
-        });
     }
+
     private void zoomIn() {
         // Получаем текущий масштаб карты
         float currentZoom = imageView.getScale();
@@ -672,57 +823,21 @@ public class MapOfWoodsActivity extends AppCompatActivity {
     Задержка в 100 миллисекунд между каждым запросом помогает равномерно распределить загрузку.
     */
     private void setActiveButton(Button button) {
-        if (activeButton != null) {
-            activeButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFC165")));
+        Boolean isSelected = (Boolean) button.getTag(); // Проверяем, активна ли кнопка
+
+        if (isSelected == null || !isSelected) {
+            // Если кнопка не была выбрана, делаем ее активной
+            button.setTag(true);
+            button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFC165"))); // Устанавливаем цвет активности
+        } else {
+            // Если кнопка уже была выбрана, делаем ее неактивной
+            button.setTag(false);
+            button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#cec7a6"))); // Устанавливаем цвет неактивности
         }
-        activeButton = button;
-        activeButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#cec7a6")));
     }
-    // Метод для загрузки и склеивания изображений
-
-
-    // Интерфейс для обратного вызова при завершении загрузки изображений
-
-
-    // Метод для загрузки массива изображений
-
-
-    // Метод для склеивания и отображения изображений в одно большое
-
-    //New code//
-    /*private void loadMapImage(String imageUrl, ImageView imageView) {
-        Log.d(TAG, "loadMapImage: попытка загрузить изображение из " + imageUrl);
-        // Создание Target и сохранение сильной ссылки
-        this.loadImageTarget = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                imageView.setImageBitmap(bitmap);
-                runOnUiThread(() -> progressBar.setVisibility(View.GONE));  // Скрыть ProgressBar
-            }
-
-            @Override
-            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                Log.e(TAG, "Ошибка загрузки изображения", e);
-                runOnUiThread(() -> progressBar.setVisibility(View.GONE));  // Скрыть ProgressBar
-                // Показать запасное изображение или сообщение об ошибке
-                // Например, imageView.setImage(ImageSource.resource(R.drawable.placeholder));
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                // Подготовка к загрузке
-            }
-        };
-
-        // Использование Picasso для загрузки изображения
-        Picasso.get().load(imageUrl).networkPolicy(NetworkPolicy.NO_CACHE)
-                .memoryPolicy(MemoryPolicy.NO_CACHE).into(this.loadImageTarget);
-    }*/
-
 
     private void loadMapImage(String imageUrl) {
         Log.d(TAG, "loadMapImage: попытка загрузить изображение из " + imageUrl);
-
         Glide.with(this)
                 .asBitmap() // Загружаем как Bitmap
                 .load(imageUrl)
@@ -740,113 +855,16 @@ public class MapOfWoodsActivity extends AppCompatActivity {
                 });
     }
 
+    private void loadMarkerImage(String imageUrl, ImageView imageView) {
+        Glide.with(this)
+                .load(imageUrl)
+                .into(imageView);
+    }
+
     // Метод для возврата на предыдущую страницу
     private void goBack() {
         Log.d(TAG, "goBack: возврат на предыдущую страницу");
         // Возврат на предыдущую страницу
         onBackPressed();
     }
-
-    // Метод для переключения ориентации экрана
-
-    // Метод для проверки интернет-соединения
-    /*private void checkInternetConnection() {
-        if (isCheckingInternet) {
-            return; // Если уже выполняется проверка, выходим из метода
-        }
-        isCheckingInternet = true;
-
-        if (!isInternetAvailable()) {
-            internetWasLost = true;
-            if (internetCheckAttempts < 3) {
-                showSnackbarWithCountdown();
-                internetCheckAttempts++;
-            } else {
-                showFinalSnackbar();
-            }
-        } else {
-            if (internetWasLost) {
-                // Интернет был потерян, но теперь восстановлен
-                Snackbar.make(findViewById(android.R.id.content), "Подключение восстановлено", Snackbar.LENGTH_SHORT).show();
-                loadAndMergeImages(WoodsimageUrls,WoodsimageUrls);
-                internetWasLost = false;
-                internetCheckAttempts = 0;
-            }
-            isCheckingInternet = false;
-        }
-    }
-
-
-    // Метод для отображения Snackbar с обратным отсчетом
-    private void showSnackbarWithCountdown() {
-        final int[] countdownSeconds = {5};
-        final Handler handler = new Handler();
-
-        final Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "", Snackbar.LENGTH_INDEFINITE);
-
-        final Runnable countdownRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (countdownSeconds[0] > 0) {
-                    snackbar.setText("Нет интернет-соединения. Повторная проверка через " + countdownSeconds[0] + " секунд...");
-                    countdownSeconds[0]--;
-                    handler.postDelayed(this, 1000);
-                } else {
-                    snackbar.dismiss();
-                    isCheckingInternet = false;
-                    checkInternetConnection(); // Повторная проверка
-                }
-            }
-        };
-
-        handler.post(countdownRunnable);
-        snackbar.show();
-    }
-
-
-    // Метод для отображения Snackbar с предложением проверить соединение
-    private void showFinalSnackbar() {
-        Snackbar.make(findViewById(android.R.id.content), "Нет подключения к интернету. Проверить соединение", Snackbar.LENGTH_INDEFINITE)
-                .setAction("Проверить", v -> {
-                    isCheckingInternet = false;
-                    internetCheckAttempts = 0; // Сброс счетчика попыток
-                    checkInternetConnection();
-                }).show();
-    }
-
-    // Метод для проверки доступности интернета
-    private boolean isInternetAvailable() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm != null) {
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        }
-        return false;
-    }
-
-    // BroadcastReceiver для обработки изменений состояния сети
-    private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
-                checkInternetConnection(); // Немедленно проверяем состояние сети
-            }
-        }
-    };
-
-
-    // Обработчики жизненного цикла активности для управления BroadcastReceiver
-    @Override
-    protected void onResume() {
-        super.onResume();
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkStateReceiver, filter);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(networkStateReceiver);
-    }*/
-
 }
