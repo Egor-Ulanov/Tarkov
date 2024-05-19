@@ -18,182 +18,42 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             />
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="177.7dp">
-        <ImageView
-            android:id="@+id/pmc_extracts_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/scav_extracts_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            />
-        <ImageView
-            android:id="@+id/boss_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/cache_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/corpse_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/cultists_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/goons_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/btr_stop_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/mines_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/ritual_spot_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/ai_scav_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/scav_sniper_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/sniper_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/pmc_spawn_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/BloodOfWar3_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/chumming_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/gratitude_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/HCarePriv3_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/InformedMeansArmed_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/introduction_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/lend_lease_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/search_mission_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/supply_plans_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/TheSurvivalistPath_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/scav_spots_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/pmc_spots_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-        <ImageView
-            android:id="@+id/neutral_spots_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-    </RelativeLayout>
+
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="280dp">
-        <ImageButton
-            android:id="@+id/PlusMach"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginStart="40dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="Увеличить масштаб"
-            android:src="@drawable/plus_mach" />
-        <ImageButton
-            android:id="@+id/MinusMach"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="90dp"
-            android:layout_marginStart="40dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="Уменьшить масштаб"
-            android:src="@drawable/minus_mach" />
+            <ImageButton
+                android:id="@+id/PlusMach"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="40dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="Увеличить масштаб"
+                android:src="@drawable/plus_mach" />
+            <ImageButton
+                android:id="@+id/MinusMach"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="90dp"
+                android:layout_marginStart="40dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="Уменьшить масштаб"
+                android:src="@drawable/minus_mach" />
 
-        <!--<ImageButton
-            android:id="@+id/rotateButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:background="?android:selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_full_dis_24dp" />-->
-    </RelativeLayout>
+            <!--<ImageButton
+                android:id="@+id/rotateButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_full_dis_24dp" />-->
+        </RelativeLayout>
 
     </RelativeLayout>
 
@@ -255,7 +115,7 @@
             android:background="#80CBC4"
             android:contentDescription="Открыть/закрыть список"
             android:onClick="toggleList"
-             />
+            />
 
         <TextView
             android:layout_width="wrap_content"

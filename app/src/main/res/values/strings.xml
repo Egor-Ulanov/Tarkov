@@ -5,4 +5,37 @@
     <string name="title_notifications">Настройки</string>
     <attr name="interfaceTextColor" format="color" />
     <attr name="lighterInterfaceTextColor" format="color" />
+    <string name="back_button_desc">Back</string>
+    <string name="zoom_in_button_desc">Zoom In</string>
+    <string name="zoom_out_button_desc">Zoom Out</string>
+    <string name="expand_button_desc">Expand/Collapse</string>
+    <string name="select_all">Select All</string>
+    <string name="clear_all">Clear All</string>
+    <string name="pmc_extracts">PMC Extracts</string>
+    <string name="scav_extracts">Scav Extracts</string>
+    <string name="legend_boss">Legend Boss</string>
+    <string name="legend_btr_stop">Legend BTR Stop</string>
+    <string name="legend_cache">Legend Cache</string>
+    <string name="legend_corpse">Legend Corpse</string>
+    <string name="legend_cultists">Legend Cultists</string>
+    <string name="legend_goons">Legend Goons</string>
+    <string name="legend_mines">Legend Mines</string>
+    <string name="legend_pmc_spawn">Legend PMC Spawn</string>
+    <string name="legend_ritual">Legend Ritual</string>
+    <string name="legend_scavs">Legend Scavs</string>
+    <string name="legend_scav_sniper">Legend Scav Sniper</string>
+    <string name="legend_sniper">Legend Sniper</string>
+    <string name="blood_of_war_3">Blood of War 3</string>
+    <string name="chumming">Chumming</string>
+    <string name="gratitude">Gratitude</string>
+    <string name="h_care_priv_3">Health Care Privacy Part 3</string>
+    <string name="informed_means_armed">Informed Means Armed</string>
+    <string name="introduction">Introduction</string>
+    <string name="lend_lease_1">Lend-Lease Part 1</string>
+    <string name="search_mission">Search Mission</string>
+    <string name="supply_plans">Supply Plans</string>
+    <string name="thrifty">Thrifty</string>
+    <string name="scav_spots">Scav Spots</string>
+    <string name="pmc_spots">PMC Spots</string>
+    <string name="neutral_spots">Neutral Spots</string>
 </resources>
