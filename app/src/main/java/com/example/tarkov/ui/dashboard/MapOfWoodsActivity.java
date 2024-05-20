@@ -141,8 +141,8 @@ public class MapOfWoodsActivity extends AppCompatActivity {
 
 
         //Metki/////////////////
-        String mapImageUrl = "http://213.171.14.43:8000/images/Карта с границами.png";
-        loadMapImage(mapImageUrl);
+//        String mapImageUrl = "http://213.171.14.43:8000/images/Карта с границами.png";
+//        loadMapImage(mapImageUrl);
 
 //        // Загрузка изображений меток с сервера
 //        ImageView pmcExtractsMarker = findViewById(R.id.pmc_extracts_marker);
@@ -412,6 +412,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(PMCExtractsButton);
+
                 loadMarker("pmc_extracts", BASE_URL + "pmc%20extracts.png");
             }
         });
@@ -716,23 +717,26 @@ public class MapOfWoodsActivity extends AppCompatActivity {
         }
     }
 
-    private void loadMapImage(String imageUrl) {
-        Log.d(TAG, "loadMapImage: попытка загрузить изображение из " + imageUrl);
-        Glide.with(this)
-                .asBitmap()
-                .load(imageUrl)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        mapBitmap = resource; // Сохраняем изображение карты
-                        imageView.setImage(ImageSource.bitmap(resource));
-                        runOnUiThread(() -> progressBar.setVisibility(View.GONE));
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) { }
-                });
-    }
+//    private void loadMapImage(String imageUrl) {
+//        Log.d(TAG, "loadMapImage: Загрузка основной карты началась...");
+//        Glide.with(this)
+//                .asBitmap()
+//                .load(imageUrl)
+//                .into(new CustomTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                        Log.d(TAG, "loadMapImage: Основная карта успешно загружена!");
+//                        mapBitmap = resource; // Сохраняем изображение карты
+//                        imageView.setImage(ImageSource.bitmap(resource));
+//                        runOnUiThread(() -> progressBar.setVisibility(View.GONE));
+//                    }
+//
+//                    @Override
+//                    public void onLoadCleared(@Nullable Drawable placeholder) {
+//                        Log.d(TAG, "loadMapImage: Основная карта очищена...");
+//                    }
+//                });
+//    }
 
 //    private void loadMarker(String markerName, String markerUrl) {
 //        if (loadedMarkers.containsKey(markerName)) {
@@ -759,15 +763,163 @@ public class MapOfWoodsActivity extends AppCompatActivity {
 //        }
 //    }
 
+//    private void loadMarker(String markerName, String markerUrl) {
+//        if (activeFilters.contains(markerName)) {
+//            activeFilters.remove(markerName);
+//            loadedMarkers.remove(markerName);
+//            updateMapWithMarkers();
+//        } else {
+//            activeFilters.add(markerName);
+//            if (!loadedMarkers.containsKey(markerName)) {
+//                markersToLoad++;
+//                progressBar.setVisibility(View.VISIBLE);
+//                Glide.with(this)
+//                        .asBitmap()
+//                        .load(markerUrl)
+//                        .into(new CustomTarget<Bitmap>() {
+//                            @Override
+//                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                                Bitmap markerBitmapCopy = resource.copy(resource.getConfig(), true);
+//                                loadedMarkers.put(markerName, markerBitmapCopy);
+//                                markersToLoad--;
+//                                if (markersToLoad == 0) {
+//                                    updateMapWithMarkers();
+//                                    progressBar.setVisibility(View.GONE);
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onLoadCleared(@Nullable Drawable placeholder) {
+//                                // Ничего не делаем здесь
+//                            }
+//                        });
+//            } else {
+//                // Маркер уже загружен, просто обновляем карту
+//                updateMapWithMarkers();
+//            }
+//        }
+//    }
+
+//    private void loadMarker(String markerName, String markerUrl) {
+//
+//        Log.d(TAG, "loadMarker: Запрос на загрузку маркера " + markerName + " с URL " + markerUrl);
+//        if (activeFilters.contains(markerName)) {
+//            Log.d(TAG, "loadMarker: Маркер " + markerName + " уже был активен, удаляем его.");
+//            activeFilters.remove(markerName);
+//            loadedMarkers.remove(markerName);
+//            updateMapWithMarkers();
+//        } else {
+//            Log.d(TAG, "loadMarker: Маркер " + markerName + " не активен, добавляем его.");
+//            activeFilters.add(markerName);
+//            if (!loadedMarkers.containsKey(markerName)) {
+//                Log.d(TAG, "loadMarker: Маркер " + markerName + " не загружен, начинаем загрузку.");
+//                markersToLoad++;
+//                progressBar.setVisibility(View.VISIBLE);
+//                Glide.with(this)
+//                        .asBitmap()
+//                        .load(markerUrl)
+//                        .into(new CustomTarget<Bitmap>() {
+//                            @Override
+//                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                                Log.d(TAG, "loadMarker: Маркер " + markerName + " успешно загружен!");
+//                                Bitmap markerBitmapCopy = resource.copy(resource.getConfig(), true);
+//                                loadedMarkers.put(markerName, markerBitmapCopy);
+//                                markersToLoad--;
+//                                if (markersToLoad == 0) {
+//                                    Log.d(TAG, "loadMarker: Все метки загружены, обновляем карту.");
+//                                    updateMapWithMarkers();
+//                                    progressBar.setVisibility(View.GONE);
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onLoadCleared(@Nullable Drawable placeholder) {
+//                                // Ничего не делаем здесь.
+//                                Log.d(TAG, "loadMarker: Маркер " + markerName + " очищен.");
+//                            }
+//                        });
+//            } else {
+//                Log.d(TAG, "loadMarker: Маркер " + markerName + " уже загружен, обновляем карту.");
+//                updateMapWithMarkers();
+//            }
+//        }
+//    }
+
+
+
+
+
+    private void loadMarkerImage(String imageUrl, ImageView imageView) {
+        Glide.with(this)
+                .load(imageUrl)
+                .into(imageView);
+    }
+//
+//    private void updateMapWithMarkers() {
+//        Log.d(TAG, "updateMapWithMarkers: Обновление карты началось...");
+//        if (mapBitmap != null) {
+//            Log.d(TAG, "updateMapWithMarkers: Основная карта доступна.");
+//            Bitmap combinedBitmap = Bitmap.createBitmap(mapBitmap.getWidth(), mapBitmap.getHeight(), mapBitmap.getConfig());
+//            Canvas canvas = new Canvas(combinedBitmap);
+//
+//            canvas.drawBitmap(mapBitmap, 0, 0, null); // Рисуем карту
+//
+//            Log.d(TAG, "updateMapWithMarkers: Начинаем рисовать метки...");
+//            for (Map.Entry<String, Bitmap> entry : loadedMarkers.entrySet()) {
+//                String markerName = entry.getKey();
+//                Bitmap markerBitmap = entry.getValue();
+//
+//                if (activeFilters.contains(markerName)) { // Проверяем активность фильтра
+//                    Log.d(TAG, "updateMapWithMarkers: Рисуем метку " + markerName);
+//                    canvas.drawBitmap(markerBitmap, 0, 0, null);
+//                }
+//            }
+//            Log.d(TAG, "updateMapWithMarkers: Рисование меток завершено.");
+//
+//            runOnUiThread(() -> {
+//                Log.d(TAG, "updateMapWithMarkers: Установка изображения карты на ImageView...");
+//                imageView.setImage(ImageSource.bitmap(combinedBitmap));
+//            });
+//        }
+//    }
+
+
+    private void loadMapImage(String imageUrl, Runnable onMapLoaded) {
+        Log.d(TAG, "loadMapImage: Загрузка основной карты началась...");
+        Glide.with(this)
+                .asBitmap()
+                .load(imageUrl)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        Log.d(TAG, "loadMapImage: Основная карта успешно загружена!");
+                        mapBitmap = resource.copy(resource.getConfig(), true); // Сохраняем изображение карты
+                        imageView.setImage(ImageSource.bitmap(mapBitmap));
+                        runOnUiThread(() -> progressBar.setVisibility(View.GONE));
+                        if (onMapLoaded != null) {
+                            onMapLoaded.run();
+                        }
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        Log.d(TAG, "loadMapImage: Основная карта очищена...");
+                    }
+                });
+    }
+
     private void loadMarker(String markerName, String markerUrl) {
+        Log.d(TAG, "loadMarker: Запрос на загрузку маркера " + markerName + " с URL " + markerUrl);
         if (activeFilters.contains(markerName)) {
+            Log.d(TAG, "loadMarker: Маркер " + markerName + " уже был активен, удаляем его.");
             activeFilters.remove(markerName);
-            loadedMarkers.remove(markerName); // Удаляем маркер из loadedMarkers
-            updateMapWithMarkers(); // Обновляем карту
+            loadedMarkers.remove(markerName);
+            reloadMapAndMarkers();
         } else {
+            Log.d(TAG, "loadMarker: Маркер " + markerName + " не активен, добавляем его.");
             activeFilters.add(markerName);
             if (!loadedMarkers.containsKey(markerName)) {
-// Загружаем маркер, только если он еще не загружен
+                Log.d(TAG, "loadMarker: Маркер " + markerName + " не загружен, начинаем загрузку.");
                 markersToLoad++;
                 progressBar.setVisibility(View.VISIBLE);
                 Glide.with(this)
@@ -776,52 +928,61 @@ public class MapOfWoodsActivity extends AppCompatActivity {
                         .into(new CustomTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-// Создаем копию Bitmap
+                                Log.d(TAG, "loadMarker: Маркер " + markerName + " успешно загружен!");
                                 Bitmap markerBitmapCopy = resource.copy(resource.getConfig(), true);
                                 loadedMarkers.put(markerName, markerBitmapCopy);
                                 markersToLoad--;
                                 if (markersToLoad == 0) {
-                                    updateMapWithMarkers();
+                                    Log.d(TAG, "loadMarker: Все метки загружены, обновляем карту.");
+                                    reloadMapAndMarkers();
                                     progressBar.setVisibility(View.GONE);
                                 }
                             }
 
                             @Override
                             public void onLoadCleared(@Nullable Drawable placeholder) {
-                                markersToLoad--;
-                                progressBar.setVisibility(View.GONE);
+                                // Ничего не делаем здесь.
+                                Log.d(TAG, "loadMarker: Маркер " + markerName + " очищен.");
                             }
                         });
             } else {
-                // Маркер уже загружен, просто обновляем карту
-                updateMapWithMarkers();
+                Log.d(TAG, "loadMarker: Маркер " + markerName + " уже загружен, обновляем карту.");
+                reloadMapAndMarkers();
             }
         }
     }
 
-    private void loadMarkerImage(String imageUrl, ImageView imageView) {
-        Glide.with(this)
-                .load(imageUrl)
-                .into(imageView);
+    private void reloadMapAndMarkers() {
+        Log.d(TAG, "reloadMapAndMarkers: Перезагрузка карты и меток...");
+        String mapImageUrl = "http://213.171.14.43:8000/images/Карта с границами.png";
+        loadMapImage(mapImageUrl, this::updateMapWithMarkers);
     }
 
     private void updateMapWithMarkers() {
+        Log.d(TAG, "updateMapWithMarkers: Обновление карты началось...");
         if (mapBitmap != null) {
+            Log.d(TAG, "updateMapWithMarkers: Основная карта доступна.");
             Bitmap combinedBitmap = Bitmap.createBitmap(mapBitmap.getWidth(), mapBitmap.getHeight(), mapBitmap.getConfig());
             Canvas canvas = new Canvas(combinedBitmap);
 
             canvas.drawBitmap(mapBitmap, 0, 0, null); // Рисуем карту
 
+            Log.d(TAG, "updateMapWithMarkers: Начинаем рисовать метки...");
             for (Map.Entry<String, Bitmap> entry : loadedMarkers.entrySet()) {
                 String markerName = entry.getKey();
                 Bitmap markerBitmap = entry.getValue();
 
                 if (activeFilters.contains(markerName)) { // Проверяем активность фильтра
+                    Log.d(TAG, "updateMapWithMarkers: Рисуем метку " + markerName);
                     canvas.drawBitmap(markerBitmap, 0, 0, null);
                 }
             }
+            Log.d(TAG, "updateMapWithMarkers: Рисование меток завершено.");
 
-            imageView.setImage(ImageSource.bitmap(combinedBitmap));
+            runOnUiThread(() -> {
+                Log.d(TAG, "updateMapWithMarkers: Установка изображения карты на ImageView...");
+                imageView.setImage(ImageSource.bitmap(combinedBitmap));
+            });
         }
     }
 
