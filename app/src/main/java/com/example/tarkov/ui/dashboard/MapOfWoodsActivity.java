@@ -32,7 +32,11 @@ import com.example.tarkov.R;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MapOfWoodsActivity extends AppCompatActivity {
 
@@ -67,6 +71,14 @@ public class MapOfWoodsActivity extends AppCompatActivity {
     private static final String TAG = "MapOfWoodsActivity";
     private Target loadImageTarget; // Поле для сильной ссылки на Target
 
+    private Bitmap mapBitmap;
+
+    private Map<String, Bitmap> loadedMarkers = new HashMap<>();
+
+    private static final String BASE_URL = "http://213.171.14.43:8000/images/";
+
+    private int markersToLoad = 0; // Счетчик маркеров, которые нужно загрузить
+
     // Runnable для периодической проверки состояния интернет-соединения
     /*private final Runnable internetCheckRunnable = new Runnable() {
         @Override
@@ -74,18 +86,14 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             checkInternetConnection();
         }
     };*/
-    private List<ImageView> markers = new ArrayList<>();
+//    private List<ImageView> markers = new ArrayList<>();
 
-    private List<MapMarker> mapMarkers;
+    private List<Bitmap> markerBitmaps = new ArrayList<>();
+    private List<String> markerUrls = new ArrayList<>();
+
+    private Set<String> activeFilters = new HashSet<>();
+
     private LinearLayout buttonsContainer;
-
-    private List<String> activeMarkers = new ArrayList<>();
-    private static final String BASE_MAP_URL = "http://213.171.14.43:8000/images/Карта с границами.png";
-
-    private Bitmap currentBitmap;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Скрыть ActionBar
@@ -131,10 +139,10 @@ public class MapOfWoodsActivity extends AppCompatActivity {
         ImageButton plusButton = findViewById(R.id.PlusMach);
         ImageButton minusButton = findViewById(R.id.MinusMach);
 
-        updateMapImage();
-//        //Metki/////////////////
-//        String mapImageUrl = "http://213.171.14.43:8000/images/Карта с границами.png";
-//        loadMapImage(mapImageUrl);
+
+        //Metki/////////////////
+        String mapImageUrl = "http://213.171.14.43:8000/images/Карта с границами.png";
+        loadMapImage(mapImageUrl);
 
 //        // Загрузка изображений меток с сервера
 //        ImageView pmcExtractsMarker = findViewById(R.id.pmc_extracts_marker);
@@ -195,9 +203,9 @@ public class MapOfWoodsActivity extends AppCompatActivity {
 //                BloodOfWar3_marker, chumming_marker, gratitude_marker, HCarePriv3_marker, InformedMeansArmed_marker, introduction_marker,
 //                lend_lease_marker, search_mission_marker, supply_plans_marker, TheSurvivalistPath_marker, scav_spots_marker,
 //                pmc_spots_marker, neutral_spots_marker));
-//
-//
-//
+
+
+
 //        // Скрыть все метки по умолчанию
 //        pmcExtractsMarker.setVisibility(View.GONE);
 //        scav_extracts_marker.setVisibility(View.GONE);
@@ -281,38 +289,61 @@ public class MapOfWoodsActivity extends AppCompatActivity {
                 setActiveButton(IconPMCSpots);
                 setActiveButton(IconNeutralSpots);
 
-                // Добавить все URL меток в массив activeMarkers
-                activeMarkers.clear(); // Очистить массив перед добавлением всех меток
-                activeMarkers.add("http://213.171.14.43:8000/images/pmc%20extracts.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/scav%20extracts.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_legend_Boss.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_legend_Btrstop.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_legend_Cashe.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_legend_Corpess.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_legend_Cultists.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_legend_Goons.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_legend_Mines.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_legend_PMCSpawn.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_legend_Ritual.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_legend_Scavs.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_legend_ScavSniper.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_legend_Sniper.png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_BloodOfWar3(Quests).png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_chumming(Quests).png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_Gratitude(Quests).png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_HCarePt3(Quests).png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_IntormedMeansArmed(Quests).png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_Introduction(Quests).png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_LendLeasePt1(Quests).png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_SerchMession(Quests).png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_SupplyPlans(Quests).png");
-                activeMarkers.add("http://213.171.14.43:8000/images/icon_Thrifty(Quests).png");
-                activeMarkers.add("http://213.171.14.43:8000/images/scav%20точки(Another).png");
-                activeMarkers.add("http://213.171.14.43:8000/images/pmc%20точки(Another).png");
-                activeMarkers.add("http://213.171.14.43:8000/images/netral%20точки(Another).png");
-
-                // Обновить изображение карты
-                updateMapImage();
+//                // Загрузить и показать все метки
+//                loadMarkerImage("http://213.171.14.43:8000/images/pmc%20extracts.png", pmcExtractsMarker);
+//                pmcExtractsMarker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/scav%20extracts.png", scav_extracts_marker);
+//                scav_extracts_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Boss.png", boss_marker);
+//                boss_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Btrstop.png", btr_stop_marker);
+//                btr_stop_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Cashe.png", cache_marker);
+//                cache_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Corpess.png", corpse_marker);
+//                corpse_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Cultists.png", cultists_marker);
+//                cultists_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Goons.png", goons_marker);
+//                goons_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Mines.png", mines_marker);
+//                mines_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_PMCSpawn.png", pmc_spawn_marker);
+//                pmc_spawn_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Ritual.png", ritual_spot_marker);
+//                ritual_spot_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Scavs.png", scav_spots_marker);
+//                scav_spots_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_ScavSniper.png", scav_sniper_marker);
+//                scav_sniper_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_legend_Sniper.png", sniper_marker);
+//                sniper_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_BloodOfWar3(Quests).png", BloodOfWar3_marker);
+//                BloodOfWar3_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_chumming(Quests).png", chumming_marker);
+//                chumming_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_Gratitude(Quests).png", gratitude_marker);
+//                gratitude_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_HCarePt3(Quests).png", HCarePriv3_marker);
+//                HCarePriv3_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_IntormedMeansArmed(Quests).png", InformedMeansArmed_marker);
+//                InformedMeansArmed_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_Introduction(Quests).png", introduction_marker);
+//                introduction_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_LendLeasePt1(Quests).png", lend_lease_marker);
+//                lend_lease_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_SerchMession(Quests).png", search_mission_marker);
+//                search_mission_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_SupplyPlans(Quests).png", supply_plans_marker);
+//                supply_plans_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/icon_Thrifty(Quests).png", TheSurvivalistPath_marker);
+//                TheSurvivalistPath_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/scav%20точки(Another).png", scav_spots_marker);
+//                scav_spots_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/pmc%20точки(Another).png", pmc_spots_marker);
+//                pmc_spots_marker.setVisibility(View.VISIBLE);
+//                loadMarkerImage("http://213.171.14.43:8000/images/netral%20точки(Another).png", neutral_spots_marker);
+//                neutral_spots_marker.setVisibility(View.VISIBLE);
             }
         });
 
@@ -326,51 +357,70 @@ public class MapOfWoodsActivity extends AppCompatActivity {
                 setActiveButton(IconLegendBTRStop);
                 setActiveButton(IconLegendCache);
                 setActiveButton(IconLegendCorpse);
+//                pmcExtractsMarker.setVisibility(View.GONE);
+//                scav_extracts_marker.setVisibility(View.GONE);
+//                boss_marker.setVisibility(View.GONE);
+//                btr_stop_marker.setVisibility(View.GONE);
+//                cache_marker.setVisibility(View.GONE);
+//                corpse_marker.setVisibility(View.GONE);
                 setActiveButton(IconLegendCultists);
+//                cultists_marker.setVisibility(View.GONE);
                 setActiveButton(IconLegendGoons);
+//                goons_marker.setVisibility(View.GONE);
                 setActiveButton(IconLegendMines);
+//                mines_marker.setVisibility(View.GONE);
                 setActiveButton(IconLegendPMCSpawn);
+//                pmc_spawn_marker.setVisibility(View.GONE);
                 setActiveButton(IconLegendRitual);
+//                ritual_spot_marker.setVisibility(View.GONE);
                 setActiveButton(IconLegendScavs);
+//                scav_spots_marker.setVisibility(View.GONE);
                 setActiveButton(IconLegendScavSniper);
+//                scav_sniper_marker.setVisibility(View.GONE);
                 setActiveButton(IconLegendSniper);
+//                sniper_marker.setVisibility(View.GONE);
                 setActiveButton(IconBloodOfWar3);
+//                BloodOfWar3_marker.setVisibility(View.GONE);
                 setActiveButton(IconChumming);
+//                chumming_marker.setVisibility(View.GONE);
                 setActiveButton(IconGratitude);
+//                gratitude_marker.setVisibility(View.GONE);
                 setActiveButton(IconHCarePriv3);
+//                HCarePriv3_marker.setVisibility(View.GONE);
                 setActiveButton(IconInformedMeansArmed);
+//                InformedMeansArmed_marker.setVisibility(View.GONE);
                 setActiveButton(IconIntroduction);
+//                introduction_marker.setVisibility(View.GONE);
                 setActiveButton(IconLendLease1);
+//                lend_lease_marker.setVisibility(View.GONE);
                 setActiveButton(IconSearchMission);
+//                search_mission_marker.setVisibility(View.GONE);
                 setActiveButton(IconSupplyPlans);
+//                supply_plans_marker.setVisibility(View.GONE);
                 setActiveButton(IconThrifty);
+//                TheSurvivalistPath_marker.setVisibility(View.GONE);
                 setActiveButton(ScavSpots);
+//                scav_spots_marker.setVisibility(View.GONE);
                 setActiveButton(IconPMCSpots);
+//                pmc_spots_marker.setVisibility(View.GONE);
                 setActiveButton(IconNeutralSpots);
-
-                // Очистить массив activeMarkers
-                activeMarkers.clear();
-
-                // Обновить изображение карты (только базовая карта без меток)
-                updateMapImage();
+//                neutral_spots_marker.setVisibility(View.GONE);
             }
         });
 
-        // Пример обработчика клика для чекбокса "PMC Extracts"
         PMCExtractsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setActiveButton(PMCExtractsButton);
-                toggleMarker("http://213.171.14.43:8000/images/pmc%20extracts.png");
+                loadMarker("pmc_extracts", BASE_URL + "pmc%20extracts.png");
             }
         });
 
-        // Обработчики кликов для кнопок:
         scavExtractsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setActiveButton(scavExtractsButton);
-                toggleMarker("http://213.171.14.43:8000/images/scav%20extracts.png");
+                loadMarker("scav_extracts", BASE_URL + "scav%20extracts.png");
             }
         });
 
@@ -378,7 +428,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLegendBoss);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_Boss.png");
+                loadMarker("boss", BASE_URL + "icon_legend_Boss.png");
             }
         });
 
@@ -386,8 +436,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLegendBTRStop);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_Btrstop.png");
-
+                loadMarker("btr_stop", BASE_URL + "icon_legend_Btrstop.png");
             }
         });
 
@@ -395,7 +444,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLegendCache);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_Cashe.png");
+                loadMarker("cache", BASE_URL + "icon_legend_Cashe.png");
             }
         });
 
@@ -403,7 +452,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLegendCorpse);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_Corpess.png");
+                loadMarker("corpse", BASE_URL + "icon_legend_Corpess.png");
             }
         });
 
@@ -411,7 +460,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLegendCultists);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_Cultists.png");
+                loadMarker("cultists", BASE_URL + "icon_legend_Cultists.png");
             }
         });
 
@@ -419,7 +468,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLegendGoons);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_Goons.png");
+                loadMarker("goons", BASE_URL + "icon_legend_Goons.png");
             }
         });
 
@@ -427,7 +476,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLegendMines);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_Mines.png");
+                loadMarker("mines", BASE_URL + "icon_legend_Mines.png");
             }
         });
 
@@ -435,8 +484,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLegendPMCSpawn);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_PMCSpawn.png");
-
+                loadMarker("pmc_spawn", BASE_URL + "icon_legend_PMCSpawn.png");
             }
         });
 
@@ -444,7 +492,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLegendRitual);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_Ritual.png");
+                loadMarker("ritual", BASE_URL + "icon_legend_Ritual.png");
             }
         });
 
@@ -452,7 +500,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLegendScavs);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_Scavs.png");
+                loadMarker("scavs", BASE_URL + "icon_legend_Scavs.png");
             }
         });
 
@@ -460,7 +508,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLegendScavSniper);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_ScavSniper.png");
+                loadMarker("scav_sniper", BASE_URL + "icon_legend_ScavSniper.png");
             }
         });
 
@@ -468,16 +516,15 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLegendSniper);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_Sniper.png");
+                loadMarker("sniper", BASE_URL + "icon_legend_Sniper.png");
             }
         });
 
         IconBloodOfWar3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setActiveButton(IconLegendCorpse);
-                toggleMarker("http://213.171.14.43:8000/images/icon_legend_Corpess.png");
-
+                setActiveButton(IconBloodOfWar3);
+                loadMarker("blood_of_war3", BASE_URL + "icon_BloodOfWar3(Quests).png");
             }
         });
 
@@ -485,7 +532,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconChumming);
-                toggleMarker("http://213.171.14.43:8000/images/icon_chumming(Quests).png");
+                loadMarker("chumming", BASE_URL + "icon_chumming(Quests).png");
             }
         });
 
@@ -493,8 +540,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconGratitude);
-                toggleMarker("http://213.171.14.43:8000/images/icon_Gratitude(Quests).png");
-
+                loadMarker("gratitude", BASE_URL + "icon_Gratitude(Quests).png");
             }
         });
 
@@ -502,8 +548,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconHCarePriv3);
-                toggleMarker("http://213.171.14.43:8000/images/icon_HCarePt3(Quests).png");
-
+                loadMarker("hcare_priv3", BASE_URL + "icon_HCarePt3(Quests).png");
             }
         });
 
@@ -511,8 +556,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconInformedMeansArmed);
-                toggleMarker("http://213.171.14.43:8000/images/icon_IntormedMeansArmed(Quests).png");
-
+                loadMarker("informed_means_armed", BASE_URL + "icon_IntormedMeansArmed(Quests).png");
             }
         });
 
@@ -520,7 +564,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconIntroduction);
-                toggleMarker("http://213.171.14.43:8000/images/icon_Introduction(Quests).png");
+                loadMarker("introduction", BASE_URL + "icon_Introduction(Quests).png");
             }
         });
 
@@ -528,7 +572,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconLendLease1);
-                toggleMarker("http://213.171.14.43:8000/images/icon_LendLeasePt1(Quests).png");
+                loadMarker("lend_lease1", BASE_URL + "icon_LendLeasePt1(Quests).png");
             }
         });
 
@@ -536,8 +580,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconSearchMission);
-                toggleMarker("http://213.171.14.43:8000/images/icon_SerchMession(Quests).png");
-
+                loadMarker("search_mission", BASE_URL + "icon_SerchMession(Quests).png");
             }
         });
 
@@ -545,7 +588,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconSupplyPlans);
-                toggleMarker("http://213.171.14.43:8000/images/icon_SupplyPlans(Quests).png");
+                loadMarker("supply_plans", BASE_URL + "icon_SupplyPlans(Quests).png");
             }
         });
 
@@ -553,8 +596,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconThrifty);
-                toggleMarker("http://213.171.14.43:8000/images/icon_Thrifty(Quests).png");
-
+                loadMarker("thrifty", BASE_URL + "icon_Thrifty(Quests).png");
             }
         });
 
@@ -562,7 +604,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(ScavSpots);
-                toggleMarker("http://213.171.14.43:8000/images/scav%20точки(Another).png");
+                loadMarker("scav_spots", BASE_URL + "scav%20точки(Another).png");
             }
         });
 
@@ -570,7 +612,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconPMCSpots);
-                toggleMarker("http://213.171.14.43:8000/images/pmc%20точки(Another).png");
+                loadMarker("pmc_spots", BASE_URL + "pmc%20точки(Another).png");
             }
         });
 
@@ -578,9 +620,10 @@ public class MapOfWoodsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveButton(IconNeutralSpots);
-                toggleMarker("http://213.171.14.43:8000/images/netral%20точки(Another).png");
+                loadMarker("neutral_spots", BASE_URL + "netral%20точки(Another).png");
             }
         });
+
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -673,7 +716,7 @@ public class MapOfWoodsActivity extends AppCompatActivity {
         }
     }
 
-    private void loadMapImage(String imageUrl, final boolean isBaseMap) {
+    private void loadMapImage(String imageUrl) {
         Log.d(TAG, "loadMapImage: попытка загрузить изображение из " + imageUrl);
         Glide.with(this)
                 .asBitmap()
@@ -681,53 +724,105 @@ public class MapOfWoodsActivity extends AppCompatActivity {
                 .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        if (isBaseMap) {
-                            currentBitmap = resource;
-                            imageView.setImage(ImageSource.bitmap(resource)); // Устанавливаем базовое изображение
-                            runOnUiThread(() -> progressBar.setVisibility(View.GONE)); // Скрыть ProgressBar
-                        } else {
-                            // Создаем новый Bitmap с наложенной меткой
-                            Bitmap overlayBitmap = Bitmap.createBitmap(currentBitmap.getWidth(), currentBitmap.getHeight(), currentBitmap.getConfig());
-                            Canvas canvas = new Canvas(overlayBitmap);
-                            canvas.drawBitmap(currentBitmap, 0, 0, null);
-                            canvas.drawBitmap(resource, 0, 0, null);
-                            currentBitmap = overlayBitmap;
-                            imageView.setImage(ImageSource.bitmap(overlayBitmap)); // Устанавливаем изображение с меткой
-                        }
+                        mapBitmap = resource; // Сохраняем изображение карты
+                        imageView.setImage(ImageSource.bitmap(resource));
+                        runOnUiThread(() -> progressBar.setVisibility(View.GONE));
                     }
 
                     @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                        // Этот метод вызывается, когда Glide освобождает ресурсы
-                    }
+                    public void onLoadCleared(@Nullable Drawable placeholder) { }
                 });
     }
 
-    private void updateMapImage() {
-        // Загружаем базовую карту
-        loadMapImage(BASE_MAP_URL, true);
+//    private void loadMarker(String markerName, String markerUrl) {
+//        if (loadedMarkers.containsKey(markerName)) {
+//            // Маркер уже загружен, используем его
+//            updateMapWithMarkers();
+//        } else {
+//            progressBar.setVisibility(View.VISIBLE);
+//            Glide.with(this)
+//                    .asBitmap()
+//                    .load(markerUrl)
+//                    .into(new CustomTarget<Bitmap>() {
+//                        @Override
+//                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                            loadedMarkers.put(markerName, resource); // Сохраняем маркер
+//                            updateMapWithMarkers();
+//                            progressBar.setVisibility(View.GONE);
+//                        }
+//
+//                        @Override
+//                        public void onLoadCleared(@Nullable Drawable placeholder) {
+//                            progressBar.setVisibility(View.GONE);
+//                        }
+//                    });
+//        }
+//    }
 
-        // Загружаем и накладываем все метки
-        for (String markerUrl : activeMarkers) {
-            loadMapImage(markerUrl, false);
-        }
-    }
-
-    private void toggleMarker(String markerUrl) {
-        if (activeMarkers.contains(markerUrl)) {
-            activeMarkers.remove(markerUrl);
+    private void loadMarker(String markerName, String markerUrl) {
+        if (activeFilters.contains(markerName)) {
+            activeFilters.remove(markerName);
+            loadedMarkers.remove(markerName); // Удаляем маркер из loadedMarkers
+            updateMapWithMarkers(); // Обновляем карту
         } else {
-            activeMarkers.add(markerUrl);
+            activeFilters.add(markerName);
+            if (!loadedMarkers.containsKey(markerName)) {
+// Загружаем маркер, только если он еще не загружен
+                markersToLoad++;
+                progressBar.setVisibility(View.VISIBLE);
+                Glide.with(this)
+                        .asBitmap()
+                        .load(markerUrl)
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+// Создаем копию Bitmap
+                                Bitmap markerBitmapCopy = resource.copy(resource.getConfig(), true);
+                                loadedMarkers.put(markerName, markerBitmapCopy);
+                                markersToLoad--;
+                                if (markersToLoad == 0) {
+                                    updateMapWithMarkers();
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                                markersToLoad--;
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        });
+            } else {
+                // Маркер уже загружен, просто обновляем карту
+                updateMapWithMarkers();
+            }
         }
-        updateMapImage();
     }
-
-
 
     private void loadMarkerImage(String imageUrl, ImageView imageView) {
         Glide.with(this)
                 .load(imageUrl)
                 .into(imageView);
+    }
+
+    private void updateMapWithMarkers() {
+        if (mapBitmap != null) {
+            Bitmap combinedBitmap = Bitmap.createBitmap(mapBitmap.getWidth(), mapBitmap.getHeight(), mapBitmap.getConfig());
+            Canvas canvas = new Canvas(combinedBitmap);
+
+            canvas.drawBitmap(mapBitmap, 0, 0, null); // Рисуем карту
+
+            for (Map.Entry<String, Bitmap> entry : loadedMarkers.entrySet()) {
+                String markerName = entry.getKey();
+                Bitmap markerBitmap = entry.getValue();
+
+                if (activeFilters.contains(markerName)) { // Проверяем активность фильтра
+                    canvas.drawBitmap(markerBitmap, 0, 0, null);
+                }
+            }
+
+            imageView.setImage(ImageSource.bitmap(combinedBitmap));
+        }
     }
 
     // Метод для возврата на предыдущую страницу
@@ -736,4 +831,6 @@ public class MapOfWoodsActivity extends AppCompatActivity {
         // Возврат на предыдущую страницу
         onBackPressed();
     }
+
+
 }
